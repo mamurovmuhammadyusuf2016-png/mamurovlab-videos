@@ -12,4 +12,9 @@ for i in range(4):
         print("retry",e,file=sys.stderr); time.sleep(5*(i+1))
 else: sys.exit(1)
 p=r["candidates"][0]["content"]["parts"][0]["inlineData"]
-open(out,"wb").write(base64.b64decode(p["data"]))
+raw=base64.b64decode(p["data"])
+if raw[:4]==b"RIFF": open(out,"wb").write(raw)
+else:  # raw 16-bit PCM (audio/L16), wrap into WAV
+    import wave, re
+    rate=int((re.search(r"rate=(\d+)",p.get("mimeType","")) or [0,24000])[1])
+    with wave.open(out,"wb") as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate); w.writeframes(raw)

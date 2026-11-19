@@ -16,6 +16,7 @@
 - Gemini TTS: модель `gemini-3.8-flash-tts`, голос задаётся в `speechConfig.voiceConfig.prebuiltVoiceConfig.voiceName`.
 - API-ключ НЕ хранить в репозитории. Брать из переменной окружения `GEMINI_API_KEY`.
 - Числа в тексте для озвучки писать словами (ikki ming dollar), чтобы произношение было правильным.
+- Бесплатный лимит Gemini TTS — 10 запросов в день на модель. Если `gemini-3.8-flash-tts` отвечает 429, переключаться на `M=gemini-3.1-flash-tts-preview` (или `gemini-3.8-flash-lite-tts`) и переозвучивать все строки одной моделью. 3.1 отдаёт сырой PCM — `video/tts.py` сам оборачивает его в WAV.
 
 ## Структура
 - `scripts/` — сценарии роликов (`NN-тема.md`).
@@ -29,6 +30,7 @@
 
 ## Обложка
 - Фон генерируется в Cloudflare Workers AI: `video/cf_img.sh "<prompt>" out.jpg 1080 1920` (модель `@cf/black-forest-labs/flux-2-dev`; на выходе JPEG).
+- Бесплатный лимит Cloudflare — 10 000 neurons в день, это примерно 3 картинки FLUX.2. Генерировать 1 фон на ролик. Если лимит кончился — типографская обложка через HTML без ИИ-фона.
 - Нужны переменные `CF_API_TOKEN` и `CF_ACCOUNT_ID` (Account ID: `fb8a3875a1098ab51eb6d22255e0ae35`). Токен в репозиторий не класть.
 - Текст накладывать через HTML (`video/NN-тема/cover.html`) и Playwright-скриншот 1080×1920. Главный текст держать в зоне y=240–1680 — это обрезка 3:4 в сетке профиля.
 
