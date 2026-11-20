@@ -1,0 +1,486 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="cues.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070a1f; }
+body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; color: #fff; }
+#bg { position: absolute; inset: 0; }
+#world { position: absolute; inset: 0; transform-origin: 540px 960px; }
+#world .o { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#notes { position: absolute; left: 0; top: 0; }
+#hud { position: absolute; inset: 0; pointer-events: none; }
+.t { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; line-height: .95; }
+.t span { display: inline-block; white-space: pre; will-change: transform; }
+.line { display: block; overflow: hidden; padding: 6px 0 14px; }
+.y { color: #ffd23f; } .g { color: #3ddc84; } .r { color: #ff4757; } .w { color: #fff; }
+.sh { text-shadow: 0 8px 0 rgba(0,0,0,.35), 0 18px 40px rgba(0,0,0,.55); }
+.pill { display: inline-block; padding: 14px 36px; border-radius: 999px; font-weight: 900; }
+.handle { position: absolute; top: 74px; left: 0; right: 0; text-align: center; font: 800 30px "Inter Display", Inter; letter-spacing: 3px; color: rgba(255,255,255,.55); }
+.prog { position: absolute; top: 46px; left: 90px; right: 90px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.14); overflow: hidden; }
+.prog i { display: block; height: 100%; background: #ffd23f; width: 0; }
+
+/* ---------- objects ---------- */
+.shadow { width: 700px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+/* printer */
+.printer { width: 600px; height: 440px; }
+.printer .body { position: absolute; inset: 60px 0 0 0; border-radius: 48px;
+  background: linear-gradient(160deg, #6f86ff 0%, #4257d6 45%, #2a3596 100%);
+  box-shadow: inset 0 10px 0 rgba(255,255,255,.25), inset 0 -18px 0 rgba(0,0,0,.25), 0 30px 60px rgba(0,0,0,.45); }
+.printer .top { position: absolute; left: 70px; right: 70px; top: 0; height: 120px; border-radius: 36px 36px 14px 14px;
+  background: linear-gradient(180deg, #8ea0ff, #5b6fe6); box-shadow: inset 0 8px 0 rgba(255,255,255,.3); }
+.printer .slot { position: absolute; left: 110px; right: 110px; top: 38px; height: 26px; border-radius: 13px; background: #10143a; box-shadow: inset 0 6px 10px rgba(0,0,0,.8); }
+.printer .panel { position: absolute; left: 60px; top: 190px; width: 300px; height: 150px; border-radius: 24px; background: #1a2166; box-shadow: inset 0 6px 14px rgba(0,0,0,.5); }
+.printer .label { position: absolute; left: 0; right: 0; top: 26px; text-align: center; font-weight: 900; font-size: 30px; color: #3ddc84; letter-spacing: 1px; white-space: nowrap; }
+.printer .led { position: absolute; top: 100px; width: 26px; height: 26px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 20px #3ddc84; }
+.printer .btn { position: absolute; right: 70px; top: 200px; width: 140px; height: 140px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff8a8a, #ff2a3d 55%, #a3101d); box-shadow: 0 12px 0 #6b0812, 0 20px 40px rgba(255,40,60,.5); }
+/* suitcase */
+.case { width: 640px; height: 470px; }
+.case .handle2 { position: absolute; left: 230px; top: 0; width: 180px; height: 90px; border: 22px solid #5a3218; border-bottom: none; border-radius: 60px 60px 0 0; }
+.case .lid { position: absolute; left: 0; right: 0; top: 70px; height: 130px; border-radius: 40px 40px 10px 10px;
+  background: linear-gradient(180deg, #c9773c, #a85a26); transform-origin: 50% 100%; box-shadow: inset 0 8px 0 rgba(255,255,255,.2); }
+.case .box { position: absolute; left: 0; right: 0; top: 190px; bottom: 0; border-radius: 10px 10px 44px 44px;
+  background: linear-gradient(180deg, #b8652d, #8a4519); box-shadow: inset 0 -16px 0 rgba(0,0,0,.25), 0 30px 60px rgba(0,0,0,.45); }
+.case .strap { position: absolute; top: 70px; bottom: 0; width: 46px; background: #5a3218; }
+.case .inside { position: absolute; left: 30px; right: 30px; top: 150px; height: 60px; border-radius: 12px; background: #2a1408; overflow: visible; }
+.bundle { position: absolute; width: 150px; height: 46px; border-radius: 8px; background: linear-gradient(180deg, #4be08f, #23a861);
+  box-shadow: inset 0 0 0 4px #1b7d48, 0 6px 0 rgba(0,0,0,.25); }
+.bundle::after { content: ""; position: absolute; left: 60px; top: 0; bottom: 0; width: 30px; background: #f5e6b8; }
+/* shop */
+.shop { width: 900px; height: 1000px; }
+.shop .wall { position: absolute; inset: 120px 0 0 0; border-radius: 30px 30px 0 0; background: linear-gradient(180deg, #ffe7c2, #f3c98e); box-shadow: 0 30px 60px rgba(0,0,0,.4); }
+.shop .awn { position: absolute; left: -30px; right: -30px; top: 230px; height: 120px; border-radius: 0 0 40px 40px;
+  background: repeating-linear-gradient(90deg, #ff4757 0 75px, #fff 75px 150px); box-shadow: 0 16px 30px rgba(0,0,0,.25); }
+.shop .sign { position: absolute; left: 200px; right: 200px; top: 70px; height: 130px; border-radius: 26px; background: #2b2f77;
+  color: #ffd23f; font-weight: 900; font-size: 84px; text-align: center; line-height: 130px; letter-spacing: 4px; box-shadow: 0 0 40px rgba(255,210,63,.35); }
+.shop .win { position: absolute; left: 70px; right: 70px; top: 400px; height: 520px; border-radius: 26px; background: linear-gradient(180deg, #a8dcff, #6fb9f2); box-shadow: inset 0 0 0 14px #fff; }
+.shop .shelf { position: absolute; left: 40px; right: 40px; height: 22px; border-radius: 6px; background: #8a5a2b; }
+.shop .item { position: absolute; font-size: 130px; line-height: 1; }
+/* scale */
+.scale { width: 1000px; height: 1100px; }
+.scale .pillar { position: absolute; left: 480px; top: 160px; width: 40px; height: 820px; border-radius: 20px; background: linear-gradient(90deg, #c49a2c, #ffd76a, #b88a1c); }
+.scale .foot { position: absolute; left: 330px; top: 960px; width: 340px; height: 80px; border-radius: 40px 40px 20px 20px; background: linear-gradient(180deg, #ffd76a, #b88a1c); }
+.scale .beam { position: absolute; left: 60px; top: 150px; width: 880px; height: 34px; border-radius: 17px; background: linear-gradient(180deg, #ffe08a, #c49a2c); transform-origin: 50% 50%; }
+.scale .pan { position: absolute; top: 0; width: 360px; height: 600px; transform-origin: 50% 0; }
+.scale .chain { position: absolute; top: 0; height: 470px; width: 6px; background: #d6b048; }
+.scale .dish { position: absolute; left: 0; right: 0; top: 460px; height: 70px; border-radius: 0 0 180px 180px; background: linear-gradient(180deg, #ffe08a, #b88a1c); }
+.scale .knob { position: absolute; left: 470px; top: 130px; width: 60px; height: 60px; border-radius: 50%; background: #ffd76a; box-shadow: 0 0 0 8px #b88a1c; }
+.tag { position: absolute; padding: 18px 30px; border-radius: 18px; background: #fff; color: #10143a; font-weight: 900; font-size: 54px; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.tag::before { content: ""; position: absolute; left: -16px; top: 50%; width: 22px; height: 22px; margin-top: -11px; border-radius: 50%; background: #10143a; }
+/* calendar */
+.cal { width: 640px; height: 560px; }
+.page { position: absolute; inset: 0; border-radius: 40px; background: #fff; color: #10143a; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.45); transform-origin: 50% 0; }
+.page .hd { height: 150px; background: #ff4757; color: #fff; font-weight: 900; font-size: 84px; text-align: center; line-height: 150px; letter-spacing: 2px; }
+.page .bd { text-align: center; padding-top: 60px; font-weight: 900; font-size: 64px; }
+.page .bd b { display: block; font-size: 150px; color: #ff4757; letter-spacing: -4px; margin-top: 10px; }
+/* zimbabwe note */
+.zim { width: 1000px; height: 470px; border-radius: 30px; background: linear-gradient(120deg, #ffb347, #ff7b54 45%, #c94b8a);
+  box-shadow: inset 0 0 0 16px rgba(255,255,255,.55), 0 40px 80px rgba(0,0,0,.5); color: #2b0f3a; text-align: center; overflow: hidden; }
+.zim .z1 { padding-top: 40px; font-weight: 900; font-size: 50px; letter-spacing: 8px; }
+.zim .z2 { font-weight: 900; font-size: 80px; letter-spacing: -2px; margin-top: 50px; white-space: nowrap; }
+.zim .z2 span { display: inline-block; white-space: pre; }
+.zim .z3 { font-weight: 800; font-size: 40px; letter-spacing: 6px; margin-top: 40px; }
+/* split */
+.oven { width: 420px; height: 440px; }
+.oven .arch { position: absolute; inset: 0; border-radius: 210px 210px 30px 30px; background: linear-gradient(180deg, #8b8b9e, #4a4a5c); box-shadow: 0 30px 60px rgba(0,0,0,.45); }
+.oven .mouth { position: absolute; left: 70px; right: 70px; top: 120px; height: 230px; border-radius: 140px 140px 20px 20px; background: radial-gradient(circle at 50% 80%, #ffcf5c, #ff7a1a 45%, #6a1d00); }
+.badge { position: absolute; padding: 14px 30px; border-radius: 999px; font-weight: 900; font-size: 46px; white-space: nowrap; }
+.bigbtn { width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ff9a9a, #ff2a3d 55%, #a3101d);
+  box-shadow: 0 34px 0 #6b0812, 0 60px 120px rgba(255,40,60,.55); display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 64px; text-align: center; line-height: 1; color: #fff; text-shadow: 0 6px 0 rgba(0,0,0,.25); }
+.ring { width: 760px; height: 760px; border-radius: 50%; border: 10px solid rgba(255,80,90,.5); }
+</style></head>
+<body>
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+
+  <!-- S0 printer -->
+  <div class="o" id="shadow0"><div class="shadow"></div></div>
+  <div class="o printer" id="printer">
+    <div class="top"><div class="slot"></div></div>
+    <div class="body">
+      <div class="panel"><div class="label">PUL MASHINASI</div>
+        <div class="led" style="left:60px"></div><div class="led" style="left:137px;background:#ffd23f;box-shadow:0 0 20px #ffd23f"></div><div class="led" style="left:214px;background:#ff4757;box-shadow:0 0 20px #ff4757"></div></div>
+      <div class="btn"></div>
+    </div>
+  </div>
+  <div class="o t" id="printed" style="width:1000px;left:0;right:auto;font-size:96px;letter-spacing:-2px"><div class="line"><span id="printedIn" style="display:inline-block">PUL CHOP ETIB</span></div></div>
+
+  <!-- S1 suitcase -->
+  <div class="o" id="shadow1"><div class="shadow" style="width:760px"></div></div>
+  <div class="o case" id="case">
+    <div class="handle2"></div>
+    <div class="box"><div class="strap" style="left:140px"></div><div class="strap" style="right:140px"></div></div>
+    <div class="inside" id="caseInside"></div>
+    <div class="lid" id="lid"></div>
+  </div>
+
+  <!-- S2 shop -->
+  <div class="o shop" id="shop">
+    <div class="wall"></div><div class="sign">DO'KON</div><div class="awn"></div>
+    <div class="win">
+      <div class="shelf" style="top:190px"></div><div class="shelf" style="top:440px"></div>
+      <div class="item" id="bread1" style="left:70px;top:55px">🍞</div><div class="item" id="bread2" style="left:300px;top:55px">🍞</div><div class="item" id="bread3" style="left:530px;top:55px">🍞</div>
+      <div class="item" id="car" style="left:300px;top:300px">🚗</div>
+    </div>
+  </div>
+  <div class="o" id="lblNon"><div class="tag" style="position:relative;font-size:58px">🍞 NON — 3 ta</div></div>
+  <div class="o" id="lblCar"><div class="tag" style="position:relative;font-size:58px">🚗 MASHINA — 1 ta</div></div>
+  <div class="o" id="stamp"><div class="pill" style="font-size:96px;background:#ff4757;transform:rotate(-8deg);box-shadow:0 0 0 10px #fff,0 30px 60px rgba(0,0,0,.4)">KO'PAYMADI!</div></div>
+
+  <!-- S3 scale -->
+  <div class="o" id="shadow3"><div class="shadow" style="width:900px"></div></div>
+  <div class="o scale" id="scale">
+    <div class="pillar"></div><div class="foot"></div>
+    <div class="beam" id="beam"></div>
+    <div class="pan" id="panL" style="left:-80px"><div class="chain" style="left:60px;transform:rotate(-14deg)"></div><div class="chain" style="right:60px;transform:rotate(14deg)"></div><div class="dish"></div><div id="pile" style="position:absolute;left:105px;top:460px"></div></div>
+    <div class="pan" id="panR" style="left:720px"><div class="chain" style="left:60px;transform:rotate(-14deg)"></div><div class="chain" style="right:60px;transform:rotate(14deg)"></div><div class="dish"></div><div style="position:absolute;left:105px;top:330px;font-size:150px">🍞</div></div>
+    <div class="knob"></div>
+  </div>
+  <div class="o" id="ptag"><div class="tag" id="ptagT" style="position:relative;font-size:74px;padding:22px 40px">3 000 so'm</div></div>
+
+  <!-- S4 zimbabwe -->
+  <div class="o cal" id="cal">
+    <div class="page" id="pageA"><div class="hd">KUN 1</div><div class="bd">1 non =<b>$1</b></div></div>
+    <div class="page" id="pageB"><div class="hd">KUN 1</div><div class="bd">1 non =<b>$1</b></div></div>
+  </div>
+  <div class="o" id="x2"><div class="pill" style="font-size:110px;background:#ffd23f;color:#10143a;box-shadow:0 20px 50px rgba(0,0,0,.4)">×2</div></div>
+  <div class="o zim" id="zim"><div class="z1">ZIMBABWE</div><div class="z2" id="zeros"></div><div class="z3">YUZ TRILLION DOLLAR</div></div>
+
+  <!-- S5 split -->
+  <div class="o" id="divider"><div style="width:10px;height:1500px;border-radius:5px;background:linear-gradient(#0000,#ffd23f 20%,#ffd23f 80%,#0000)"></div></div>
+  <div class="o printer" id="printer5"><div class="top"><div class="slot"></div></div><div class="body"><div class="panel"><div class="label">PUL</div><div class="led" style="left:60px"></div><div class="led" style="left:137px"></div><div class="led" style="left:214px"></div></div><div class="btn" id="btn5"></div></div></div>
+  <div class="o oven" id="oven"><div class="arch"></div><div class="mouth"></div><div id="ovenBread" style="position:absolute;left:0;right:0;top:170px;text-align:center;font-size:150px;line-height:1">🍞</div></div>
+  <div class="o" id="bdgL"><div class="badge" style="position:relative;background:#3ddc84;color:#08210f">⚡ 1 soniya</div></div>
+  <div class="o" id="bdgR"><div class="badge" style="position:relative;background:#ff8a3d;color:#2a0f00">⏳ soatlab</div></div>
+
+  <!-- S6 button -->
+  <div class="o" id="ring"><div class="ring"></div></div>
+  <div class="o bigbtn" id="bigbtn">PUL<br>CHOP<br>ETISH</div>
+  <div class="o" id="hand" style="font-size:260px;line-height:1">👆</div>
+
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <!-- S0 -->
+  <div class="t sh y" data-s="0" data-in="-0.25" data-fx="slam" style="top:250px;font-size:250px;letter-spacing:-8px">NEGA?</div>
+  <div class="t sh" data-s="0" data-in="line2" data-fx="slam" style="top:1440px;font-size:96px;letter-spacing:-2px">HAMMANI <span class="y">BOY</span><br>QILMAYDI?</div>
+  <!-- S1 -->
+  <div class="t" data-s="1" data-in="0.15" data-fx="pop" style="top:300px"><span class="pill" style="font-size:54px;background:#ffd23f;color:#10143a">TASAVVUR QILING 🤔</span></div>
+  <div class="t sh" data-s="1" data-in="line" data-fx="slam" style="top:440px;font-size:104px;letter-spacing:-3px">HAR KIMGA</div>
+  <div class="t sh g" data-s="1" data-in="lid" data-fx="slam" style="top:1500px;font-size:118px;letter-spacing:-3px">1 CHEMODAN 💼</div>
+  <!-- S2 -->
+  <div class="t sh" data-s="2" data-in="crowd" data-fx="slam" style="top:230px;font-size:104px;letter-spacing:-3px">HAMMA <span class="y">DO'KONGA!</span></div>
+  <!-- S3 -->
+  <div class="t sh g" data-s="3" data-in="pul" data-fx="slam" style="top:300px;left:40px;right:540px;font-size:110px">PUL ×10</div>
+  <div class="t sh" data-s="3" data-in="non" data-fx="slam" style="top:300px;left:540px;right:40px;font-size:110px">NON ×1</div>
+  <div class="t sh r" data-s="3" data-in="narx" data-fx="stamp" style="top:1480px;font-size:150px;letter-spacing:-5px">NARX ↑↑↑</div>
+  <!-- S4 -->
+  <div class="t" data-s="4" data-in="label" data-fx="pop" style="top:230px"><span class="pill" style="font-size:60px;background:#fff;color:#10143a">🇿🇼 ZIMBABVE · 2008</span></div>
+  <div class="t sh y" data-s="4" data-in="flip0" data-fx="slam" style="top:1430px;font-size:92px;letter-spacing:-2px" data-out="note">NARX HAR KUNI ×2</div>
+  <div class="t sh y" data-s="4" data-in="zerosEnd" data-fx="stamp" style="top:1530px;font-size:150px;letter-spacing:-5px">TRILLION! 🤯</div>
+  <!-- S5 -->
+  <div class="t sh" data-s="5" data-in="0.05" data-fx="slam" style="top:300px;left:30px;right:540px;font-size:72px">PUL CHOP<br>ETISH</div>
+  <div class="t sh" data-s="5" data-in="non" data-fx="slam" style="top:300px;left:540px;right:30px;font-size:72px">NON<br>YOPISH</div>
+  <div class="t sh g" data-s="5" data-in="oson" data-fx="stamp" style="top:1500px;left:30px;right:540px;font-size:96px">OSON ✅</div>
+  <div class="t sh r" data-s="5" data-in="qiyin" data-fx="stamp" style="top:1500px;left:540px;right:30px;font-size:96px">QIYIN 😓</div>
+  <!-- S6 -->
+  <div class="t sh" data-s="6" data-in="0.05" data-fx="slam" style="top:230px;font-size:80px;letter-spacing:-2px">SIZ PREZIDENT<br>BO'LSANGIZ…</div>
+  <div class="t sh y" data-s="6" data-in="q2" data-fx="slam" style="top:1380px;font-size:84px;letter-spacing:-2px">PUL CHOP<br>ETARMIDINGIZ?</div>
+  <div class="t" data-s="6" data-in="ha" data-fx="pop" style="top:1640px"><span class="pill" style="font-size:66px;background:#3ddc84;color:#08210f;margin-right:20px">HA ✅</span><span class="pill" style="font-size:66px;background:#ff4757">YO'Q ❌</span></div>
+  <div class="t y" data-s="6" data-in="ha" data-fx="pop" style="top:1790px;font-size:48px;font-weight:800">Kommentga yozing 👇</div>
+</div>
+
+<script>
+const C = window.CUES, ST = C.starts, TOTAL = C.total;
+const W = 1080, H = 1920, F = 1000;
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, d) => cl((t - a) / d);
+const E = {
+  io: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  out: x => 1 - Math.pow(1 - x, 3),
+  back: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+  el: x => x === 0 || x === 1 ? x : Math.pow(2, -9 * x) * Math.sin((x * 10 - .75) * (2 * Math.PI) / 3) + 1,
+};
+const sDur = i => (ST[i + 1] ?? TOTAL) - ST[i];
+const cue = (s, k) => { const v = C['s' + s]?.[k]; return v === undefined ? parseFloat(k) : v; };
+// seeded RNG
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// ---------- world layout ----------
+const A = [[0, 0], [0, 2400], [2600, 2400], [5200, 2400], [5200, 0], [7800, 0]];
+const BTN = [7800 - 270 + 190 - 300 + 70, 0]; // fixed below after printer5 placement
+const P5 = [7800 - 250, 60];             // small printer in split
+const BTN6 = [P5[0] + 0.6 * (600 / 2 - 70 - 70), P5[1] + 0.6 * (60 + 200 + 70 - 220)]; // its red button (scale .6)
+A.push(BTN6);
+const SCENE_BG = [['#0d1a4a', '#2a0f5a'], ['#0d2a3a', '#173a5a'], ['#2a1450', '#5a1f5a'], ['#2a1a08', '#5a3410'], ['#3a0812', '#6a1530'], ['#0f1a3a', '#3a2a10'], ['#2a0610', '#5a0a20']];
+
+// ---------- camera ----------
+function hold(i, u) {
+  const d = sDur(i);
+  let [x, y] = A[i];
+  let z = -1000 + 150 * E.io(cl(u / d));
+  x += Math.sin(u * 0.9 + i * 1.7) * 26; y += Math.cos(u * 0.7 + i * 2.3) * 18;
+  let roll = Math.sin(u * 0.8 + i) * 1.4;
+  if (i === 0) { z = -1180 + 330 * E.io(cl(u / d)); y -= 60; }
+  if (i === 2) { x -= 120 - 240 * E.io(cl(u / d)); }                 // lateral track along the crowd
+  if (i === 3) { const r = seg(u, cue(3, 'rocket'), 0.9); y -= 420 * E.io(r); roll -= 3 * Math.sin(r * Math.PI); }
+  if (i === 4) {
+    const zt = u - cue(4, 'zeros');
+    if (zt > 0 && zt < 1.4) { const k = Math.exp(-zt * 3.2); x += Math.sin(zt * 83) * 16 * k; y += Math.cos(zt * 71) * 16 * k; roll += Math.sin(zt * 57) * 1.4 * k; }
+    const zn = seg(u, cue(4, 'note') - 0.1, 0.6); y += 60 * E.io(zn); z += 60 * E.io(zn);
+  }
+  if (i === 6) { z = -1000 + 560 * E.out(cl(u / 1.1)); roll = Math.sin(u * 1.1) * 1.2; }
+  return { x, y, z, roll };
+}
+const lerp = (a, b, p) => a + (b - a) * p;
+const lc = (a, b, p) => ({ x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), z: lerp(a.z, b.z, p), roll: lerp(a.roll, b.roll, p) });
+const TW = 0.26;
+function sceneAt(t) { let i = 0; ST.forEach((s, k) => { if (t >= s) i = k; }); return i; }
+function cam(t) {
+  const i = sceneAt(t);
+  let c = hold(i, t - ST[i]);
+  if (i + 1 < ST.length && t > ST[i + 1] - TW) c = lc(c, hold(i + 1, t - ST[i + 1]), E.io(seg(t, ST[i + 1] - TW, 2 * TW)));
+  if (i > 0 && t < ST[i] + TW) c = lc(hold(i - 1, t - ST[i - 1]), c, E.io(seg(t, ST[i] - TW, 2 * TW)));
+  return c;
+}
+
+// ---------- projection ----------
+let CAM, FOCUS = 0;
+function proj(x, y, z) { const s = F / (z - CAM.z); return { sx: W / 2 + (x - CAM.x) * s, sy: H / 2 + (y - CAM.y) * s, s }; }
+const $ = id => document.getElementById(id);
+function put(el, x, y, z = 0, sc = 1, rot = 0, op = 1) {
+  if (typeof el === 'string') el = $(el);
+  const p = proj(x, y, z);
+  if (op <= 0.001 || p.s <= 0 || p.sx < -1600 || p.sx > 2700 || p.sy < -1800 || p.sy > 3700) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.style.transform = `translate(${p.sx}px,${p.sy}px) scale(${p.s * sc}) rotate(${rot}deg) translate(-50%,-50%)`;
+  el.style.opacity = op;
+  const b = Math.min(16, Math.abs(z - FOCUS) * 0.016);
+  el.style.filter = b > 0.4 ? `blur(${b}px)` : '';
+  el.style.zIndex = Math.round(6000 - z);
+}
+
+// ---------- banknote sprites ----------
+function sprite(kind) {
+  const c = document.createElement('canvas'); c.width = 300; c.height = 140; const g = c.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, 300, 140);
+  if (kind === 'zim') { grad.addColorStop(0, '#ffb347'); grad.addColorStop(.5, '#ff7b54'); grad.addColorStop(1, '#c94b8a'); }
+  else { grad.addColorStop(0, '#5ff0a0'); grad.addColorStop(.55, '#2fbf71'); grad.addColorStop(1, '#17844a'); }
+  g.fillStyle = grad; g.beginPath(); g.roundRect(0, 0, 300, 140, 14); g.fill();
+  g.strokeStyle = 'rgba(255,255,255,.65)'; g.lineWidth = 6; g.beginPath(); g.roundRect(10, 10, 280, 120, 10); g.stroke();
+  g.fillStyle = 'rgba(255,255,255,.35)'; g.beginPath(); g.arc(70, 70, 38, 0, 7); g.fill();
+  g.fillStyle = kind === 'zim' ? '#3a0f2a' : '#0d3b22'; g.font = '900 40px "Inter Display", Inter'; g.textAlign = 'right';
+  g.fillText(kind === 'zim' ? '100 000 000' : '100 000', 280, 62);
+  g.font = '800 26px Inter'; g.fillText(kind === 'zim' ? 'TRILLION $' : "SO'M", 280, 108);
+  return c;
+}
+const SPR = { som: sprite('som'), zim: sprite('zim') };
+
+// ---------- particles (deterministic, analytic) ----------
+const parts = [];
+function emit(seed, t0, t1, rate, fn) { const r = rng(seed); for (let t = t0; t < t1; t += 1 / rate) parts.push(fn(r, t + r() / rate)); }
+// S0 printer burst toward camera
+emit(11, ST[0] + 0.1, ST[1] + 0.35, 24, (r, t) => ({ t0: t, life: 2.4, x: A[0][0] + (r() - .5) * 200, y: A[0][1] - 140, z: 0, vx: (r() - .5) * 1500, vy: -1300 - r() * 900, vz: -300 - r() * 1300, g: 2300, rot: r() * 6, vr: (r() - .5) * 9, fl: 3 + r() * 9, sc: .9, k: 'som' }));
+// carrier: notes falling down into S1 during the whip
+emit(12, ST[1] - 0.4, ST[1] + 0.5, 30, (r, t) => ({ t0: t, life: 2.2, x: A[1][0] + (r() - .5) * 900, y: A[1][1] - 1500 - r() * 300, z: (r() - .5) * 500, vx: (r() - .5) * 200, vy: 900 + r() * 600, vz: 0, g: 1600, rot: r() * 6, vr: (r() - .5) * 7, fl: 4 + r() * 6, sc: .9, k: 'som' }));
+// S1 suitcase fountain at "chemodan"
+emit(13, ST[1] + cue(1, 'lid'), ST[1] + cue(1, 'lid') + 1.3, 38, (r, t) => ({ t0: t, life: 2.0, x: A[1][0] + (r() - .5) * 360, y: A[1][1] - 130, z: (r() - .5) * 100, vx: (r() - .5) * 1100, vy: -1900 - r() * 900, vz: -200 - r() * 700, g: 2600, rot: r() * 6, vr: (r() - .5) * 10, fl: 4 + r() * 8, sc: .85, k: 'som' }));
+// S2 crowd throws notes in the air
+emit(14, ST[2] + 0.1, ST[3] - 0.1, 9, (r, t) => ({ t0: t, life: 1.8, x: A[2][0] - 500 + r() * 1000, y: A[2][1] + 700, z: -250 - r() * 150, vx: (r() - .5) * 500, vy: -1500 - r() * 600, vz: 0, g: 2300, rot: r() * 6, vr: (r() - .5) * 8, fl: 4 + r() * 6, sc: .7, k: 'som' }));
+// S3 pour onto left pan (stop at dish)
+emit(15, ST[3] - 0.1, ST[3] + cue(3, 'rocket'), 20, (r, t) => ({ t0: t, life: 1.4, x: A[3][0] - 320 + (r() - .5) * 160, y: A[3][1] - 1200, z: (r() - .5) * 60, vx: (r() - .5) * 120, vy: 300 + r() * 300, vz: 0, g: 2400, rot: r() * 6, vr: (r() - .5) * 6, fl: 3 + r() * 5, sc: .7, k: 'som', floor: A[3][1] + 20 }));
+// S4 avalanche of zimbabwe notes on the zeros
+emit(16, ST[4] + cue(4, 'zeros'), ST[4] + cue(4, 'zeros') + 1.0, 80, (r, t) => { const a = r() * Math.PI * 2, v = 900 + r() * 1700; return { t0: t, life: 2.2, x: A[4][0] + Math.cos(a) * 80, y: A[4][1] + 220 + Math.sin(a) * 60, z: 0, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 600, vz: -200 - r() * 1300, g: 1500, rot: r() * 6, vr: (r() - .5) * 12, fl: 5 + r() * 9, sc: .95, k: 'zim' }; });
+// S5 small printer spitting fast
+emit(17, ST[5] + 0.05, ST[6] + 0.3, 16, (r, t) => ({ t0: t, life: 1.3, x: P5[0] + (r() - .5) * 60, y: P5[1] - 230, z: 0, vx: (r() - .5) * 500, vy: -1200 - r() * 500, vz: -100 - r() * 400, g: 2600, rot: r() * 6, vr: (r() - .5) * 9, fl: 4 + r() * 7, sc: .5, k: 'som' }));
+
+function partAt(p, t) {
+  let u = t - p.t0; if (u < 0 || u > p.life) return null;
+  let y = p.y + p.vy * u + 0.5 * p.g * u * u;
+  if (p.floor !== undefined && y > p.floor) return null;
+  return { x: p.x + p.vx * u, y, z: p.z + p.vz * u, rot: p.rot + p.vr * u, fl: Math.cos(p.fl * u), a: cl((p.life - u) / 0.3) * cl(u / 0.05) };
+}
+const nctx = $('notes').getContext('2d');
+function drawNotes(t) {
+  nctx.setTransform(1, 0, 0, 1, 0, 0); nctx.clearRect(0, 0, W, H);
+  const live = [];
+  for (const p of parts) { const s = partAt(p, t); if (s && s.z > CAM.z + 60) live.push([p, s]); }
+  live.sort((a, b) => b[1].z - a[1].z);
+  for (const [p, s0] of live) {
+    const pr = proj(s0.x, s0.y, s0.z);
+    if (pr.sx < -400 || pr.sx > W + 400 || pr.sy < -400 || pr.sy > H + 400) continue;
+    const b = Math.min(14, Math.abs(s0.z - FOCUS) * 0.012);
+    nctx.filter = b > 0.6 ? `blur(${b.toFixed(1)}px)` : 'none';
+    for (let k = 2; k >= 0; k--) {           // motion blur: sub-frame samples along the trajectory
+      const s = k ? partAt(p, t - k / 200) : s0; if (!s) continue;
+      const q = k ? proj(s.x, s.y, s.z) : pr;
+      nctx.globalAlpha = s0.a * (k ? 0.22 : 1);
+      nctx.setTransform(1, 0, 0, 1, q.sx, q.sy); nctx.rotate(s.rot);
+      const sc = q.s * p.sc * 0.62; nctx.scale(sc, sc * (0.25 + 0.75 * Math.abs(s.fl)));
+      nctx.drawImage(SPR[p.k], -150, -70);
+    }
+  }
+  nctx.globalAlpha = 1; nctx.filter = 'none';
+}
+
+// ---------- background: gradient + bokeh depth layers ----------
+const far = $('far').getContext('2d');
+const bokeh = []; { const r = rng(7); for (let i = 0; i < 70; i++) bokeh.push({ x: -1600 + r() * 11000, y: -2400 + r() * 6600, z: 900 + r() * 2600, rad: 40 + r() * 120, hue: [48, 140, 200, 330, 270][Math.floor(r() * 5)] }); }
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function bgAt(t) {
+  const i = sceneAt(t); let a = SCENE_BG[i];
+  if (i + 1 < ST.length && t > ST[i + 1] - TW) { const p = seg(t, ST[i + 1] - TW, 2 * TW); const b = SCENE_BG[i + 1]; return [0, 1].map(k => { const x = hex(a[k]), y = hex(b[k]); return `rgb(${x.map((v, j) => Math.round(lerp(v, y[j], p))).join(',')})`; }); }
+  return a;
+}
+function drawBg(t) {
+  const [c1, c2] = bgAt(t);
+  $('bg').style.background = `radial-gradient(1200px 1400px at 50% 40%, ${c2} 0%, ${c1} 65%, #05060f 100%)`;
+  far.clearRect(0, 0, W, H);
+  for (const b of bokeh) {
+    const p = proj(b.x, b.y, b.z); if (p.sx < -300 || p.sx > W + 300 || p.sy < -300 || p.sy > H + 300) continue;
+    const r = b.rad * p.s * 2.2, g = far.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r);
+    g.addColorStop(0, `hsla(${b.hue},90%,65%,.28)`); g.addColorStop(1, `hsla(${b.hue},90%,65%,0)`);
+    far.fillStyle = g; far.beginPath(); far.arc(p.sx, p.sy, r, 0, 7); far.fill();
+  }
+}
+
+// ---------- HUD kinetic typography ----------
+const hudItems = [...document.querySelectorAll('#hud [data-s]')].map(el => {
+  const fx = el.dataset.fx; const letters = [];
+  if (fx === 'slam') {
+    const walk = n => { [...n.childNodes].forEach(ch => {
+      if (ch.nodeType === 3) { const frag = document.createDocumentFragment(); for (const c of ch.textContent) { const s = document.createElement('span'); s.textContent = c; frag.appendChild(s); letters.push(s); } ch.replaceWith(frag); }
+      else if (ch.nodeName !== 'BR') walk(ch); }); };
+    walk(el);
+  }
+  el.style.opacity = 0;
+  return { el, s: +el.dataset.s, inK: el.dataset.in, outK: el.dataset.out, fx, letters };
+});
+function hudAt(t, vel) {
+  for (const it of hudItems) {
+    const s0 = ST[it.s], end = (ST[it.s + 1] ?? TOTAL + 1);
+    const tin = s0 + (it.inK === 'zerosEnd' ? cue(4, 'zeros') + 4 * cue(4, 'zeroStep') + 0.15 : cue(it.s, it.inK));
+    const tout = it.outK ? s0 + cue(it.s, it.outK) : end - 0.12;
+    const a = t - tin;
+    if (a < 0 || t > tout + 0.2) { it.el.style.opacity = 0; continue; }
+    const o = 1 - seg(t, tout, 0.2);                     // exit
+    const lag = `translate(${-vel.x * 2}px, ${-vel.y * 2}px)`;  // text lags camera slightly
+    if (it.fx === 'slam') {
+      it.el.style.opacity = o; it.el.style.transform = `${lag} scale(${1 + (1 - o) * .25})`; it.el.style.filter = o < 1 ? `blur(${(1 - o) * 10}px)` : '';
+      it.letters.forEach((sp, k) => {
+        const p = seg(a - k * 0.03, 0, 0.34);
+        sp.style.opacity = cl(p * 3);
+        sp.style.transform = `translateY(${(1 - E.out(p)) * -80}px) scale(${1 + (1 - E.back(p)) * 1.6}) rotate(${(1 - E.out(p)) * -14}deg)`;
+      });
+    } else if (it.fx === 'stamp') {
+      const p = seg(a, 0, 0.3), sh = a < 0.5 ? Math.sin(a * 70) * 10 * (1 - a / 0.5) : 0;
+      it.el.style.opacity = cl(p * 4) * o; it.el.style.transform = `${lag} translateX(${sh}px) scale(${2.3 - 1.3 * E.back(p)}) rotate(${-6 + 6 * (1 - E.out(p))}deg)`;
+    } else if (it.fx === 'pop') {
+      const p = seg(a, 0, 0.35); it.el.style.opacity = cl(p * 3) * o; it.el.style.transform = `${lag} scale(${.4 + .6 * E.back(p)})`;
+    }
+  }
+}
+
+// ---------- per-scene object animation ----------
+const zerosEl = $('zeros'); const ZG = ['100', ' 000', ' 000', ' 000', ' 000']; ZG.forEach(g => { const s = document.createElement('span'); s.textContent = g; zerosEl.appendChild(s); });
+const pile = $('pile'); for (let i = 0; i < 14; i++) { const b = document.createElement('div'); b.className = 'bundle'; b.style.left = ((i % 3) * 50 - 50 + (Math.floor(i / 3) % 2) * 25) + 'px'; b.style.top = (-50 - Math.floor(i / 3) * 40) + 'px'; pile.appendChild(b); }
+const inside = $('caseInside'); for (let i = 0; i < 6; i++) { const b = document.createElement('div'); b.className = 'bundle'; b.style.left = (20 + (i % 3) * 180) + 'px'; b.style.top = (-30 - Math.floor(i / 3) * 40) + 'px'; inside.appendChild(b); }
+const PRICES = ["3 000 so'm", "30 000 so'm", "300 000 so'm", "3 000 000 so'm"];
+
+function objects(t) {
+  const L = i => t - ST[i];
+  // S0 printer: vibrates while printing, letters rise out of the slot
+  { const u = L(0), vib = u < sDur(0) + 0.3 ? Math.sin(u * 95) * 4 : 0;
+    put('shadow0', A[0][0], A[0][1] + 300, 0, 1);
+    put('printer', A[0][0] + vib, A[0][1] + 60, 0, 1, vib * 0.15);
+    put('printed', A[0][0], A[0][1] - 250, 0, 1, 0, u < sDur(0) + 0.4 ? 1 : 0);
+    const p = E.out(seg(u, cue(0, 'print'), 0.9));
+    $('printedIn').style.transform = `translateY(${(1 - p) * 120}%)`;
+    $('printer').querySelectorAll('.led').forEach((l, k) => l.style.opacity = (Math.sin(u * 14 + k * 2) > 0) ? 1 : .35); }
+  // S1 suitcase drops in, squash on contact, lid bursts open at "chemodan"
+  { const u = L(1), drop = seg(u, -0.1, 0.55), land = u - 0.45;
+    let y = A[1][1] - 900 * (1 - E.out(drop) ** 1) + 0;
+    if (drop < 1) y = A[1][1] - 900 * Math.pow(1 - drop, 2);
+    const sq = land > 0 && land < 0.35 ? Math.sin(land / 0.35 * Math.PI) * 0.12 * Math.exp(-land * 4) : 0;
+    put('shadow1', A[1][0], A[1][1] + 250, 0, 0.6 + 0.4 * drop, 0, drop);
+    put('case', A[1][0], y, 0, 1, 0);
+    $('case').style.transform += ` scale(${1 + sq}, ${1 - sq})`;
+    const lo = seg(u, cue(1, 'lid'), 0.45);
+    $('lid').style.transform = `perspective(900px) rotateX(${-115 * E.back(lo)}deg)`;
+    inside.style.transform = `translateY(${-40 * E.out(lo)}px)`; }
+  // S2 shop + crowd
+  { const u = L(2);
+    put('shop', A[2][0], A[2][1] + 80, 0, 0.82);
+    ['bread1', 'bread2', 'bread3'].forEach((id, k) => { const p = seg(u, cue(2, 'non') + k * 0.08, 0.3); $(id).style.transform = `scale(${1 + 0.35 * Math.sin(p * Math.PI)})`; });
+    { const p = seg(u, cue(2, 'car'), 0.3); $('car').style.transform = `scale(${1 + 0.35 * Math.sin(p * Math.PI)})`; }
+    put('lblNon', A[2][0] + 60, A[2][1] + 120, -120, E.back(seg(u, cue(2, 'non'), 0.35)), -3, cl(seg(u, cue(2, 'non'), 0.1)));
+    put('lblCar', A[2][0] - 20, A[2][1] + 360, -120, E.back(seg(u, cue(2, 'car'), 0.35)), 3, cl(seg(u, cue(2, 'car'), 0.1)));
+    const st = seg(u, cue(2, 'stamp'), 0.28); put('stamp', A[2][0], A[2][1] + 40, -200, 2.2 - 1.2 * E.back(st), 0, cl(st * 4)); }
+  // S3 scale: pile grows, beam wobbles on each drop, price tag ka-chings, then rockets up
+  { const u = L(3), pr = C.s3.prices;
+    put('shadow3', A[3][0], A[3][1] + 470, 0, 0.8);
+    put('scale', A[3][0], A[3][1] + 40, 0, 0.78);
+    const n = Math.floor(cl(u / (cue(3, 'rocket') + 0.2)) * 14);
+    [...pile.children].forEach((b, k) => b.style.opacity = k < n ? 1 : 0);
+    let step = 0; pr.forEach((c, k) => { if (u >= c) step = k; });
+    const lastHit = pr.reduce((m, c) => (u >= c ? c : m), -9), hit = u - lastHit;
+    const wob = Math.sin(u * 11) * 2 * Math.exp(-Math.max(0, hit) * 3) + Math.sin(u * 2) * 0.8;
+    $('beam').style.transform = `rotate(${wob}deg)`;
+    $('panL').style.transform = `translateY(${-Math.sin(wob * Math.PI / 180) * 440}px)`;
+    $('panR').style.transform = `translateY(${Math.sin(wob * Math.PI / 180) * 440}px)`;
+    $('ptagT').textContent = PRICES[step];
+    const bump = hit >= 0 && hit < 0.3 ? 1 + 0.35 * Math.sin(hit / 0.3 * Math.PI) : 1;
+    const rk = seg(u, cue(3, 'rocket'), 1.0), ry = -2600 * Math.pow(rk, 2.2);
+    put('ptag', A[3][0] + 120 + Math.sin(u * 3) * 6, A[3][1] - 330 + ry, -60, bump * (1 + rk * .3), -6 + Math.sin(u * 4) * 3 + rk * 8, 1 - seg(u, cue(3, 'rocket') + 0.55, 0.25)); }
+  // S4 calendar flips ×2 each beat, then the 100-trillion note and its zeros slam in
+  { const u = L(4), f0 = cue(4, 'flip0'), fs = cue(4, 'flipStep'), nf = C.s4.flips;
+    const k = cl(Math.floor((u - f0) / fs) + 1, 0, nf), kp = (u - f0) / fs - Math.floor((u - f0) / fs);
+    const setPage = (el, n) => { el.querySelector('.hd').textContent = 'KUN ' + (n + 1); el.querySelector('b').textContent = '$' + (2 ** n).toLocaleString('en-US').replace(/,/g, ' '); };
+    setPage($('pageA'), k); setPage($('pageB'), Math.max(0, k - 1));
+    const tearing = k > 0 && u >= f0 && u < f0 + nf * fs;
+    $('pageB').style.display = tearing ? '' : 'none';
+    if (tearing) { const p = E.out(cl(kp / 0.8)); $('pageB').style.transform = `translate(${p * 500}px, ${-p * 700}px) rotate(${p * 40}deg)`; $('pageB').style.opacity = 1 - p; }
+    const zn = seg(u, cue(4, 'note'), 0.45);
+    put('cal', A[4][0], A[4][1] - 80 + zn * 200, 0, 1 - zn * 0.25, 0, (u > -0.5 ? 1 : 0) * (1 - zn));
+    const xp = k > 0 && tearing ? kp : 1; put('x2', A[4][0] + 300, A[4][1] - 380, -150, tearing ? 0.7 + 0.5 * Math.exp(-xp * 5) : 0.001, 8, tearing ? 1 : 0);
+    put('zim', A[4][0], A[4][1] + 220 - 900 * (1 - E.out(zn)), -40, 0.95, -10 * (1 - E.out(zn)) - 3, cl(zn * 3));
+    [...zerosEl.children].forEach((s, j) => { const p = seg(u, cue(4, 'zeros') + j * cue(4, 'zeroStep'), 0.22); s.style.opacity = cl(p * 4); s.style.transform = `scale(${2.6 - 1.6 * E.back(p)})`; }); }
+  // S5 split: printer (fast) vs oven (slow bread rise)
+  { const u = L(5), vis = t > ST[5] - 0.6 ? 1 : 0, vib = Math.sin(u * 110) * 3;
+    put('divider', A[5][0], A[5][1], 40, 1, 0, vis * (1 - seg(t, ST[6] - 0.2, 0.3)));
+    put('printer5', P5[0] + vib, P5[1], 0, 0.6, 0, vis * (u < sDur(5) + 0.15 ? 1 : 1 - seg(t, ST[6], 0.35)));
+    put('oven', A[5][0] + 270, A[5][1] + 40, 0, 0.8, 0, vis * (1 - seg(t, ST[6] - 0.1, 0.3)));
+    $('ovenBread').style.transform = `scale(${0.45 + 0.45 * E.io(cl(u / sDur(5)))})`;
+    put('bdgL', P5[0] + 30, A[5][1] + 250, -80, E.back(seg(u, cue(5, 'oson'), 0.35)), -4, vis * cl(seg(u, cue(5, 'oson'), .1)) * (1 - seg(t, ST[6] - 0.1, 0.2)));
+    put('bdgR', A[5][0] + 270, A[5][1] + 290, -80, E.back(seg(u, cue(5, 'qiyin'), 0.35)), 4, vis * cl(seg(u, cue(5, 'qiyin'), .1)) * (1 - seg(t, ST[6] - 0.1, 0.2))); }
+  // S6 big red button grows out of the small printer's button
+  { const u = L(6), g = E.out(seg(t, ST[6] - 0.25, 0.7)), hit = u - cue(6, 'hit');
+    const press = hit > 0 ? Math.exp(-hit * 6) * Math.sin(Math.min(hit, .2) / .2 * Math.PI) : 0;
+    const pulse = 1 + 0.03 * Math.sin(u * 7);
+    put('bigbtn', A[6][0], A[6][1], 0, (0.16 + 0.84 * g) * 0.42 * pulse * (1 - press * 0.08), 0, g);
+    put('ring', A[6][0], A[6][1], 30, 0.42 * (0.6 + 0.4 * g) * (1 + (u % 1.0) * 0.5), 0, g * (1 - (u % 1.0)));
+    const hy = Math.sin(u * 5) * 14 - press * 30;
+    put('hand', A[6][0] + 95, A[6][1] + 55 + hy, -100, 0.32 * g, -24, g); }
+}
+
+// ---------- frame ----------
+let prevCam = null;
+window.render = (t) => {
+  CAM = cam(t); const pc = cam(Math.max(0, t - 1 / 60));
+  const s = F / (0 - CAM.z), vel = { x: (CAM.x - pc.x) * s, y: (CAM.y - pc.y) * s };
+  $('world').style.transform = `rotate(${CAM.roll}deg) scale(1.07)`;
+  const bx = Math.min(36, Math.abs(vel.x) * 0.45), by = Math.min(36, Math.abs(vel.y) * 0.45);
+  $('mbk').setAttribute('stdDeviation', `${bx.toFixed(1)} ${by.toFixed(1)}`);
+  $('world').style.filter = (bx > 0.5 || by > 0.5) ? 'url(#mb)' : '';
+  drawBg(t); objects(t); drawNotes(t); hudAt(t, vel);
+  $('prog').style.width = (100 * cl(t / TOTAL)) + '%';
+};
+</script>
+</body></html>
