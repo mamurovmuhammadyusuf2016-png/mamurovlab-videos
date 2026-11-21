@@ -1,0 +1,301 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="cues.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070a1f; }
+body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; color: #fff; }
+#bg { position: absolute; inset: 0; }
+#world { position: absolute; inset: 0; transform-origin: 540px 960px; }
+#world .o { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#notes { position: absolute; left: 0; top: 0; }
+#hud { position: absolute; inset: 0; pointer-events: none; }
+.t { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; line-height: .95; }
+.t span { display: inline-block; white-space: pre; will-change: transform; }
+.y { color: #ffd23f; } .g { color: #3ddc84; } .r { color: #ff4757; } .b { color: #5fd3ff; }
+.sh { text-shadow: 0 8px 0 rgba(0,0,0,.35), 0 18px 40px rgba(0,0,0,.55); }
+.pill { display: inline-block; padding: 14px 36px; border-radius: 999px; font-weight: 900; }
+.handle { position: absolute; top: 74px; left: 0; right: 0; text-align: center; font: 800 30px "Inter Display", Inter; letter-spacing: 3px; color: rgba(255,255,255,.55); }
+.prog { position: absolute; top: 46px; left: 90px; right: 90px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.14); overflow: hidden; }
+.prog i { display: block; height: 100%; background: #ffd23f; width: 0; }
+.shadow { width: 900px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+.lbl { padding: 14px 32px; border-radius: 20px; font-weight: 900; font-size: 48px; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.emo { font-size: 150px; line-height: 1; }
+/* cartoon Earth with a face */
+.earth { width: 640px; height: 640px; border-radius: 50%; overflow: hidden;
+  background: radial-gradient(circle at 35% 28%, #8fd8ff, #2f8be0 45%, #154a9e 85%);
+  box-shadow: 0 0 90px rgba(95,180,255,.55), inset -50px -60px 110px rgba(0,0,40,.45), inset 30px 30px 60px rgba(255,255,255,.25); }
+.earth .land { position: absolute; background: linear-gradient(160deg, #6ee06b, #2fae4a); border-radius: 42% 58% 46% 54%; opacity: .95; }
+.earth .cloud { position: absolute; background: rgba(255,255,255,.85); border-radius: 50%; filter: blur(2px); }
+.earth .eye { position: absolute; top: 230px; width: 120px; height: 140px; border-radius: 50%; background: #fff; box-shadow: inset 0 -8px 0 rgba(0,0,0,.08); }
+.earth .eye i { position: absolute; left: 30px; top: 40px; width: 60px; height: 70px; border-radius: 50%; background: #0d1a3a; }
+.earth .eye i::after { content: ""; position: absolute; left: 12px; top: 10px; width: 18px; height: 18px; border-radius: 50%; background: #fff; }
+.earth .brow { position: absolute; top: 190px; width: 110px; height: 18px; border-radius: 9px; background: #0d1a3a; }
+.earth .mouth { position: absolute; left: 50%; top: 420px; width: 120px; height: 100px; margin-left: -60px; background: #5a0f1f; border-radius: 50%; overflow: hidden; }
+.earth .mouth::after { content: ""; position: absolute; left: 20%; right: 20%; bottom: -10px; height: 45%; background: #ff6b81; border-radius: 50%; }
+.big { font-weight: 900; font-size: 140px; letter-spacing: -4px; color: #ffd23f; text-shadow: 0 0 30px rgba(255,210,63,.7), 0 10px 0 rgba(0,0,0,.35); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cd { font-weight: 900; font-size: 360px; color: #fff; text-shadow: 0 0 60px rgba(255,255,255,.6), 0 14px 0 rgba(0,0,0,.35); line-height: 1; }
+/* balance */
+.beam { width: 1000px; height: 40px; border-radius: 20px; background: linear-gradient(180deg, #ffe08a, #c49a2c); }
+.post { width: 44px; height: 560px; border-radius: 22px; background: linear-gradient(90deg, #c49a2c, #ffd76a, #b88a1c); }
+.foot { width: 380px; height: 80px; border-radius: 40px 40px 18px 18px; background: linear-gradient(180deg, #ffd76a, #b88a1c); }
+.pan { width: 380px; height: 70px; border-radius: 0 0 190px 190px; background: linear-gradient(180deg, #ffe08a, #b88a1c); }
+.chain { width: 6px; height: 300px; background: #d6b048; }
+/* atom */
+.atom { width: 760px; height: 760px; }
+.orbit { position: absolute; left: 30px; top: 230px; width: 700px; height: 300px; border-radius: 50%; border: 8px solid rgba(95,211,255,.8); box-shadow: 0 0 30px rgba(95,211,255,.6); }
+.nucleus { position: absolute; left: 330px; top: 330px; width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffd0d0, #ff4757 55%, #a3101d); box-shadow: 0 0 40px rgba(255,71,87,.8); }
+.electron { position: absolute; width: 36px; height: 36px; border-radius: 50%; background: #5fd3ff; box-shadow: 0 0 24px #5fd3ff; }
+.zoom { padding: 16px 34px; border-radius: 999px; background: #10143a; color: #5fd3ff; font-weight: 900; font-size: 64px; letter-spacing: 1px; box-shadow: 0 0 0 5px #5fd3ff, 0 0 40px rgba(95,211,255,.6); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.shift { width: 6px; height: 6px; border-radius: 50%; background: #ffd23f; box-shadow: 0 0 14px 4px #ffd23f; }
+
+</style></head>
+<body>
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <!-- Earth used in S0-S1 and (second copy) S4, small one on the balance -->
+  <div class="o earth" id="e0"></div>
+  <div class="o earth" id="e4"></div>
+  <div class="o earth" id="e2"></div>
+  <div class="o cd" id="cd3">3</div><div class="o cd" id="cd2">2</div><div class="o cd" id="cd1">1</div>
+  <div class="o" id="go"><div class="lbl" style="background:#ffd23f;color:#10143a;font-size:110px">SAKRA! 🚀</div></div>
+  <div class="o big" id="ppl">0</div>
+  <div class="o" id="pplU"><div class="lbl" style="background:#fff;color:#10143a;font-size:56px">ODAM</div></div>
+  <div class="o" id="tons"><div class="lbl" style="background:#ff8a3d;color:#2a0f00;font-size:64px">≈ 400 MLN TONNA</div></div>
+  <!-- S2 balance -->
+  <div class="o foot" id="foot"></div><div class="o post" id="post"></div><div class="o beam" id="beam"></div>
+  <div class="o chain" id="chL1"></div><div class="o chain" id="chL2"></div><div class="o chain" id="chR1"></div><div class="o chain" id="chR2"></div>
+  <div class="o pan" id="panL"></div><div class="o pan" id="panR"></div>
+  <div class="o" id="crowd2" style="font-size:70px;line-height:1;white-space:nowrap">👨‍👩‍👧‍👦</div>
+  <div class="o" id="x15"><div class="lbl" style="background:#ff4757;color:#fff;font-size:84px;transform:rotate(-5deg)">×15 TRILLION</div></div>
+  <!-- S3 atom zoom -->
+  <div class="o atom" id="atom"><div class="orbit"></div><div class="orbit" style="transform:rotate(60deg)"></div><div class="orbit" style="transform:rotate(-60deg)"></div><div class="nucleus"></div>
+    <div class="electron" id="el0"></div><div class="electron" id="el1"></div><div class="electron" id="el2"></div></div>
+  <div class="o shift" id="shift"></div>
+  <div class="o" id="shiftL"><div class="lbl" style="background:#ffd23f;color:#10143a;font-size:40px">← Yer siljishi</div></div>
+  <div class="o" id="zoom"><div class="zoom" id="zoomT">×1</div></div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh y" data-s="0" data-in="-0.25" data-fx="slam" style="top:230px;font-size:220px;letter-spacing:-8px">AGAR…</div>
+  <div class="t sh" data-s="0" data-in="q" data-fx="slam" style="top:440px;font-size:92px;letter-spacing:-2px">HAMMA BIRDAN<br><span class="y">SAKRASA?</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:250px;font-size:96px;letter-spacing:-2px">LEKIN <span class="y">YER…</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:250px;font-size:84px;letter-spacing:-2px">YER QANCHA<br><span class="y">SILJIYDI?</span></div>
+  <div class="t sh" data-s="3" data-in="sez" data-fx="stamp" style="top:1520px;font-size:96px;letter-spacing:-2px">HECH KIM <span class="y">SEZMAYDI 😴</span></div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:250px;font-size:86px;letter-spacing:-2px">SAYYORAMIZ<br><span class="g">KATTA 💪</span></div>
+  <div class="t" data-s="4" data-in="tag" data-fx="pop" style="top:1560px"><span class="pill" style="font-size:62px;background:#ff4757;color:#fff">DO'STINGIZNI BELGILANG 👇</span></div>
+  <div class="t y" data-s="4" data-in="tag" data-fx="pop" style="top:1700px;font-size:54px;font-weight:800">Birga sakraymiz! 😄</div>
+</div>
+
+<script>
+const C = window.CUES, ST = C.starts, TOTAL = C.total;
+const W = 1080, H = 1920, F = 1000;
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, d) => cl((t - a) / d);
+const E = {
+  io: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  out: x => 1 - Math.pow(1 - x, 3),
+  back: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+};
+const sDur = i => (ST[i + 1] ?? TOTAL) - ST[i];
+const cue = (s, k) => { const v = C['s' + s]?.[k]; return v === undefined ? parseFloat(k) : v; };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const A = [[0, 0], [0, -40], [2600, 0], [5200, 0], [7800, 0]];
+const SCENE_BG = [['#0b0a2e', '#2a1a5a'], ['#0b0a2e', '#3a1a6a'], ['#0a1a3a', '#1f3a6a'], ['#05051a', '#1a1040'], ['#0b0a2e', '#2a2a6a']];
+
+function hold(i, u) {
+  const d = sDur(i);
+  let [x, y] = A[i];
+  let z = -1000 + 150 * E.io(cl(u / d));
+  x += Math.sin(u * 0.9 + i * 1.7) * 20; y += Math.cos(u * 0.7 + i * 2.3) * 14;
+  let roll = Math.sin(u * 0.8 + i) * 1.2;
+  if (i === 0) { z = -1250 + 300 * E.io(cl(u / d)); }
+  if (i === 1) { z = -950 - 450 * E.io(seg(u, 0, 1.2)); const k = u - 0.05; if (k > 0 && k < .9) { const e = Math.exp(-k * 5); x += Math.sin(k * 80) * 10 * e; y += Math.cos(k * 70) * 10 * e; } }
+  if (i === 3) { z = -1000 + 860 * E.io(seg(u, 0.1, sDur(3) - 0.5)); roll += u * 4; }   // dolly deep into the "atom"
+  if (i === 4) { z = -1150 + 200 * E.io(cl(u / d)); }
+  return { x, y, z, roll };
+}
+const lerp = (a, b, p) => a + (b - a) * p;
+const lc = (a, b, p) => ({ x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), z: lerp(a.z, b.z, p), roll: lerp(a.roll, b.roll, p) });
+const TW = 0.26;
+function sceneAt(t) { let i = 0; ST.forEach((s, k) => { if (t >= s) i = k; }); return i; }
+function cam(t) {
+  const i = sceneAt(t); let c = hold(i, t - ST[i]);
+  if (i + 1 < ST.length && t > ST[i + 1] - TW) c = lc(c, hold(i + 1, t - ST[i + 1]), E.io(seg(t, ST[i + 1] - TW, 2 * TW)));
+  if (i > 0 && t < ST[i] + TW) c = lc(hold(i - 1, t - ST[i - 1]), c, E.io(seg(t, ST[i] - TW, 2 * TW)));
+  return c;
+}
+let CAM, FOCUS = 0;
+function proj(x, y, z) { const s = F / (z - CAM.z); return { sx: W / 2 + (x - CAM.x) * s, sy: H / 2 + (y - CAM.y) * s, s }; }
+const $ = id => document.getElementById(id);
+function put(el, x, y, z = 0, sc = 1, rot = 0, op = 1, sx2 = 1, sy2 = 1) {
+  if (typeof el === 'string') el = $(el);
+  const p = proj(x, y, z);
+  if (op <= 0.001 || p.s <= 0 || p.sx < -1600 || p.sx > 2700 || p.sy < -1800 || p.sy > 3700) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.style.transform = `translate(${p.sx}px,${p.sy}px) scale(${p.s * sc}) rotate(${rot}deg) scale(${sx2},${sy2}) translate(-50%,-50%)`;
+  el.style.opacity = op;
+  const b = Math.min(16, Math.abs(z - FOCUS) * 0.016);
+  el.style.filter = b > 0.4 ? `blur(${b}px)` : '';
+  el.style.zIndex = Math.round(6000 - z);
+}
+
+// ---------- Earth builder ----------
+function buildEarth(id) {
+  const e = $(id);
+  [[60, 120, 220, 170], [330, 80, 200, 150], [380, 420, 190, 160], [90, 430, 160, 120], [250, 520, 160, 80]].forEach(([l, t, w, h]) => { const d = document.createElement('div'); d.className = 'land'; Object.assign(d.style, { left: l + 'px', top: t + 'px', width: w + 'px', height: h + 'px' }); e.append(d); });
+  [[120, 60, 140, 40], [380, 300, 160, 46], [60, 360, 120, 36]].forEach(([l, t, w, h]) => { const d = document.createElement('div'); d.className = 'cloud'; Object.assign(d.style, { left: l + 'px', top: t + 'px', width: w + 'px', height: h + 'px' }); e.append(d); });
+  e.insertAdjacentHTML('beforeend', '<div class="brow" style="left:170px"></div><div class="brow" style="right:170px"></div><div class="eye" style="left:180px"><i></i></div><div class="eye" style="right:180px"><i></i></div><div class="mouth"></div>');
+  return e;
+}
+['e0', 'e2', 'e4'].forEach(buildEarth);
+// expression: fear 0..1 (open round mouth, raised brows) vs smile (wide flat mouth)
+function face(id, fear, smile, look) {
+  const e = $(id), m = e.querySelector('.mouth');
+  const h = 30 + 90 * fear, w = 120 + 120 * smile;
+  m.style.height = (smile > 0 ? 70 : h) + 'px'; m.style.width = w + 'px'; m.style.marginLeft = (-w / 2) + 'px';
+  m.style.borderRadius = smile > 0 ? '0 0 140px 140px' : '50%';
+  e.querySelectorAll('.brow').forEach((b, k) => { b.style.transform = `translateY(${-30 * fear}px) rotate(${(k ? 1 : -1) * (12 * fear - 8 * smile)}deg)`; });
+  e.querySelectorAll('.eye i').forEach((p) => { p.style.transform = `translate(${look[0]}px, ${look[1]}px) scale(${1 - .25 * fear})`; });
+}
+
+// ---------- sprites ----------
+function emojiSprite(e) { const c = document.createElement('canvas'); c.width = c.height = 140; const g = c.getContext('2d'); g.font = '110px "Noto Color Emoji"'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(e, 70, 76); return c; }
+const PEOPLE = ['🧍', '🧍‍♀️', '🧍‍♂️', '🙋', '🙋‍♀️', '🙆', '🙆‍♀️', '🧒', '👧', '🧓'].map(emojiSprite);
+const JUMP = ['🙌', '🤸', '🤸‍♀️', '🙋', '🙆‍♂️'].map(emojiSprite);
+// the crowd stands on the Earth: angle along the rim, jumps radially
+function crowd(seed, n, spread) { const r = rng(seed), out = []; for (let k = 0; k < n; k++) out.push({ a: -Math.PI / 2 + (r() - .5) * spread, d: r() * .25, s: .5 + r() * .35, k: Math.floor(r() * 10), j: Math.floor(r() * 5) }); return out; }
+const C0 = crowd(51, 46, 2.9), C4 = crowd(52, 46, 2.9);
+const nctx = $('notes').getContext('2d');
+function drawCrowd(people, cx, cy, R, scaleE, jumpAt, t, landed) {
+  for (const p of people) {
+    let lift = 0, sprite = PEOPLE[p.k];
+    const u = t - jumpAt - p.d * .25;
+    if (jumpAt !== null && u > 0 && u < 1.0) { lift = Math.sin(u / 1.0 * Math.PI) * 260; sprite = JUMP[p.j]; }
+    if (landed) lift = Math.abs(Math.sin(t * 5 + p.a * 7)) * 18;
+    const rr = R * scaleE + 70 * p.s + lift;
+    const wx = cx + Math.cos(p.a) * rr, wy = cy + Math.sin(p.a) * rr;
+    const q = proj(wx, wy, -20); if (q.sx < -200 || q.sx > W + 200 || q.sy < -200 || q.sy > H + 200) continue;
+    nctx.setTransform(1, 0, 0, 1, q.sx, q.sy); nctx.rotate(p.a + Math.PI / 2); const sc = q.s * p.s * 1.45; nctx.scale(sc, sc);
+    nctx.drawImage(sprite, -70, -110);
+  }
+  nctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+function drawNotes(t) {
+  nctx.setTransform(1, 0, 0, 1, 0, 0); nctx.clearRect(0, 0, W, H);
+  if (t < ST[2] + .3) drawCrowd(C0, A[0][0], A[0][1] + 520, 320, 1, ST[1], t, false);
+  if (t > ST[4] - .4) drawCrowd(C4, A[4][0], A[4][1] + 400, 320, 1, null, t, true);
+}
+
+const pop = (u, t0, d = .35) => E.back(seg(u, t0, d)), vis = (u, t0) => cl(seg(u, t0, .1));
+function objects(t) {
+  const L = i => t - ST[i];
+  // S0-S1: Earth, countdown, jump, counters
+  { const u0 = L(0), u1 = L(1), on = t < ST[2] + .3 ? 1 : 0;
+    const scared = cl(seg(u0, .3, .6) * .5 + seg(u1, -.1, .2) * .5) * (1 - seg(u1, 1.4, .6) * .6);
+    const jolt = u1 > 0 && u1 < 1.2 ? Math.sin(u1 * 40) * 6 * (1 - u1 / 1.2) : 0;
+    put('e0', A[0][0] + jolt, A[0][1] + 520, 0, 1, Math.sin(t * .6) * 2, on);
+    face('e0', scared, 0, [0, -18 * scared]);
+    const cds = [['cd3', .25], ['cd2', .95], ['cd1', 1.65]];
+    cds.forEach(([id, t0]) => { const k = u0 - t0; put(id, A[0][0], A[0][1] - 40, -150, k > 0 && k < .7 ? 1.4 - .4 * E.out(cl(k / .25)) : 1, 0, k > 0 && k < .7 ? cl((.7 - k) * 5) * cl(k * 8) : 0); });
+    put('go', A[0][0], A[0][1] - 80, -150, 2 - E.back(seg(u0, 2.35, .3)), -4, u0 > 2.35 && u1 < .5 ? 1 : 0);
+    put('ppl', A[0][0], A[0][1] - 330, -80, pop(u1, cue(1, 'ppl')), 0, on * vis(u1, cue(1, 'ppl')));
+    $('ppl').textContent = fmt(8.2e9 * E.out(seg(u1, cue(1, 'ppl'), 1.0)));
+    put('pplU', A[0][0], A[0][1] - 190, -80, pop(u1, cue(1, 'ppl') + .25), -3, on * vis(u1, cue(1, 'ppl') + .25));
+    put('tons', A[0][0], A[0][1] - 60, -100, pop(u1, cue(1, 'tons')), 3, on * vis(u1, cue(1, 'tons'))); }
+  // S2: balance — tiny crowd vs the whole Earth
+  { const u = L(2), [x, y] = A[2], on = t > ST[2] - .6 && t < ST[3] + .4 ? 1 : 0;
+    const tilt = 18 * E.back(seg(u, .2, .9)) + Math.sin(u * 3) * .6, r = tilt * Math.PI / 180;
+    const px = x, py = y - 120, Lh = 310;
+    put('foot', x, y + 380, 0, .8, 0, on); put('post', x, y + 140, 5, .85, 0, on); put('beam', px, py, 0, .7, tilt, on);
+    const ends = [[-1, 'L'], [1, 'R']];
+    ends.forEach(([sgn, k]) => { const ex = px + sgn * Lh * Math.cos(r), ey = py + sgn * Lh * Math.sin(r);
+      put('ch' + k + '1', ex - 85, ey + 110, 5, .72, 14, on); put('ch' + k + '2', ex + 85, ey + 110, 5, .72, -14, on); put('pan' + k, ex, ey + 220, 0, .72, 0, on);
+      if (k === 'L') put('crowd2', ex, ey + 180, -10, 1.3, 0, on); else put('e2', ex, ey + 40, -10, 0.36, 0, on); });
+    face('e2', 0, .6, [0, 6]);
+    put('x15', x, y + 560, -150, 2.2 - 1.2 * E.back(seg(u, cue(2, 'x15'), .3)), 0, on * cl(seg(u, cue(2, 'x15'), .1) * 4)); }
+  // S3: dive into an atom; Earth's shift is a tiny glowing dot next to the nucleus
+  { const u = L(3), [x, y] = A[3], on = t > ST[3] - .6 && t < ST[4] + .4 ? 1 : 0;
+    put('atom', x, y, 0, 1, u * 20, on);
+    [0, 1, 2].forEach((k) => { const a = u * 3 + k * 2.1, ang = k * 60 * Math.PI / 180, ex = Math.cos(a) * 350, ey = Math.sin(a) * 150; $('el' + k).style.left = (380 - 18 + ex * Math.cos(ang) - ey * Math.sin(ang)) + 'px'; $('el' + k).style.top = (380 - 18 + ex * Math.sin(ang) + ey * Math.cos(ang)) + 'px'; });
+    put('shift', x + 18, y + 2, -5, 1, 0, on * vis(u, cue(3, 'atom')));
+    put('shiftL', x + 62, y + 2, -6, .25 * pop(u, cue(3, 'atom') + .2), 0, on * vis(u, cue(3, 'atom') + .2));
+    const zexp = Math.round(cl(u / (cue(3, 'atom') + .2)) * 10);
+    $('zoomT').textContent = '×' + fmt(Math.pow(10, zexp));
+    const zs = F / (-5 - CAM.z);  // keep the zoom badge fixed on screen while the camera dives
+    put('zoom', CAM.x, CAM.y + (1260 - 960) / zs, -5, 0.9 / zs, 0, (t < ST[4] - .15 ? 1 : 0) * vis(u, .1) * (1 - seg(u, cue(3, 'sez') - .2, .2))); }
+  // S4: everyone landed, Earth relieved and smiling
+  { const u = L(4), on = t > ST[4] - .6 ? 1 : 0;
+    put('e4', A[4][0], A[4][1] + 400, 0, 1, Math.sin(t * .8) * 3, on);
+    face('e4', 0, E.out(seg(u, .2, .6)), [Math.sin(u * 2) * 8, 0]); }
+}
+
+const far = $('far').getContext('2d');
+const bokeh = []; { const r = rng(11); for (let i = 0; i < 70; i++) bokeh.push({ x: -1600 + r() * 11000, y: -2400 + r() * 6600, z: 900 + r() * 2600, rad: 40 + r() * 120, hue: [48, 140, 200, 330, 270][Math.floor(r() * 5)] }); }
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function bgAt(t) {
+  const i = sceneAt(t); const a = SCENE_BG[i];
+  if (i + 1 < ST.length && t > ST[i + 1] - 0.3) { const p = seg(t, ST[i + 1] - 0.3, 0.6); const b = SCENE_BG[i + 1]; return [0, 1].map(k => { const x = hex(a[k]), y = hex(b[k]); return `rgb(${x.map((v, j) => Math.round(lerp(v, y[j], p))).join(',')})`; }); }
+  return a;
+}
+function drawBg(t) {
+  const [c1, c2] = bgAt(t);
+  $('bg').style.background = `radial-gradient(1200px 1400px at 50% 40%, ${c2} 0%, ${c1} 65%, #05060f 100%)`;
+  far.clearRect(0, 0, W, H);
+  for (const b of bokeh) {
+    const p = proj(b.x, b.y, b.z); if (p.sx < -300 || p.sx > W + 300 || p.sy < -300 || p.sy > H + 300) continue;
+    const r = b.rad * p.s * 2.2, g = far.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r);
+    g.addColorStop(0, `hsla(${b.hue},90%,65%,.28)`); g.addColorStop(1, `hsla(${b.hue},90%,65%,0)`);
+    far.fillStyle = g; far.beginPath(); far.arc(p.sx, p.sy, r, 0, 7); far.fill();
+  }
+}
+
+const hudItems = [...document.querySelectorAll('#hud [data-s]')].map(el => {
+  const fx = el.dataset.fx; const letters = [];
+  if (fx === 'slam') {
+    const walk = n => { [...n.childNodes].forEach(ch => {
+      if (ch.nodeType === 3) { const frag = document.createDocumentFragment(); for (const c of ch.textContent) { const s = document.createElement('span'); s.textContent = c; frag.appendChild(s); letters.push(s); } ch.replaceWith(frag); }
+      else if (ch.nodeName !== 'BR') walk(ch); }); };
+    walk(el);
+  }
+  el.style.opacity = 0;
+  return { el, s: +el.dataset.s, inK: el.dataset.in, fx, letters };
+});
+function hudAt(t, vel) {
+  for (const it of hudItems) {
+    const s0 = ST[it.s], end = (ST[it.s + 1] ?? TOTAL + 1);
+    const tin = s0 + cue(it.s, it.inK), tout = end - 0.12, a = t - tin;
+    if (a < 0 || t > tout + 0.2) { it.el.style.opacity = 0; continue; }
+    const o = 1 - seg(t, tout, 0.2), lag = `translate(${-vel.x * 2}px, ${-vel.y * 2}px)`;
+    if (it.fx === 'slam') {
+      it.el.style.opacity = o; it.el.style.transform = `${lag} scale(${1 + (1 - o) * .25})`; it.el.style.filter = o < 1 ? `blur(${(1 - o) * 10}px)` : '';
+      it.letters.forEach((sp, k) => { const p = seg(a - k * 0.03, 0, 0.34); sp.style.opacity = cl(p * 3);
+        sp.style.transform = `translateY(${(1 - E.out(p)) * -80}px) scale(${1 + (1 - E.back(p)) * 1.6}) rotate(${(1 - E.out(p)) * -14}deg)`; });
+    } else if (it.fx === 'stamp') {
+      const p = seg(a, 0, 0.3), sh = a < 0.5 ? Math.sin(a * 70) * 10 * (1 - a / 0.5) : 0;
+      it.el.style.opacity = cl(p * 4) * o; it.el.style.transform = `${lag} translateX(${sh}px) scale(${2.3 - 1.3 * E.back(p)}) rotate(${-6 + 6 * (1 - E.out(p))}deg)`;
+    } else if (it.fx === 'pop') {
+      const p = seg(a, 0, 0.35); it.el.style.opacity = cl(p * 3) * o; it.el.style.transform = `${lag} scale(${.4 + .6 * E.back(p)})`;
+    }
+  }
+}
+
+
+window.render = (t) => {
+  CAM = cam(t); const pc = cam(Math.max(0, t - 1 / 60));
+  const s = F / (0 - CAM.z), vel = { x: (CAM.x - pc.x) * s, y: (CAM.y - pc.y) * s };
+  $('world').style.transform = `rotate(${CAM.roll}deg) scale(1.07)`;
+  const bx = Math.min(36, Math.abs(vel.x) * 0.45), by = Math.min(36, Math.abs(vel.y) * 0.45);
+  $('mbk').setAttribute('stdDeviation', `${bx.toFixed(1)} ${by.toFixed(1)}`);
+  $('world').style.filter = (bx > 0.5 || by > 0.5) ? 'url(#mb)' : '';
+  drawBg(t); objects(t); drawNotes(t); hudAt(t, vel);
+  $('prog').style.width = (100 * cl(t / TOTAL)) + '%';
+};
+</script>
+</body></html>
