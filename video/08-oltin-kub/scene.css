@@ -1,0 +1,17 @@
+/* gold cube (real CSS 3D) */
+.cubeWrap { width: 520px; height: 520px; perspective: 1700px; }
+.cube { position: absolute; inset: 0; transform-style: preserve-3d; }
+.face { position: absolute; width: 520px; height: 520px; backface-visibility: hidden;
+  background: linear-gradient(135deg, #fff3b0 0%, #ffd34d 22%, #e8a521 55%, #b9780e 100%);
+  box-shadow: inset 0 0 0 6px rgba(255,255,255,.35), inset 0 0 90px rgba(120,70,0,.45); }
+.face::before { content: ""; position: absolute; inset: 0; opacity: .32;
+  background: repeating-linear-gradient(0deg, transparent 0 63px, rgba(120,70,0,.7) 63px 65px), repeating-linear-gradient(90deg, transparent 0 128px, rgba(120,70,0,.7) 128px 130px); }
+.face::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) 45%, transparent 60%); background-size: 300% 100%; background-position: var(--sh, 100%) 0; }
+.glow { width: 1300px; height: 1300px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,200,60,.45), rgba(255,200,60,0)); }
+.bldg { width: 300px; height: 560px; border-radius: 10px 10px 0 0; background: linear-gradient(180deg, #f2d7b0, #c99f6e);
+  background-image: radial-gradient(circle, #ffe9a8 0 13px, transparent 14px), linear-gradient(180deg, #f2d7b0, #c99f6e); background-size: 75px 80px, 100% 100%; background-position: 18px 22px, 0 0; box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+.ruler { width: 16px; height: 520px; background: #fff; border-radius: 8px; box-shadow: 0 0 20px rgba(255,255,255,.6); }
+.ground { width: 1700px; height: 30px; border-radius: 15px; background: linear-gradient(180deg, #4a3a6a, #251c3a); }
+.ptag { padding: 22px 36px; border-radius: 22px; background: #fff7d6; color: #3a2400; font-weight: 900; font-size: 66px; white-space: nowrap; font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 6px #c99a2e, 0 20px 50px rgba(0,0,0,.45), 0 0 60px rgba(255,210,63,.6); }
+.big { font-weight: 900; font-size: 150px; letter-spacing: -5px; color: #ffd23f; text-shadow: 0 0 30px rgba(255,210,63,.7), 0 10px 0 rgba(0,0,0,.35); white-space: nowrap; font-variant-numeric: tabular-nums; }
