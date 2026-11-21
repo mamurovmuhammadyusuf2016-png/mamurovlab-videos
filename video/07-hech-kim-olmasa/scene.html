@@ -1,0 +1,343 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="cues.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070a1f; }
+body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; color: #fff; }
+#bg { position: absolute; inset: 0; }
+#world { position: absolute; inset: 0; transform-origin: 540px 960px; }
+#world .o { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#notes { position: absolute; left: 0; top: 0; }
+#hud { position: absolute; inset: 0; pointer-events: none; }
+.t { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; line-height: .95; }
+.t span { display: inline-block; white-space: pre; will-change: transform; }
+.y { color: #ffd23f; } .g { color: #3ddc84; } .r { color: #ff4757; } .b { color: #5fd3ff; }
+.sh { text-shadow: 0 8px 0 rgba(0,0,0,.35), 0 18px 40px rgba(0,0,0,.55); }
+.pill { display: inline-block; padding: 14px 36px; border-radius: 999px; font-weight: 900; }
+.handle { position: absolute; top: 74px; left: 0; right: 0; text-align: center; font: 800 30px "Inter Display", Inter; letter-spacing: 3px; color: rgba(255,255,255,.55); }
+.prog { position: absolute; top: 46px; left: 90px; right: 90px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.14); overflow: hidden; }
+.prog i { display: block; height: 100%; background: #ffd23f; width: 0; }
+.shadow { width: 900px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+.lbl { padding: 14px 32px; border-radius: 20px; font-weight: 900; font-size: 48px; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.emo { font-size: 150px; line-height: 1; }
+/* hourglass */
+.hg { width: 420px; height: 640px; }
+.hg .cap { position: absolute; left: 0; right: 0; height: 46px; border-radius: 23px; background: linear-gradient(180deg, #e6b35c, #9b6a22); box-shadow: 0 10px 20px rgba(0,0,0,.4); }
+.hg .post { position: absolute; top: 30px; bottom: 30px; width: 26px; border-radius: 13px; background: linear-gradient(90deg, #9b6a22, #e6b35c, #9b6a22); }
+.hg .glass { position: absolute; left: 60px; right: 60px; top: 46px; bottom: 46px;
+  background: rgba(170,220,255,.14); border: 6px solid rgba(200,235,255,.55);
+  clip-path: polygon(0 0, 100% 0, 100% 6%, 56% 48%, 56% 52%, 100% 94%, 100% 100%, 0 100%, 0 94%, 44% 52%, 44% 48%, 0 6%); box-shadow: inset 0 0 60px rgba(150,210,255,.35); }
+.hg .sandT { position: absolute; left: 66px; right: 66px; top: 52px; height: 200px; background: linear-gradient(180deg, #ffe08a, #e0a93c);
+  clip-path: polygon(0 0, 100% 0, 56% 98%, 44% 98%); }
+.hg .sandB { position: absolute; left: 66px; right: 66px; bottom: 52px; height: 120px; background: linear-gradient(180deg, #ffe08a, #e0a93c);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.hg .glow { position: absolute; inset: -80px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,215,120,.35), rgba(255,215,120,0)); }
+/* family */
+.table { width: 940px; height: 220px; border-radius: 50%; background: radial-gradient(ellipse at 50% 35%, #fff6e4, #e9d4ad 70%, #b99a6a);
+  box-shadow: 0 30px 60px rgba(0,0,0,.45), inset 0 -14px 0 rgba(0,0,0,.12); }
+.food { font-size: 92px; line-height: 1; }
+.age { padding: 8px 22px; border-radius: 16px; background: #ffd23f; color: #10143a; font-weight: 900; font-size: 44px; white-space: nowrap; box-shadow: 0 10px 20px rgba(0,0,0,.35); }
+/* counters */
+.ctr { width: 860px; height: 250px; border-radius: 40px; display: flex; align-items: center; gap: 30px; padding: 0 44px; box-shadow: 0 30px 60px rgba(0,0,0,.45); }
+.ctr .ic { font-size: 130px; line-height: 1; }
+.ctr .v { font-weight: 900; font-size: 104px; letter-spacing: -3px; font-variant-numeric: tabular-nums; }
+.ctr .u { font-weight: 800; font-size: 40px; opacity: .8; }
+.big { font-weight: 900; font-size: 150px; letter-spacing: -5px; color: #ffd23f; text-shadow: 0 0 30px rgba(255,210,63,.7), 0 10px 0 rgba(0,0,0,.35); white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* globe */
+.globe { width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #7fd3ff, #2a7fd4 45%, #123a7a 80%);
+  box-shadow: 0 0 80px rgba(95,211,255,.5), inset -40px -40px 80px rgba(0,0,0,.35); overflow: hidden; }
+.globe .land { position: absolute; border-radius: 45% 55% 50% 40%; background: #3ddc84; opacity: .9; }
+/* city */
+.bld { position: absolute; bottom: 0; border-radius: 14px 14px 0 0; background: linear-gradient(180deg, #5b6fe6, #2a3596);
+  box-shadow: inset 0 8px 0 rgba(255,255,255,.2); transform-origin: 50% 100%;
+  background-image: radial-gradient(circle, #ffe08a 0 9px, transparent 10px), linear-gradient(180deg, #5b6fe6, #2a3596); background-size: 46px 56px, 100% 100%; background-position: 12px 18px, 0 0; }
+.ground { width: 1000px; height: 40px; border-radius: 20px; background: linear-gradient(180deg, #3ddc84, #1d8a4f); }
+/* S5 panels */
+.panel { width: 900px; height: 380px; border-radius: 40px; background: rgba(255,255,255,.07); border: 3px solid rgba(255,255,255,.15); overflow: hidden; }
+.panel .cap2 { position: absolute; left: 30px; top: 24px; font-weight: 900; font-size: 50px; }
+.house { position: absolute; width: 300px; height: 280px; bottom: 0; border-radius: 12px 12px 0 0; background: linear-gradient(180deg, #ffcf8a, #d9934a); }
+.win { position: absolute; width: 74px; height: 64px; border-radius: 8px; background: #2a3596; color: #ffd23f; font: 900 18px Inter; display: flex; align-items: center; justify-content: center; }
+</style></head>
+<body>
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+
+  <!-- S0 / S6 hourglass -->
+  <div class="o hg" id="hg0"><div class="glow"></div><div class="post" style="left:20px"></div><div class="post" style="right:20px"></div><div class="glass"></div><div class="sandT"></div><div class="sandB"></div><div class="cap" style="top:0"></div><div class="cap" style="bottom:0"></div></div>
+  <div class="o hg" id="hg6"><div class="glow"></div><div class="post" style="left:20px"></div><div class="post" style="right:20px"></div><div class="glass"></div><div class="sandT"></div><div class="sandB"></div><div class="cap" style="top:0"></div><div class="cap" style="bottom:0"></div></div>
+
+  <!-- S1 family -->
+  <div class="o" id="sh1"><div class="shadow" style="width:1000px"></div></div>
+  <div class="o emo" id="f0">👨</div><div class="o emo" id="f1">👩</div><div class="o emo" id="f2">🧒</div><div class="o emo" id="f3">👧</div>
+  <div class="o emo" id="f4" style="font-size:190px">👴</div><div class="o emo" id="f5" style="font-size:170px">👵</div><div class="o emo" id="f6" style="font-size:150px">🧓</div>
+  <div class="o age" id="a4">150 yosh</div><div class="o age" id="a5">120 yosh</div><div class="o age" id="a6">95 yosh</div>
+  <div class="o table" id="table"></div>
+  <div class="o food" id="fd0">🍲</div><div class="o food" id="fd1">🫓</div><div class="o food" id="fd2">🍉</div><div class="o food" id="fd3">🫖</div><div class="o food" id="fd4">🎂</div>
+
+  <!-- S2 counters -->
+  <div class="o ctr" id="cB" style="background:linear-gradient(135deg,#3ddc84,#1d8a4f)"><div class="ic">👶</div><div><div class="v" id="vB">+0</div><div class="u">tug'iladi / yil</div></div></div>
+  <div class="o ctr" id="cD" style="background:linear-gradient(135deg,#ff6b6b,#b3243a)"><div class="ic" id="icD">🕯️</div><div><div class="v" id="vD">−0</div><div class="u">vafot etadi / yil</div></div></div>
+  <div class="o" id="world0"><div class="lbl" style="background:#fff;color:#10143a;font-size:54px">🌍 DUNYODA</div></div>
+
+  <!-- S3 globe -->
+  <div class="o globe" id="globe"><div class="land" style="left:90px;top:120px;width:200px;height:150px"></div><div class="land" style="left:300px;top:260px;width:170px;height:200px"></div><div class="land" style="left:120px;top:360px;width:120px;height:90px"></div></div>
+  <div class="o big" id="cnt3">+0</div>
+  <div class="o" id="tenY"><div class="lbl" style="background:#5fd3ff;color:#08243a;font-size:56px">10 YILDA</div></div>
+  <div class="o" id="usa"><div class="lbl" style="background:#fff;color:#10143a;font-size:84px">🇺🇸 × 2</div></div>
+
+  <!-- S4 city -->
+  <div class="o" id="uzf"><div class="lbl" style="background:#fff;color:#10143a;font-size:64px">🇺🇿 O'ZBEKISTON</div></div>
+  <div class="o" id="city" style="width:1000px;height:600px"></div>
+  <div class="o ground" id="ground"></div>
+  <div class="o big" id="cnt4" style="font-size:130px">+0</div>
+  <div class="o" id="cityStamp"><div class="lbl" style="background:#ff4757;color:#fff;font-size:76px;transform:rotate(-6deg)">1 SHAHAR! 🏙️</div></div>
+
+  <!-- S5 panels -->
+  <div class="o panel" id="p1"><div class="cap2">💰 PENSIYA</div><div id="queue" style="position:absolute;left:0;top:130px;width:3000px;font-size:150px;white-space:nowrap">👴👵🧓👴👵🧓👴👵🧓👴👵🧓👴👵🧓👴👵🧓👴👵🧓</div></div>
+  <div class="o panel" id="p2"><div class="cap2">🏠 KVARTIRA</div>
+    <div class="house" style="left:300px"><div class="win" style="left:30px;top:30px">BAND</div><div class="win" style="left:113px;top:30px">BAND</div><div class="win" style="left:196px;top:30px">BAND</div><div class="win" style="left:30px;top:120px">BAND</div><div class="win" style="left:113px;top:120px">BAND</div><div class="win" style="left:196px;top:120px">BAND</div></div>
+    <div id="homeless" style="position:absolute;left:640px;top:170px;font-size:150px">🧍</div></div>
+  <div class="o panel" id="p3"><div class="cap2">💼 BOSHLIQ</div><div style="position:absolute;left:330px;top:110px;font-size:200px">🧓</div><div class="age" style="position:absolute;left:560px;top:150px;font-size:52px">300 yosh</div><div id="young" style="position:absolute;left:80px;top:170px;font-size:140px">🧑‍💼</div></div>
+
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <!-- S0 -->
+  <div class="t sh y" data-s="0" data-in="-0.25" data-fx="slam" style="top:250px;font-size:230px;letter-spacing:-8px">AGAR…</div>
+  <div class="t sh" data-s="0" data-in="q" data-fx="slam" style="top:1470px;font-size:104px;letter-spacing:-3px">HECH KIM<br><span class="y">O'LMASA?</span></div>
+  <!-- S1 -->
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:250px;font-size:96px;letter-spacing:-2px">1-YIL: HAMMA<br><span class="g">XURSAND 🥳</span></div>
+  <!-- S2 -->
+  <div class="t sh" data-s="2" data-in="zero" data-fx="stamp" style="top:1500px;font-size:100px">O'LIM = <span class="r">0</span></div>
+  <!-- S3 -->
+  <div class="t sh" data-s="3" data-in="grow" data-fx="slam" style="top:250px;font-size:96px;letter-spacing:-2px">AHOLI <span class="y">×2</span><br>TEZ O'SADI</div>
+  <!-- S4 -->
+  <div class="t sh" data-s="4" data-in="count" data-fx="slam" style="top:250px;font-size:84px;letter-spacing:-2px">HAR YILI<br><span class="y">QO'SHIMCHA</span></div>
+  <!-- S6 -->
+  <div class="t sh" data-s="6" data-in="0.05" data-fx="slam" style="top:250px;font-size:92px;letter-spacing:-2px">ABADIY<br><span class="y">YASHARMIDINGIZ?</span></div>
+  <div class="t" data-s="6" data-in="ha" data-fx="pop" style="top:1560px"><span class="pill" style="font-size:70px;background:#3ddc84;color:#08210f;margin-right:20px">HA ✅</span><span class="pill" style="font-size:70px;background:#ff4757">YO'Q ❌</span></div>
+  <div class="t y" data-s="6" data-in="komment" data-fx="pop" style="top:1720px;font-size:50px;font-weight:800">Kommentga yozing 👇</div>
+</div>
+
+<script>
+const C = window.CUES, ST = C.starts, TOTAL = C.total;
+const W = 1080, H = 1920, F = 1000;
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, d) => cl((t - a) / d);
+const E = {
+  io: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  out: x => 1 - Math.pow(1 - x, 3),
+  back: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+};
+const sDur = i => (ST[i + 1] ?? TOTAL) - ST[i];
+const cue = (s, k) => { const v = C['s' + s]?.[k]; return v === undefined ? parseFloat(k) : v; };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const A = [[0, 0], [0, 2400], [2600, 2400], [5200, 2400], [5200, 0], [7800, 0], [7800, 2400]];
+const SCENE_BG = [['#120d3a', '#3a1f5a'], ['#2a1208', '#5a3a18'], ['#0d1a4a', '#2a1f5a'], ['#06183a', '#0f3a6a'], ['#0d2a2a', '#1a5a4a'], ['#1a0d3a', '#4a1f4a'], ['#120d3a', '#4a2a10']];
+
+function hold(i, u) {
+  const d = sDur(i);
+  let [x, y] = A[i];
+  let z = -1000 + 150 * E.io(cl(u / d));
+  x += Math.sin(u * 0.9 + i * 1.7) * 24; y += Math.cos(u * 0.7 + i * 2.3) * 16;
+  let roll = Math.sin(u * 0.8 + i) * 1.3;
+  if (i === 0) { z = -1250 + 380 * E.io(cl(u / d)); roll = Math.sin(u * 0.6) * 2; }
+  if (i === 1) { x += -70 + 140 * E.io(cl(u / d)); }                         // lateral track along the family
+  if (i === 3) { const g = seg(u, cue(3, 'grow'), 4); z = -900 - 450 * E.io(g); const k = u - cue(3, 'usa'); if (k > 0 && k < 1) { const e = Math.exp(-k * 4); x += Math.sin(k * 70) * 14 * e; y += Math.cos(k * 63) * 14 * e; } }
+  if (i === 4) { y -= 120 * E.io(cl(u / d)); }                                // tilt up as the city rises
+  if (i === 5) { y = A[5][1] - 360 + 720 * E.io(seg(u, 0.4, d - 0.7)); z = -1050; } // pan down across the three panels
+  if (i === 6) { z = -1150 + 250 * E.io(cl(u / d)); }
+  return { x, y, z, roll };
+}
+const lerp = (a, b, p) => a + (b - a) * p;
+const lc = (a, b, p) => ({ x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), z: lerp(a.z, b.z, p), roll: lerp(a.roll, b.roll, p) });
+const TW = 0.26;
+function sceneAt(t) { let i = 0; ST.forEach((s, k) => { if (t >= s) i = k; }); return i; }
+function cam(t) {
+  const i = sceneAt(t); let c = hold(i, t - ST[i]);
+  if (i + 1 < ST.length && t > ST[i + 1] - TW) c = lc(c, hold(i + 1, t - ST[i + 1]), E.io(seg(t, ST[i + 1] - TW, 2 * TW)));
+  if (i > 0 && t < ST[i] + TW) c = lc(hold(i - 1, t - ST[i - 1]), c, E.io(seg(t, ST[i] - TW, 2 * TW)));
+  return c;
+}
+let CAM, FOCUS = 0;
+function proj(x, y, z) { const s = F / (z - CAM.z); return { sx: W / 2 + (x - CAM.x) * s, sy: H / 2 + (y - CAM.y) * s, s }; }
+const $ = id => document.getElementById(id);
+function put(el, x, y, z = 0, sc = 1, rot = 0, op = 1, sx2 = 1, sy2 = 1) {
+  if (typeof el === 'string') el = $(el);
+  const p = proj(x, y, z);
+  if (op <= 0.001 || p.s <= 0 || p.sx < -1600 || p.sx > 2700 || p.sy < -1800 || p.sy > 3700) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.style.transform = `translate(${p.sx}px,${p.sy}px) scale(${p.s * sc}) rotate(${rot}deg) scale(${sx2},${sy2}) translate(-50%,-50%)`;
+  el.style.opacity = op;
+  const b = Math.min(16, Math.abs(z - FOCUS) * 0.016);
+  el.style.filter = b > 0.4 ? `blur(${b}px)` : '';
+  el.style.zIndex = Math.round(6000 - z);
+}
+
+// ---------- sprites: sand grain + emoji people ----------
+function sandSprite() { const c = document.createElement('canvas'); c.width = c.height = 40; const g = c.getContext('2d'); const r = g.createRadialGradient(20, 20, 0, 20, 20, 20); r.addColorStop(0, 'rgba(255,240,180,1)'); r.addColorStop(.35, 'rgba(255,205,100,.9)'); r.addColorStop(1, 'rgba(255,205,100,0)'); g.fillStyle = r; g.fillRect(0, 0, 40, 40); return c; }
+function emojiSprite(e) { const c = document.createElement('canvas'); c.width = c.height = 140; const g = c.getContext('2d'); g.font = '110px "Noto Color Emoji"'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(e, 70, 76); return c; }
+const SPR = { sand: sandSprite() }; ['👨', '👩', '🧒', '👧', '👴', '👵', '👶', '🧑'].forEach((e, k) => SPR['p' + k] = emojiSprite(e)); SPR.confA = emojiSprite('🎉'); SPR.confB = emojiSprite('⏳');
+const parts = [];
+function emit(seed, t0, t1, rate, fn) { const r = rng(seed); for (let t = t0; t < t1; t += 1 / rate) parts.push(fn(r, t + r() / rate)); }
+// S0: sand grains frozen in the air around the hourglass (slow drift, glittering)
+emit(31, -0.5, -0.5 + 0.001, 1, () => null); parts.length = 0;
+{ const r = rng(31); for (let k = 0; k < 140; k++) parts.push({ frozen: true, t0: -1, life: ST[1] + 0.5, x: A[0][0] + (r() - .5) * 900, y: A[0][1] - 500 + r() * 1100, z: -350 + r() * 900, vx: (r() - .5) * 14, vy: (r() - .5) * 14, vz: 0, g: 0, rot: 0, vr: 0, fl: 1, sc: .5 + r() * .9, k: 'sand', tw: r() * 6 }); }
+// S3: people pop out around the growing globe
+emit(32, ST[3] + cue(3, 'grow'), ST[4] + 0.2, 26, (r, t) => { const a = r() * Math.PI * 2, v = 600 + r() * 900; return { t0: t, life: 2.4, x: A[3][0] + Math.cos(a) * 200, y: A[3][1] + Math.sin(a) * 200, z: 0, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vz: -100 - r() * 700, g: 0, drag: 1.6, rot: (r() - .5), vr: (r() - .5) * 2, fl: 0, sc: .55 + r() * .3, k: 'p' + Math.floor(r() * 8) }; });
+// S6: sand sparkles + confetti
+emit(33, ST[6] + cue(6, 'komment'), ST[6] + cue(6, 'komment') + 0.8, 40, (r, t) => { const a = -Math.PI / 2 + (r() - .5) * 2.4, v = 1100 + r() * 1100; return { t0: t, life: 2.0, x: A[6][0], y: A[6][1] + 100, z: 0, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vz: -300 - r() * 800, g: 2300, rot: r() * 6, vr: (r() - .5) * 10, fl: 0, sc: .5, k: r() > .5 ? 'confA' : 'sand' }; });
+
+function partAt(p, t) {
+  const u = t - p.t0; if (u < 0 || u > p.life) return null;
+  if (p.frozen) return { x: p.x + Math.sin(t * .7 + p.tw) * 18, y: p.y + Math.cos(t * .5 + p.tw) * 14, z: p.z, rot: 0, fl: 1, a: (0.55 + 0.45 * Math.sin(t * 5 + p.tw * 3)) * cl((p.life - u) / .4) };
+  const k = p.drag ? (1 - Math.exp(-p.drag * u)) / p.drag : u;
+  return { x: p.x + p.vx * k, y: p.y + p.vy * k + 0.5 * p.g * u * u, z: p.z + p.vz * k, rot: p.rot + p.vr * u, fl: 1, a: cl((p.life - u) / 0.3) * cl(u / 0.08) };
+}
+const nctx = $('notes').getContext('2d');
+function drawNotes(t) {
+  nctx.setTransform(1, 0, 0, 1, 0, 0); nctx.clearRect(0, 0, W, H);
+  const live = [];
+  for (const p of parts) { const s = partAt(p, t); if (s && s.z > CAM.z + 60) live.push([p, s]); }
+  live.sort((a, b) => b[1].z - a[1].z);
+  for (const [p, s0] of live) {
+    const pr = proj(s0.x, s0.y, s0.z);
+    if (pr.sx < -300 || pr.sx > W + 300 || pr.sy < -300 || pr.sy > H + 300) continue;
+    const b = Math.min(12, Math.abs(s0.z - FOCUS) * 0.012);
+    nctx.filter = b > 0.6 ? `blur(${b.toFixed(1)}px)` : 'none';
+    const img = SPR[p.k], half = img.width / 2;
+    for (let k = p.frozen ? 0 : 2; k >= 0; k--) {
+      const s = k ? partAt(p, t - k / 200) : s0; if (!s) continue;
+      const q = k ? proj(s.x, s.y, s.z) : pr;
+      nctx.globalAlpha = s0.a * (k ? 0.22 : 1);
+      nctx.setTransform(1, 0, 0, 1, q.sx, q.sy); nctx.rotate(s.rot);
+      const sc = q.s * p.sc; nctx.scale(sc, sc); nctx.drawImage(img, -half, -half);
+    }
+  }
+  nctx.globalAlpha = 1; nctx.filter = 'none';
+}
+
+const far = $('far').getContext('2d');
+const bokeh = []; { const r = rng(11); for (let i = 0; i < 70; i++) bokeh.push({ x: -1600 + r() * 11000, y: -2400 + r() * 6600, z: 900 + r() * 2600, rad: 40 + r() * 120, hue: [48, 140, 200, 330, 270][Math.floor(r() * 5)] }); }
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function bgAt(t) {
+  const i = sceneAt(t); const a = SCENE_BG[i];
+  if (i + 1 < ST.length && t > ST[i + 1] - 0.3) { const p = seg(t, ST[i + 1] - 0.3, 0.6); const b = SCENE_BG[i + 1]; return [0, 1].map(k => { const x = hex(a[k]), y = hex(b[k]); return `rgb(${x.map((v, j) => Math.round(lerp(v, y[j], p))).join(',')})`; }); }
+  return a;
+}
+function drawBg(t) {
+  const [c1, c2] = bgAt(t);
+  $('bg').style.background = `radial-gradient(1200px 1400px at 50% 40%, ${c2} 0%, ${c1} 65%, #05060f 100%)`;
+  far.clearRect(0, 0, W, H);
+  for (const b of bokeh) {
+    const p = proj(b.x, b.y, b.z); if (p.sx < -300 || p.sx > W + 300 || p.sy < -300 || p.sy > H + 300) continue;
+    const r = b.rad * p.s * 2.2, g = far.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r);
+    g.addColorStop(0, `hsla(${b.hue},90%,65%,.28)`); g.addColorStop(1, `hsla(${b.hue},90%,65%,0)`);
+    far.fillStyle = g; far.beginPath(); far.arc(p.sx, p.sy, r, 0, 7); far.fill();
+  }
+}
+
+const hudItems = [...document.querySelectorAll('#hud [data-s]')].map(el => {
+  const fx = el.dataset.fx; const letters = [];
+  if (fx === 'slam') {
+    const walk = n => { [...n.childNodes].forEach(ch => {
+      if (ch.nodeType === 3) { const frag = document.createDocumentFragment(); for (const c of ch.textContent) { const s = document.createElement('span'); s.textContent = c; frag.appendChild(s); letters.push(s); } ch.replaceWith(frag); }
+      else if (ch.nodeName !== 'BR') walk(ch); }); };
+    walk(el);
+  }
+  el.style.opacity = 0;
+  return { el, s: +el.dataset.s, inK: el.dataset.in, fx, letters };
+});
+function hudAt(t, vel) {
+  for (const it of hudItems) {
+    const s0 = ST[it.s], end = (ST[it.s + 1] ?? TOTAL + 1);
+    const tin = s0 + cue(it.s, it.inK), tout = end - 0.12, a = t - tin;
+    if (a < 0 || t > tout + 0.2) { it.el.style.opacity = 0; continue; }
+    const o = 1 - seg(t, tout, 0.2), lag = `translate(${-vel.x * 2}px, ${-vel.y * 2}px)`;
+    if (it.fx === 'slam') {
+      it.el.style.opacity = o; it.el.style.transform = `${lag} scale(${1 + (1 - o) * .25})`; it.el.style.filter = o < 1 ? `blur(${(1 - o) * 10}px)` : '';
+      it.letters.forEach((sp, k) => { const p = seg(a - k * 0.03, 0, 0.34); sp.style.opacity = cl(p * 3);
+        sp.style.transform = `translateY(${(1 - E.out(p)) * -80}px) scale(${1 + (1 - E.back(p)) * 1.6}) rotate(${(1 - E.out(p)) * -14}deg)`; });
+    } else if (it.fx === 'stamp') {
+      const p = seg(a, 0, 0.3), sh = a < 0.5 ? Math.sin(a * 70) * 10 * (1 - a / 0.5) : 0;
+      it.el.style.opacity = cl(p * 4) * o; it.el.style.transform = `${lag} translateX(${sh}px) scale(${2.3 - 1.3 * E.back(p)}) rotate(${-6 + 6 * (1 - E.out(p))}deg)`;
+    } else if (it.fx === 'pop') {
+      const p = seg(a, 0, 0.35); it.el.style.opacity = cl(p * 3) * o; it.el.style.transform = `${lag} scale(${.4 + .6 * E.back(p)})`;
+    }
+  }
+}
+
+// ---------- city buildings (generated once) ----------
+const CITY = []; { const r = rng(5), city = $('city'); for (let k = 0; k < 9; k++) { const b = document.createElement('div'); b.className = 'bld'; const w = 90 + r() * 40, h = 200 + r() * 380; b.style.left = (20 + k * 108) + 'px'; b.style.width = w + 'px'; b.style.height = h + 'px'; city.appendChild(b); CITY.push({ b, d: r() * .5 }); } }
+const pop = (u, t0, d = .35) => E.back(seg(u, t0, d)), vis = (u, t0) => cl(seg(u, t0, .1));
+
+function objects(t) {
+  const L = i => t - ST[i];
+  // S0 hourglass with frozen sand; S6 the same hourglass flips
+  { const u = L(0); put('hg0', A[0][0], A[0][1] + 40, 0, 1, Math.sin(u * .8) * 2, t < ST[1] + .4 ? 1 : 0); }
+  { const u = L(6), fl = E.io(seg(u, cue(6, 'ha') - .3, .8)); put('hg6', A[6][0], A[6][1] + 20, 0, 0.9, 180 * fl, t > ST[6] - .6 ? 1 : 0);
+    $('hg6').querySelector('.sandT').style.height = (200 - 120 * cl(u / 4)) + 'px'; $('hg6').querySelector('.sandB').style.height = (120 + 90 * cl(u / 4)) + 'px'; }
+  // S1 family around the dastarkhan; elders pop in with their ages
+  { const u = L(1), [x, y] = A[1], br = k => Math.sin(u * 3 + k) * 6;
+    put('sh1', x, y + 480, 0, 1, 0, 1);
+    const people = [['f0', -300, 90], ['f1', 300, 90], ['f2', -380, 230], ['f3', 380, 230]];
+    people.forEach(([id, dx, dy], k) => put(id, x + dx, y + dy + br(k), -20, pop(u, -0.2 + k * .08), Math.sin(u * 2 + k) * 4, vis(u, -0.2 + k * .08)));
+    const eld = [['f4', 0, -40, 'a4', 0], ['f5', -190, 20, 'a5', .15], ['f6', 190, 20, 'a6', .3]];
+    eld.forEach(([id, dx, dy, aid, d], k) => { const t0 = cue(1, 'bobo') + d; put(id, x + dx, y + dy + br(k + 5), -10, pop(u, t0), 0, vis(u, t0)); put(aid, x + dx, y + dy - (k ? 135 : 160), -60, pop(u, t0 + .15), -4 + k * 4, vis(u, t0 + .15)); });
+    put('table', x, y + 330, 10, 0.9, 0, 1);
+    [['fd0', -260, 300], ['fd1', -100, 325], ['fd2', 100, 325], ['fd3', 260, 300], ['fd4', 0, 280]].forEach(([id, dx, dy], k) => put(id, x + dx, y + dy, -5, pop(u, .1 + k * .06), 0, vis(u, .1 + k * .06))); }
+  // S2 counters: births run up, deaths run up then switch off to 0
+  { const u = L(2), [x, y] = A[2];
+    put('world0', x, y - 520, -40, pop(u, 0), -3, vis(u, 0));
+    put('cB', x, y - 210, 0, 0.95 * pop(u, cue(2, 'birth') - .3), -1.5, vis(u, cue(2, 'birth') - .3));
+    $('vB').textContent = '+' + Math.round(132 * E.out(seg(u, cue(2, 'birth') - .2, 1.2))) + ' mln';
+    const off = seg(u, cue(2, 'zero') - .1, .5), dShake = off > 0 && off < 1 ? Math.sin(u * 70) * 8 * (1 - off) : 0;
+    put('cD', x + dShake, y + 150, 0, 0.95 * pop(u, cue(2, 'death') - .3), 1.5, vis(u, cue(2, 'death') - .3));
+    const dv = 63 * E.out(seg(u, cue(2, 'death') - .2, 1.0)) * (1 - E.io(off));
+    $('vD').textContent = '−' + Math.round(dv) + ' mln';
+    $('cD').style.filter = `grayscale(${off}) brightness(${1 - .45 * off})`; $('icD').style.opacity = 1 - off * .8; }
+  // S3 growing globe + population counter
+  { const u = L(3), [x, y] = A[3], g = E.io(seg(u, cue(3, 'grow'), 4.2));
+    put('globe', x, y, 0, 0.75 + .55 * g, u * 8, t > ST[3] - .6 && t < ST[4] + .4 ? 1 : 0);
+    put('tenY', x, y - 560, -60, pop(u, cue(3, 'count') - .35), -4, vis(u, cue(3, 'count') - .35));
+    put('cnt3', x, y + 560, -80, pop(u, cue(3, 'count')), 0, vis(u, cue(3, 'count')));
+    $('cnt3').textContent = '+' + fmt(630e6 * E.out(seg(u, cue(3, 'count'), 1.4)));
+    put('usa', x + 200, y - 340, -160, 2.2 - 1.2 * E.back(seg(u, cue(3, 'usa'), .3)), 6, cl(seg(u, cue(3, 'usa'), .1) * 4)); }
+  // S4 a new city grows out of the ground
+  { const u = L(4), [x, y] = A[4];
+    put('uzf', x, y - 330, -40, pop(u, cue(4, 'uz')), -3, vis(u, cue(4, 'uz')));
+    put('ground', x, y + 520, 0, 1, 0, 1); put('city', x, y + 220, 0, 1, 0, 1);
+    CITY.forEach(({ b, d }) => { const p = E.back(seg(u, 0.25 + d * 2.2, .7)); b.style.transform = `scaleY(${Math.max(p, .001)})`; });
+    put('cnt4', x, y - 110, -80, pop(u, cue(4, 'count')), 0, vis(u, cue(4, 'count')));
+    $('cnt4').textContent = '+' + fmt(177000 * E.out(seg(u, cue(4, 'count'), 1.2)));
+    put('cityStamp', x, y + 650, -150, 2.2 - 1.2 * E.back(seg(u, cue(4, 'city'), .3)), 0, cl(seg(u, cue(4, 'city'), .1) * 4)); }
+  // S5 three panels: endless pension queue / BAND windows / 300-year-old boss
+  { const u = L(5), [x, y] = A[5];
+    put('p1', x, y - 450, 0, pop(u, cue(5, 'pension')), -1, vis(u, cue(5, 'pension')));
+    $('queue').style.transform = `translateX(${-((u * 260) % 600)}px)`;
+    put('p2', x, y, 0, pop(u, cue(5, 'flat')), 1, vis(u, cue(5, 'flat')));
+    $('homeless').style.transform = `translateX(${Math.sin(u * 3) * 20}px) rotate(${Math.sin(u * 5) * 6}deg)`;
+    put('p3', x, y + 450, 0, pop(u, cue(5, 'boss')), -1, vis(u, cue(5, 'boss')));
+    $('young').style.transform = `translateY(${Math.abs(Math.sin(u * 4)) * -30}px)`; }
+}
+
+window.render = (t) => {
+  CAM = cam(t); const pc = cam(Math.max(0, t - 1 / 60));
+  const s = F / (0 - CAM.z), vel = { x: (CAM.x - pc.x) * s, y: (CAM.y - pc.y) * s };
+  $('world').style.transform = `rotate(${CAM.roll}deg) scale(1.07)`;
+  const bx = Math.min(36, Math.abs(vel.x) * 0.45), by = Math.min(36, Math.abs(vel.y) * 0.45);
+  $('mbk').setAttribute('stdDeviation', `${bx.toFixed(1)} ${by.toFixed(1)}`);
+  $('world').style.filter = (bx > 0.5 || by > 0.5) ? 'url(#mb)' : '';
+  drawBg(t); objects(t); drawNotes(t); hudAt(t, vel);
+  $('prog').style.width = (100 * cl(t / TOTAL)) + '%';
+};
+</script>
+</body></html>
