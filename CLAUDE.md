@@ -45,6 +45,13 @@
 - Нужны `CF_API_TOKEN` и `CF_ACCOUNT_ID` (Account ID: `fb8a3875a1098ab51eb6d22255e0ae35`). Токен в репозиторий не класть.
 - Главный текст держать в зоне y=240–1680 — это обрезка 3:4 в сетке профиля.
 
+## Прогноз просмотров — ВСЕГДА артефактом
+- Любой прогноз показывать на странице-артефакте «Прогноз просмотров @mamurovlab»: https://claude.ai/artifact/TBiQF5mjTEpouzah9Ud8px (тип Data, живой запрос к Zernio `analytics_get_analytics`, сам берёт самый свежий ролик). В чат — ссылка + 2–3 строки итога, без длинных таблиц.
+- Перед прогнозом обновить данные: Zernio тянет статистику из Instagram раз в ~1–1,5 ч. Новый ролик подтянуть сразу: `call_tool` → `analytics_sync_external_posts` с `account_id` и `post_id` (platformPostId).
+- Модель: просмотры(t) = итог × (1 − e^(−t/τ)), τ = 4 / 5 / 7 ч (осторожный / базовый / оптимистичный); итог = просмотры ÷ (1 − e^(−t/τ)), t — часы до момента снятия данных (`lastUpdated`), не до «сейчас».
+- Через час после каждой публикации — автоматический прогноз (send_later): обновить данные, открыть артефакт, коротко написать итог. Время для пользователя — по Ташкенту (UTC+5).
+- Если страница меняется: читать `data/users/me/check` и `runs` через ArtifactData; элементы `data-draw` хранить пустыми.
+
 ## Публикация в Instagram (Zernio)
 1. `media_get_media_presigned_url` → `PUT` файла на `uploadUrl` (видео и обложку отдельно).
 2. `call_tool` → `posts_create_post` с `media_items: [{type: "video", url, instagramThumbnail: <url обложки>}]`, `platforms: [{platform: "instagram", accountId: "6aff20925d6d88607ad9d5c6"}]`, `publish_now: true`.
