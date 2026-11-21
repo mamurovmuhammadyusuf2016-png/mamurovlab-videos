@@ -1,0 +1,21 @@
+.board { width: 900px; height: 240px; border-radius: 40px; background: #0b0f2e; display: flex; align-items: center; justify-content: center; gap: 26px;
+  box-shadow: 0 0 0 8px #5fd3ff, 0 0 60px rgba(95,211,255,.6), inset 0 0 40px rgba(95,211,255,.2); font-weight: 900; font-size: 140px; letter-spacing: -3px; }
+.board .d { color: #5fd3ff; text-shadow: 0 0 24px #5fd3ff; } .board .n { font-variant-numeric: tabular-nums; color: #fff; text-shadow: 0 0 24px rgba(255,255,255,.6); }
+.board.hot { box-shadow: 0 0 0 8px #ff3b4e, 0 0 90px rgba(255,59,78,.85), inset 0 0 40px rgba(255,59,78,.25); }
+.board.hot .n { color: #ff5f6e; text-shadow: 0 0 30px #ff3b4e; }
+.siren { width: 1300px; height: 1300px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,40,60,.5), rgba(255,40,60,0)); }
+.arrow { font-weight: 900; font-size: 260px; color: #ff4757; text-shadow: 0 0 40px rgba(255,71,87,.8); line-height: 1; }
+.cal { width: 520px; height: 470px; border-radius: 40px; background: #fff; color: #10143a; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.45); text-align: center; }
+.cal .hd { height: 130px; background: #ff4757; color: #fff; font-weight: 900; font-size: 64px; line-height: 130px; }
+.cal .bd { font-weight: 900; font-size: 170px; line-height: 300px; letter-spacing: -6px; }
+.ptag { width: 440px; border-radius: 34px; background: rgba(255,255,255,.08); border: 3px solid rgba(255,255,255,.18); padding: 28px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,.35); }
+.ptag .e { font-size: 130px; line-height: 1; }
+.ptag .p { font-weight: 900; font-size: 58px; margin-top: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ptag .old { color: rgba(255,255,255,.55); text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 6px; font-size: 44px; }
+.up { color: #ff5f6e; }
+.win { width: 860px; border-radius: 36px; background: linear-gradient(135deg, #3ddc84, #1d8a4f); color: #08210f; display: flex; align-items: center; gap: 26px; padding: 26px 36px; box-shadow: 0 24px 50px rgba(0,0,0,.4); }
+.win .e { font-size: 120px; line-height: 1; }
+.win .t { font-weight: 900; font-size: 56px; line-height: 1.05; }
+.slot { width: 900px; height: 260px; border-radius: 40px; background: linear-gradient(180deg, #2b2f77, #141846); box-shadow: 0 0 0 10px #ffd23f, 0 30px 60px rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; gap: 14px; }
+.slot .cell { width: 170px; height: 190px; border-radius: 22px; background: #fff; color: #10143a; overflow: hidden; position: relative; font-weight: 900; font-size: 140px; text-align: center; }
+.slot .cell b { position: absolute; left: 0; right: 0; line-height: 190px; }
