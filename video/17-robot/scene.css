@@ -1,0 +1,13 @@
+#vid { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; transform-origin: 50% 50%; }
+#vshade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.25) 24%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 62%, rgba(0,0,0,.78) 100%); pointer-events: none; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.stat { width: 860px; border-radius: 36px; padding: 30px 44px; background: rgba(255,255,255,.96); color: #0c1a2e; box-shadow: 0 28px 56px rgba(0,0,0,.5); display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
+.stat .v { font: 900 120px/1 "Inter Display", Inter; letter-spacing: -5px; white-space: nowrap; color: #0a6cff; }
+.stat .k { font: 900 50px/1.1 "Inter Display", Inter; letter-spacing: 1px; white-space: nowrap; text-align: right; }
+.job { width: 820px; border-radius: 30px; padding: 26px 40px; background: rgba(255,255,255,.96); color: #1a0610; box-shadow: 0 24px 46px rgba(0,0,0,.45); position: relative; overflow: hidden; font: 900 84px/1 "Inter Display", Inter; letter-spacing: -1px; white-space: nowrap; }
+.job .x { position: absolute; left: 24px; right: 24px; top: 50%; height: 14px; margin-top: -7px; background: #ff3b4e; border-radius: 7px; transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 24px rgba(255,59,78,.8); }
+.wef { width: 860px; border-radius: 30px; padding: 26px 40px; border: 10px solid #ffd23f; background: rgba(20,6,10,.85); color: #fff; text-align: center; box-shadow: 0 0 60px rgba(255,210,63,.35); }
+.wef .v { font: 900 120px/1 "Inter Display", Inter; letter-spacing: -4px; color: #ffd23f; white-space: nowrap; }
+.wef .k { font: 800 40px/1.25 Inter; margin-top: 8px; }
+.vsb { width: 400px; height: 200px; border-radius: 100px; text-align: center; font: 900 110px/200px "Inter Display", Inter; color: #fff; box-shadow: 0 26px 50px rgba(0,0,0,.5); white-space: nowrap; }
+.lower { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; }
