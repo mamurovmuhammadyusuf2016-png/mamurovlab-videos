@@ -1,0 +1,45 @@
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <canvas class="o city" id="city" width="1700" height="600"></canvas>
+  <!-- S0 / S4: the big receipt -->
+  <div class="o glow" id="glow0"></div>
+  <div class="o rcpt" id="rcpt">
+    <div class="hd">CHEK · TOSHKENT</div><div class="sub">1 OY · 1 KISHI · IJARADA</div>
+    <div class="ln"><span>🏠 Ijara</span><span>6 000 000</span></div>
+    <div class="ln"><span>🍞 Ovqat</span><span>· · ·</span></div>
+    <div class="ln"><span>🚇 Yo'l</span><span>· · ·</span></div>
+    <div class="ln"><span>💡 Kommunal</span><span>· · ·</span></div>
+    <div class="ln"><span>📱 Aloqa</span><span>· · ·</span></div>
+    <div class="tot"><span>JAMI</span><span>≈12 mln</span></div>
+  </div>
+  <div class="o stamp" id="stamp0">12 000 000<small>SO'M / OY</small></div>
+  <div class="o mini" id="mini"><div class="hd">DAVLAT HISOBI</div><div class="n">715 000</div><div class="seal">RASMIY</div></div>
+  <!-- S1: rent -->
+  <div class="o door" id="door"><div class="num">1 XONA</div><div class="knob"></div></div>
+  <div class="o ktag" id="ktag"><div class="a" id="ktagA">$500</div><div class="b" id="ktagB">oyiga · median</div></div>
+  <!-- S2: living -->
+  <div class="o item" id="it1"><div class="e">🍞</div><div class="t">Ovqat<small>go'sht, non, sabzavot</small></div></div>
+  <div class="o item" id="it2"><div class="e">🚇</div><div class="t">Yo'l<small>metro — 1 700 so'm</small></div></div>
+  <div class="o item" id="it3"><div class="e">💡</div><div class="t">Kommunal<small>gaz, svet, suv</small></div></div>
+  <div class="o item" id="it4"><div class="e">📱</div><div class="t">Telefon<small>aloqa, internet</small></div></div>
+  <div class="o sumv" id="sum2">+6 300 000</div>
+  <!-- S3: salary vs costs -->
+  <div class="o col" id="colS" style="background:linear-gradient(160deg,#3ddc84,#178a4a);color:#06240f"><div class="k">MAOSH</div><div class="old" id="salOld">12 300 000</div><div class="tax" id="salTax">−12% soliq</div><div class="v" id="salV">12 300 000</div></div>
+  <div class="o col" id="colX" style="background:linear-gradient(160deg,#ffffff,#e6e2f0);color:#1d1a2e"><div class="k">XARAJAT</div><div class="v">12 300 000</div></div>
+  <div class="o gap" id="gap"><div class="v">−1 500 000</div><div class="t">YETMAYDI!</div></div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="pop" style="top:230px;font-size:104px;letter-spacing:-4px">TOSHKENTDA <span class="y">1 OY</span></div>
+  <div class="t sh" data-s="0" data-in="kim" data-fx="stamp" style="top:1610px;font-size:100px;letter-spacing:-3px"><span class="pill" style="background:#ffd23f;color:#1a0c02">KIM HAQ?</span></div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:240px;font-size:110px;letter-spacing:-3px"><span class="y">IJARA</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:240px;font-size:104px;letter-spacing:-3px">YASHASH <span class="y">UCHUN</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:230px;font-size:92px;letter-spacing:-2px">O'RTACHA <span class="g">MAOSH</span><br>YETADIMI?</div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:230px;font-size:96px;letter-spacing:-3px">SIZGA QANCHA<br><span class="y">KETADI?</span></div>
+  <div class="t" data-s="4" data-in="num" data-fx="pop" style="top:1490px"><span class="pill" style="font-size:70px;background:#ffd23f;color:#1a0c02">RAQAM YOZING 👇</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1620px"><span class="pill" style="font-size:44px;background:#fff;color:#1a0c40">IJARADAGI DO'STINGIZGA YUBORING ↗</span></div>
+</div>

@@ -1,0 +1,38 @@
+.rcpt { width: 600px; background: linear-gradient(180deg, #ffffff, #f3f0ea); color: #1d1a2e; border-radius: 10px 10px 0 0; padding: 40px 44px 70px; font-family: "Inter", sans-serif;
+  box-shadow: 0 50px 90px rgba(0,0,0,.55), inset 0 -30px 40px rgba(0,0,0,.05); position: relative;
+  -webkit-mask: linear-gradient(#000 0 0) top/100% calc(100% - 22px) no-repeat, radial-gradient(circle 16px at 22px 100%, #0000 98%, #000) bottom/44px 22px repeat-x; }
+.rcpt .hd { text-align: center; font: 900 40px/1.1 "Inter Display", Inter; letter-spacing: 4px; }
+.rcpt .sub { text-align: center; font: 700 26px/1.3 Inter; color: #6a6780; margin-top: 6px; letter-spacing: 2px; }
+.rcpt .ln { display: flex; justify-content: space-between; gap: 14px; font: 700 34px/1.25 Inter; margin-top: 22px; border-bottom: 3px dotted #c9c4d6; padding-bottom: 12px; font-variant-numeric: tabular-nums; }
+.rcpt .tot { display: flex; justify-content: space-between; font: 900 50px/1.1 "Inter Display", Inter; margin-top: 30px; font-variant-numeric: tabular-nums; }
+.stamp { border: 12px solid #ff3b4e; color: #ff3b4e; border-radius: 26px; padding: 18px 34px; font: 900 112px/1 "Inter Display", Inter; letter-spacing: -4px; white-space: nowrap; background: rgba(255,255,255,.9); box-shadow: 0 0 40px rgba(255,59,78,.35); }
+.stamp small { display: block; font-size: 44px; letter-spacing: 1px; text-align: center; margin-top: 4px; }
+.mini { width: 340px; white-space: nowrap; background: #e9f0ff; color: #12224a; border-radius: 8px; padding: 22px 24px 34px; box-shadow: 0 30px 50px rgba(0,0,0,.45); text-align: center; }
+.mini .hd { font: 900 26px/1.15 Inter; letter-spacing: 2px; color: #2a4a9a; }
+.mini .n { font: 900 68px/1 "Inter Display", Inter; margin-top: 14px; letter-spacing: -2px; font-variant-numeric: tabular-nums; }
+.mini .seal { width: 96px; height: 96px; border-radius: 50%; border: 7px solid #2a6ad0; color: #2a6ad0; font: 900 20px/82px Inter; margin: 14px auto 0; }
+.door { width: 460px; height: 820px; border-radius: 18px 18px 0 0; background: linear-gradient(90deg, #6a3a16, #a8642a 40%, #8a4c1e 70%, #5a2e10);
+  box-shadow: inset 0 0 0 16px #4a240c, inset 0 0 0 22px #c98a4a, 0 50px 90px rgba(0,0,0,.6); position: relative; }
+.door::before { content: ''; position: absolute; left: 60px; right: 60px; top: 70px; height: 300px; border-radius: 10px; box-shadow: inset 0 0 0 8px rgba(0,0,0,.25), inset 0 0 0 14px rgba(255,220,170,.18); }
+.door::after { content: ''; position: absolute; left: 60px; right: 60px; top: 430px; height: 320px; border-radius: 10px; box-shadow: inset 0 0 0 8px rgba(0,0,0,.25), inset 0 0 0 14px rgba(255,220,170,.18); }
+.door .knob { position: absolute; right: 54px; top: 400px; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff6c8, #e0a10e 60%, #8a5a00); box-shadow: 0 6px 12px rgba(0,0,0,.5); z-index: 2; }
+.door .num { position: absolute; left: 0; right: 0; top: 16px; text-align: center; font: 900 54px/1 "Inter Display", Inter; color: #ffd23f; text-shadow: 0 4px 0 rgba(0,0,0,.4); z-index: 2; }
+.ktag { width: 420px; padding: 26px 20px; border-radius: 30px; background: #ffd23f; color: #3a2200; text-align: center; box-shadow: 0 26px 50px rgba(0,0,0,.5); position: relative; }
+.ktag::before { content: '🔑'; position: absolute; left: -110px; top: 30px; font-size: 110px; transform: rotate(-30deg); }
+.ktag .a { font: 900 84px/1 "Inter Display", Inter; letter-spacing: -3px; white-space: nowrap; }
+.ktag .b { font: 800 40px/1.2 Inter; margin-top: 6px; white-space: nowrap; }
+.item { width: 760px; display: flex; align-items: center; gap: 30px; padding: 22px 34px; border-radius: 30px; background: rgba(255,255,255,.95); color: #102a2a; box-shadow: 0 24px 46px rgba(0,0,0,.4); }
+.item .e { font-size: 100px; line-height: 1; }
+.item .t { font: 900 62px/1.05 "Inter Display", Inter; letter-spacing: -1px; }
+.item .t small { display: block; font: 700 32px/1.2 Inter; color: #4a6a6a; letter-spacing: 0; }
+.sumv { font: 900 150px/1 "Inter Display", Inter; letter-spacing: -6px; color: #ffd23f; text-shadow: 0 10px 0 rgba(0,0,0,.35), 0 0 50px rgba(255,210,63,.5); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.col { width: 420px; border-radius: 34px; padding: 30px 20px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,.5); }
+.col .k { font: 900 44px/1.1 Inter; letter-spacing: 2px; }
+.col .v { font: 900 74px/1.05 "Inter Display", Inter; letter-spacing: -3px; margin-top: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.col .old { font: 800 44px/1.1 Inter; opacity: .6; text-decoration: line-through; text-decoration-thickness: 6px; text-decoration-color: #ff3b4e; margin-top: 10px; white-space: nowrap; }
+.col .tax { display: inline-block; margin-top: 12px; padding: 8px 22px; border-radius: 999px; background: #ff3b4e; color: #fff; font: 900 40px/1.1 Inter; }
+.gap { width: 700px; padding: 26px; border-radius: 30px; background: #ff3b4e; color: #fff; text-align: center; box-shadow: 0 0 70px rgba(255,59,78,.7), 0 30px 60px rgba(0,0,0,.5); }
+.gap .v { font: 900 110px/1 "Inter Display", Inter; letter-spacing: -4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.gap .t { font: 900 54px/1.1 Inter; margin-top: 6px; letter-spacing: 2px; }
+.glow { width: 1300px; height: 1300px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,210,63,.35), rgba(255,210,63,0)); }
+.city { width: 1700px; height: 600px; }
