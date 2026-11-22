@@ -1,0 +1,22 @@
+.badge { display: inline-block; padding: 14px 34px; border-radius: 22px; font: 900 64px/1 "Inter Display", Inter; letter-spacing: 1px; white-space: nowrap; box-shadow: 0 16px 32px rgba(0,0,0,.4); }
+.cnt { text-align: center; }
+.cnt .v { font: 900 196px/1 "Inter Display", Inter; letter-spacing: -8px; color: #ffd23f; white-space: nowrap; font-variant-numeric: tabular-nums; text-shadow: 0 12px 0 #8a4a00, 0 0 60px rgba(255,190,40,.6); }
+.cnt .u { font: 900 64px/1.1 "Inter Display", Inter; color: #fff; letter-spacing: 2px; margin-top: 10px; text-shadow: 0 6px 0 rgba(0,0,0,.4); }
+.tick { padding: 12px 30px; border-radius: 999px; background: rgba(255,255,255,.12); border: 3px solid rgba(255,255,255,.25); font: 800 44px/1 Inter; color: #fff; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.watch { width: 640px; border-radius: 34px; padding: 26px 30px; background: #fff; color: #14143a; text-align: center; box-shadow: 0 28px 56px rgba(0,0,0,.5); }
+.watch .k { font: 800 40px/1.2 Inter; color: #5a5a7a; }
+.watch .v { font: 900 120px/1 "Inter Display", Inter; letter-spacing: -4px; margin-top: 8px; color: #ff3b4e; font-variant-numeric: tabular-nums; }
+.bcard { width: 820px; border-radius: 36px; padding: 30px 40px; background: rgba(255,255,255,.96); color: #14143a; box-shadow: 0 28px 56px rgba(0,0,0,.5); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.bcard .v { font: 900 104px/1 "Inter Display", Inter; letter-spacing: -4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.bcard .v small { font-size: 40px; letter-spacing: 0; color: #6a6a8a; margin-left: 6px; }
+.bar { width: 330px; border-radius: 30px 30px 10px 10px; position: relative; box-shadow: 0 0 60px rgba(255,255,255,.15), 0 30px 60px rgba(0,0,0,.45); }
+.barv { font: 900 80px/1 "Inter Display", Inter; letter-spacing: -3px; color: #fff; white-space: nowrap; text-align: center; text-shadow: 0 6px 0 rgba(0,0,0,.4); font-variant-numeric: tabular-nums; }
+.stampR { padding: 18px 34px; border: 12px solid #ffd23f; border-radius: 26px; color: #ffd23f; font: 900 80px/1 "Inter Display", Inter; white-space: nowrap; background: rgba(30,10,0,.75); text-shadow: 0 0 30px rgba(255,210,63,.6); }
+.vsb { width: 420px; height: 200px; border-radius: 100px; text-align: center; font: 900 80px/200px "Inter Display", Inter; color: #fff; box-shadow: 0 26px 50px rgba(0,0,0,.45); white-space: nowrap; }
+.glow { width: 1400px; height: 1400px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,190,60,.35), rgba(255,190,60,0)); }
+.ms { display: inline-grid; grid-template-columns: 26px 26px; gap: 4px; vertical-align: middle; margin-right: 14px; }
+.ms i { display: block; width: 26px; height: 26px; }
+.bcard { width: 940px; padding: 28px 34px; }
+.bcard .badge { font-size: 52px; padding: 12px 26px; }
+.bcard .v { font-size: 88px; }
+.bcard .v small { font-size: 34px; }
