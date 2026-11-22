@@ -1,0 +1,318 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="cues.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070a1f; }
+body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; color: #fff; }
+#bg { position: absolute; inset: 0; }
+#world { position: absolute; inset: 0; transform-origin: 540px 960px; }
+#world .o { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#notes { position: absolute; left: 0; top: 0; }
+#hud { position: absolute; inset: 0; pointer-events: none; }
+.t { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; line-height: .95; }
+.t span { display: inline-block; white-space: pre; will-change: transform; }
+.y { color: #ffd23f; } .g { color: #3ddc84; } .r { color: #ff4757; } .b { color: #5fd3ff; }
+.sh { text-shadow: 0 8px 0 rgba(0,0,0,.35), 0 18px 40px rgba(0,0,0,.55); }
+.pill { display: inline-block; padding: 14px 36px; border-radius: 999px; font-weight: 900; }
+.handle { position: absolute; top: 74px; left: 0; right: 0; text-align: center; font: 800 30px "Inter Display", Inter; letter-spacing: 3px; color: rgba(255,255,255,.55); }
+.prog { position: absolute; top: 46px; left: 90px; right: 90px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.14); overflow: hidden; }
+.prog i { display: block; height: 100%; background: #ffd23f; width: 0; }
+.shadow { width: 900px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+.lbl { padding: 14px 32px; border-radius: 20px; font-weight: 900; font-size: 48px; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.emo { font-size: 150px; line-height: 1; }
+.rcpt { width: 600px; background: linear-gradient(180deg, #ffffff, #f3f0ea); color: #1d1a2e; border-radius: 10px 10px 0 0; padding: 40px 44px 70px; font-family: "Inter", sans-serif;
+  box-shadow: 0 50px 90px rgba(0,0,0,.55), inset 0 -30px 40px rgba(0,0,0,.05); position: relative;
+  -webkit-mask: linear-gradient(#000 0 0) top/100% calc(100% - 22px) no-repeat, radial-gradient(circle 16px at 22px 100%, #0000 98%, #000) bottom/44px 22px repeat-x; }
+.rcpt .hd { text-align: center; font: 900 40px/1.1 "Inter Display", Inter; letter-spacing: 4px; }
+.rcpt .sub { text-align: center; font: 700 26px/1.3 Inter; color: #6a6780; margin-top: 6px; letter-spacing: 2px; }
+.rcpt .ln { display: flex; justify-content: space-between; gap: 14px; font: 700 34px/1.25 Inter; margin-top: 22px; border-bottom: 3px dotted #c9c4d6; padding-bottom: 12px; font-variant-numeric: tabular-nums; }
+.rcpt .tot { display: flex; justify-content: space-between; font: 900 50px/1.1 "Inter Display", Inter; margin-top: 30px; font-variant-numeric: tabular-nums; }
+.stamp { border: 12px solid #ff3b4e; color: #ff3b4e; border-radius: 26px; padding: 18px 34px; font: 900 112px/1 "Inter Display", Inter; letter-spacing: -4px; white-space: nowrap; background: rgba(255,255,255,.9); box-shadow: 0 0 40px rgba(255,59,78,.35); }
+.stamp small { display: block; font-size: 44px; letter-spacing: 1px; text-align: center; margin-top: 4px; }
+.mini { width: 340px; white-space: nowrap; background: #e9f0ff; color: #12224a; border-radius: 8px; padding: 22px 24px 34px; box-shadow: 0 30px 50px rgba(0,0,0,.45); text-align: center; }
+.mini .hd { font: 900 26px/1.15 Inter; letter-spacing: 2px; color: #2a4a9a; }
+.mini .n { font: 900 68px/1 "Inter Display", Inter; margin-top: 14px; letter-spacing: -2px; font-variant-numeric: tabular-nums; }
+.mini .seal { width: 96px; height: 96px; border-radius: 50%; border: 7px solid #2a6ad0; color: #2a6ad0; font: 900 20px/82px Inter; margin: 14px auto 0; }
+.door { width: 460px; height: 820px; border-radius: 18px 18px 0 0; background: linear-gradient(90deg, #6a3a16, #a8642a 40%, #8a4c1e 70%, #5a2e10);
+  box-shadow: inset 0 0 0 16px #4a240c, inset 0 0 0 22px #c98a4a, 0 50px 90px rgba(0,0,0,.6); position: relative; }
+.door::before { content: ''; position: absolute; left: 60px; right: 60px; top: 70px; height: 300px; border-radius: 10px; box-shadow: inset 0 0 0 8px rgba(0,0,0,.25), inset 0 0 0 14px rgba(255,220,170,.18); }
+.door::after { content: ''; position: absolute; left: 60px; right: 60px; top: 430px; height: 320px; border-radius: 10px; box-shadow: inset 0 0 0 8px rgba(0,0,0,.25), inset 0 0 0 14px rgba(255,220,170,.18); }
+.door .knob { position: absolute; right: 54px; top: 400px; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff6c8, #e0a10e 60%, #8a5a00); box-shadow: 0 6px 12px rgba(0,0,0,.5); z-index: 2; }
+.door .num { position: absolute; left: 0; right: 0; top: 16px; text-align: center; font: 900 54px/1 "Inter Display", Inter; color: #ffd23f; text-shadow: 0 4px 0 rgba(0,0,0,.4); z-index: 2; }
+.ktag { width: 420px; padding: 26px 20px; border-radius: 30px; background: #ffd23f; color: #3a2200; text-align: center; box-shadow: 0 26px 50px rgba(0,0,0,.5); position: relative; }
+.ktag::before { content: '🔑'; position: absolute; left: -110px; top: 30px; font-size: 110px; transform: rotate(-30deg); }
+.ktag .a { font: 900 84px/1 "Inter Display", Inter; letter-spacing: -3px; white-space: nowrap; }
+.ktag .b { font: 800 40px/1.2 Inter; margin-top: 6px; white-space: nowrap; }
+.item { width: 760px; display: flex; align-items: center; gap: 30px; padding: 22px 34px; border-radius: 30px; background: rgba(255,255,255,.95); color: #102a2a; box-shadow: 0 24px 46px rgba(0,0,0,.4); }
+.item .e { font-size: 100px; line-height: 1; }
+.item .t { font: 900 62px/1.05 "Inter Display", Inter; letter-spacing: -1px; }
+.item .t small { display: block; font: 700 32px/1.2 Inter; color: #4a6a6a; letter-spacing: 0; }
+.sumv { font: 900 150px/1 "Inter Display", Inter; letter-spacing: -6px; color: #ffd23f; text-shadow: 0 10px 0 rgba(0,0,0,.35), 0 0 50px rgba(255,210,63,.5); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.col { width: 420px; border-radius: 34px; padding: 30px 20px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,.5); }
+.col .k { font: 900 44px/1.1 Inter; letter-spacing: 2px; }
+.col .v { font: 900 74px/1.05 "Inter Display", Inter; letter-spacing: -3px; margin-top: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.col .old { font: 800 44px/1.1 Inter; opacity: .6; text-decoration: line-through; text-decoration-thickness: 6px; text-decoration-color: #ff3b4e; margin-top: 10px; white-space: nowrap; }
+.col .tax { display: inline-block; margin-top: 12px; padding: 8px 22px; border-radius: 999px; background: #ff3b4e; color: #fff; font: 900 40px/1.1 Inter; }
+.gap { width: 700px; padding: 26px; border-radius: 30px; background: #ff3b4e; color: #fff; text-align: center; box-shadow: 0 0 70px rgba(255,59,78,.7), 0 30px 60px rgba(0,0,0,.5); }
+.gap .v { font: 900 110px/1 "Inter Display", Inter; letter-spacing: -4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.gap .t { font: 900 54px/1.1 Inter; margin-top: 6px; letter-spacing: 2px; }
+.glow { width: 1300px; height: 1300px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,210,63,.35), rgba(255,210,63,0)); }
+.city { width: 1700px; height: 600px; }
+
+</style></head>
+<body>
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <canvas class="o city" id="city" width="1700" height="600"></canvas>
+  <!-- S0 / S4: the big receipt -->
+  <div class="o glow" id="glow0"></div>
+  <div class="o rcpt" id="rcpt">
+    <div class="hd">CHEK · TOSHKENT</div><div class="sub">1 OY · 1 KISHI · IJARADA</div>
+    <div class="ln"><span>🏠 Ijara</span><span>6 000 000</span></div>
+    <div class="ln"><span>🍞 Ovqat</span><span>· · ·</span></div>
+    <div class="ln"><span>🚇 Yo'l</span><span>· · ·</span></div>
+    <div class="ln"><span>💡 Kommunal</span><span>· · ·</span></div>
+    <div class="ln"><span>📱 Aloqa</span><span>· · ·</span></div>
+    <div class="tot"><span>JAMI</span><span>≈12 mln</span></div>
+  </div>
+  <div class="o stamp" id="stamp0">12 000 000<small>SO'M / OY</small></div>
+  <div class="o mini" id="mini"><div class="hd">DAVLAT HISOBI</div><div class="n">715 000</div><div class="seal">RASMIY</div></div>
+  <!-- S1: rent -->
+  <div class="o door" id="door"><div class="num">1 XONA</div><div class="knob"></div></div>
+  <div class="o ktag" id="ktag"><div class="a" id="ktagA">$500</div><div class="b" id="ktagB">oyiga · median</div></div>
+  <!-- S2: living -->
+  <div class="o item" id="it1"><div class="e">🍞</div><div class="t">Ovqat<small>go'sht, non, sabzavot</small></div></div>
+  <div class="o item" id="it2"><div class="e">🚇</div><div class="t">Yo'l<small>metro — 1 700 so'm</small></div></div>
+  <div class="o item" id="it3"><div class="e">💡</div><div class="t">Kommunal<small>gaz, svet, suv</small></div></div>
+  <div class="o item" id="it4"><div class="e">📱</div><div class="t">Telefon<small>aloqa, internet</small></div></div>
+  <div class="o sumv" id="sum2">+6 300 000</div>
+  <!-- S3: salary vs costs -->
+  <div class="o col" id="colS" style="background:linear-gradient(160deg,#3ddc84,#178a4a);color:#06240f"><div class="k">MAOSH</div><div class="old" id="salOld">12 300 000</div><div class="tax" id="salTax">−12% soliq</div><div class="v" id="salV">12 300 000</div></div>
+  <div class="o col" id="colX" style="background:linear-gradient(160deg,#ffffff,#e6e2f0);color:#1d1a2e"><div class="k">XARAJAT</div><div class="v">12 300 000</div></div>
+  <div class="o gap" id="gap"><div class="v">−1 500 000</div><div class="t">YETMAYDI!</div></div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="pop" style="top:230px;font-size:104px;letter-spacing:-4px">TOSHKENTDA <span class="y">1 OY</span></div>
+  <div class="t sh" data-s="0" data-in="kim" data-fx="stamp" style="top:1610px;font-size:100px;letter-spacing:-3px"><span class="pill" style="background:#ffd23f;color:#1a0c02">KIM HAQ?</span></div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:240px;font-size:110px;letter-spacing:-3px"><span class="y">IJARA</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:240px;font-size:104px;letter-spacing:-3px">YASHASH <span class="y">UCHUN</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:230px;font-size:92px;letter-spacing:-2px">O'RTACHA <span class="g">MAOSH</span><br>YETADIMI?</div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:230px;font-size:96px;letter-spacing:-3px">SIZGA QANCHA<br><span class="y">KETADI?</span></div>
+  <div class="t" data-s="4" data-in="num" data-fx="pop" style="top:1490px"><span class="pill" style="font-size:70px;background:#ffd23f;color:#1a0c02">RAQAM YOZING 👇</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1620px"><span class="pill" style="font-size:44px;background:#fff;color:#1a0c40">IJARADAGI DO'STINGIZGA YUBORING ↗</span></div>
+</div>
+
+<script>
+const C = window.CUES, ST = C.starts, TOTAL = C.total;
+const W = 1080, H = 1920, F = 1000;
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, d) => cl((t - a) / d);
+const E = {
+  io: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  out: x => 1 - Math.pow(1 - x, 3),
+  back: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+};
+const sDur = i => (ST[i + 1] ?? TOTAL) - ST[i];
+const cue = (s, k) => { const v = C['s' + s]?.[k]; return v === undefined ? parseFloat(k) : v; };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const A = [[0, 0], [0, 2400], [2600, 2400], [2600, 0], [0, 0]];
+const SCENE_BG = [['#140a3a', '#4a1f7a'], ['#2a1408', '#7a3a10'], ['#062a2a', '#106a5a'], ['#2a0812', '#7a1530'], ['#140a3a', '#4a1f7a']];
+
+function shake(k, amp) { if (k <= 0 || k > 1.1) return [0, 0, 0]; const e = Math.exp(-k * 4.5); return [Math.sin(k * 80) * amp * e, Math.cos(k * 70) * amp * e, Math.sin(k * 55) * 1.2 * e]; }
+function hold(i, u) {
+  const d = sDur(i), p = E.io(cl(u / d));
+  let [x, y] = A[i];
+  let z = -1000 + 150 * p;
+  x += Math.sin(u * 0.9 + i * 1.7) * 18; y += Math.cos(u * 0.7 + i * 2.3) * 12;
+  let roll = Math.sin(u * 0.8 + i) * 1.1;
+  let s = [0, 0, 0];
+  if (i === 0) { z = -1000 + 110 * p; y += 170 - 120 * p; roll += -1.5 + 1.5 * p; s = shake(u - cue(0, 'stamp'), 12); }
+  if (i === 1) { z = -1150 + 250 * p; s = shake(u - cue(1, 'som'), 14); }
+  if (i === 2) { y += 30 + 90 * E.io(seg(u, 0, cue(2, 'sum') + .6)); s = shake(u - cue(2, 'sum'), 12); }
+  if (i === 3) { x += -40 + 80 * p; s = shake(u - cue(3, 'gap'), 18); }
+  if (i === 4) { z = -1150 + 150 * p; y += 20 + 150 * p; roll += 1 - 2.5 * p; }
+  return { x: x + s[0], y: y + s[1], z, roll: roll + s[2] };
+}
+const lerp = (a, b, p) => a + (b - a) * p;
+const lc = (a, b, p) => ({ x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), z: lerp(a.z, b.z, p), roll: lerp(a.roll, b.roll, p) });
+const TW = 0.26;
+function sceneAt(t) { let i = 0; ST.forEach((s, k) => { if (t >= s) i = k; }); return i; }
+function cam(t) {
+  const i = sceneAt(t); let c = hold(i, t - ST[i]);
+  if (i + 1 < ST.length && t > ST[i + 1] - TW) c = lc(c, hold(i + 1, t - ST[i + 1]), E.io(seg(t, ST[i + 1] - TW, 2 * TW)));
+  if (i > 0 && t < ST[i] + TW) c = lc(hold(i - 1, t - ST[i - 1]), c, E.io(seg(t, ST[i] - TW, 2 * TW)));
+  return c;
+}
+let CAM, FOCUS = 0;
+function proj(x, y, z) { const s = F / (z - CAM.z); return { sx: W / 2 + (x - CAM.x) * s, sy: H / 2 + (y - CAM.y) * s, s }; }
+const $ = id => document.getElementById(id);
+function put(el, x, y, z = 0, sc = 1, rot = 0, op = 1, sx2 = 1, sy2 = 1) {
+  if (typeof el === 'string') el = $(el);
+  const p = proj(x, y, z);
+  if (op <= 0.001 || p.s <= 0 || p.sx < -1600 || p.sx > 2700 || p.sy < -1800 || p.sy > 3700) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.style.transform = `translate(${p.sx}px,${p.sy}px) scale(${p.s * sc}) rotate(${rot}deg) scale(${sx2},${sy2}) translate(-50%,-50%)`;
+  el.style.opacity = op;
+  const b = Math.min(16, Math.abs(z - FOCUS) * 0.016);
+  el.style.filter = b > 0.4 ? `blur(${b}px)` : '';
+  el.style.zIndex = Math.round(6000 - z);
+}
+
+// ---------- sprites + particles ----------
+function sprite(kind) {
+  const c = document.createElement('canvas'); c.width = 300; c.height = 140; const g = c.getContext('2d');
+  if (kind === 'spark') {
+    const r = g.createRadialGradient(150, 70, 0, 150, 70, 70); r.addColorStop(0, 'rgba(255,255,220,1)'); r.addColorStop(.35, 'rgba(255,210,63,.9)'); r.addColorStop(1, 'rgba(255,160,0,0)');
+    g.fillStyle = r; g.beginPath(); g.arc(150, 70, 70, 0, 7); g.fill(); return c;
+  }
+  const grad = g.createLinearGradient(0, 0, 300, 140);
+  grad.addColorStop(0, '#f3e6ff'); grad.addColorStop(.55, '#d2b8f0'); grad.addColorStop(1, '#a88ad6');
+  g.fillStyle = grad; g.beginPath(); g.roundRect(0, 0, 300, 140, 14); g.fill();
+  g.strokeStyle = 'rgba(255,255,255,.7)'; g.lineWidth = 6; g.beginPath(); g.roundRect(10, 10, 280, 120, 10); g.stroke();
+  g.fillStyle = 'rgba(255,255,255,.4)'; g.beginPath(); g.arc(70, 70, 38, 0, 7); g.fill();
+  g.fillStyle = '#3a1d6a'; g.font = '900 44px "Inter Display", Inter'; g.textAlign = 'right';
+  g.fillText('100 000', 282, 66); g.font = '800 26px Inter'; g.fillText("SO'M", 280, 108);
+  return c;
+}
+const SPR = { som: sprite('som'), spark: sprite('spark') };
+const parts = [];
+function emit(seed, t0, t1, rate, fn) { const r = rng(seed); for (let t = t0; t < t1; t += 1 / rate) parts.push(fn(r, t + r() / rate)); }
+// S0 + S4: purple so'm notes drift up around the receipt
+emit(91, -1.5, ST[1] + .3, 6, (r, t) => ({ t0: t, life: 3.4, x: A[0][0] - 700 + r() * 1400, y: A[0][1] + 1100, z: -150 + r() * 700, vx: (r() - .5) * 160, vy: -480 - r() * 240, vz: 0, g: 0, rot: r() * 6, vr: (r() - .5) * 2.5, fl: 1.5 + r() * 3, sc: .7, k: 'som' }));
+emit(92, ST[4] - .2, TOTAL + .5, 6, (r, t) => ({ t0: t, life: 3.4, x: A[4][0] - 700 + r() * 1400, y: A[4][1] + 1100, z: -150 + r() * 700, vx: (r() - .5) * 160, vy: -480 - r() * 240, vz: 0, g: 0, rot: r() * 6, vr: (r() - .5) * 2.5, fl: 1.5 + r() * 3, sc: .7, k: 'som' }));
+// S1: notes puff out when $500 turns into 6 000 000
+emit(93, ST[1] + cue(1, 'som'), ST[1] + cue(1, 'som') + .45, 40, (r, t) => { const a = -Math.PI / 2 + (r() - .5) * 2.6, v = 800 + r() * 1000; return { t0: t, life: 1.9, x: A[1][0] + 110, y: A[1][1] + 400, z: -120, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vz: -100 - r() * 700, g: 1500, rot: r() * 6, vr: (r() - .5) * 10, fl: 3 + r() * 8, sc: .65, k: 'som' }; });
+// S3: money drains away when the salary falls short
+emit(94, ST[3] + cue(3, 'gap'), ST[4] + .2, 22, (r, t) => ({ t0: t, life: 2.0, x: A[3][0] - 550 + r() * 1100, y: A[3][1] - 1050, z: -200 + r() * 600, vx: (r() - .5) * 140, vy: 600 + r() * 300, vz: 0, g: 900, rot: r() * 6, vr: (r() - .5) * 5, fl: 2 + r() * 5, sc: .65, k: 'som' }));
+// S2: gold sparks on the subtotal
+emit(95, ST[2] + cue(2, 'sum'), ST[2] + cue(2, 'sum') + .3, 90, (r, t) => { const a = r() * Math.PI * 2, v = 500 + r() * 1000; return { t0: t, life: 1.0, x: A[2][0], y: A[2][1] + 610, z: -80, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vz: 0, g: 900, rot: 0, vr: 0, fl: 0, sc: .1 + r() * .12, k: 'spark', add: 1 }; });
+function partAt(p, t) { const u = t - p.t0; if (u < 0 || u > p.life) return null; return { x: p.x + p.vx * u, y: p.y + p.vy * u + 0.5 * p.g * u * u, z: p.z + p.vz * u, rot: p.rot + p.vr * u, fl: p.fl ? Math.cos(p.fl * u) : 1, a: cl((p.life - u) / 0.35) * cl(u / 0.05) }; }
+const nctx = $('notes').getContext('2d');
+function drawNotes(t) {
+  nctx.setTransform(1, 0, 0, 1, 0, 0); nctx.clearRect(0, 0, W, H);
+  const live = []; for (const p of parts) { const s = partAt(p, t); if (s && s.z > CAM.z + 60) live.push([p, s]); }
+  live.sort((a, b) => b[1].z - a[1].z);
+  for (const [p, s0] of live) {
+    const pr = proj(s0.x, s0.y, s0.z); if (pr.sx < -400 || pr.sx > W + 400 || pr.sy < -400 || pr.sy > H + 400) continue;
+    if (p.add) { // soft glow sprite: no DOF filter and no trail copies (cheap to paint)
+      nctx.filter = 'none'; nctx.globalCompositeOperation = 'lighter'; nctx.globalAlpha = s0.a; const sc = pr.s * p.sc * 0.62;
+      nctx.setTransform(sc, 0, 0, sc, pr.sx, pr.sy); nctx.drawImage(SPR[p.k], -150, -70); continue; }
+    const b = Math.min(14, Math.abs(s0.z - FOCUS) * 0.012); nctx.filter = b > 0.6 ? `blur(${b.toFixed(1)}px)` : 'none';
+    nctx.globalCompositeOperation = 'source-over';
+    const fast = Math.hypot(p.vx, p.vy + p.g * (t - p.t0)) > 1000;
+    for (let k = fast ? 2 : 0; k >= 0; k--) { const s = k ? partAt(p, t - k / 200) : s0; if (!s) continue; const q = k ? proj(s.x, s.y, s.z) : pr;
+      nctx.globalAlpha = s0.a * (k ? 0.22 : 1); nctx.setTransform(1, 0, 0, 1, q.sx, q.sy); nctx.rotate(s.rot); const sc = q.s * p.sc * 0.62; nctx.scale(sc, sc * (0.25 + 0.75 * Math.abs(s.fl))); nctx.drawImage(SPR[p.k], -150, -70); }
+  }
+  nctx.globalAlpha = 1; nctx.filter = 'none'; nctx.globalCompositeOperation = 'source-over';
+}
+const pop = (u, t0, d = .35) => E.back(seg(u, t0, d)), vis = (u, t0) => cl(seg(u, t0, .1));
+const fmtN = (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+// Tashkent skyline silhouette (TV tower + blocks), drawn once
+{ const c = $('city'), g = c.getContext('2d'), r = rng(7); const grd = g.createLinearGradient(0, 0, 0, 600); grd.addColorStop(0, 'rgba(20,10,60,0)'); grd.addColorStop(1, 'rgba(20,10,60,.95)');
+  for (let x = 0; x < 1700;) { const w = 60 + r() * 120, h = 140 + r() * 300; g.fillStyle = '#1a0f46'; g.fillRect(x, 600 - h, w - 8, h);
+    g.fillStyle = 'rgba(255,190,90,.75)'; for (let wy = 600 - h + 18; wy < 590; wy += 30) for (let wx = x + 10; wx < x + w - 20; wx += 22) if (r() < .45) g.fillRect(wx, wy, 9, 13); x += w; }
+  g.fillStyle = '#1a0f46'; g.fillRect(1180, 40, 14, 560); g.beginPath(); g.ellipse(1187, 250, 46, 26, 0, 0, 7); g.fill(); g.fillRect(1160, 300, 54, 18);
+  g.fillStyle = '#ff5f6e'; g.beginPath(); g.arc(1187, 40, 7, 0, 7); g.fill(); }
+function objects(t) {
+  const L = i => t - ST[i];
+  // S0 + S4: receipt, stamp, official mini-receipt
+  { const inS0 = t < ST[1] + .4, inS4 = t > ST[4] - .6, on = inS0 || inS4 ? 1 : 0, [x, y] = A[0], u = inS4 ? L(4) + 8 : L(0);
+    put('city', x, y + 760, 900, 1, 0, on * .9);
+    put('glow0', x, y + 60, 400, 1 + .08 * Math.sin(u * 3), 0, on * (.7 + .3 * Math.sin(u * 5)));
+    put('rcpt', x + 10, y + 60 + Math.sin(u * 1.3) * 10, 0, 1.05, -3 + Math.sin(u * .9) * 1.2, on);
+    const sb = inS0 ? E.back(seg(L(0), cue(0, 'stamp') - .05, .3)) : 1, bump = inS0 && L(0) > cue(0, 'stamp') - .05 && L(0) < cue(0, 'stamp') + .3 ? 1.15 - .15 * sb : 1;
+    put('stamp0', x + 40, y + 330, -110, .95 * bump, -8, on);
+    const mi = inS0 ? E.out(seg(L(0), cue(0, 'small') - .15, .5)) : 0;
+    put('mini', x - 250 - 700 * (1 - mi), y + 600, -60, .85, 6, inS0 ? vis(L(0), cue(0, 'small') - .15) : 0); }
+  // S1: door + key tag $500 -> 6 000 000
+  { const u = L(1), [x, y] = A[1], on = t > ST[1] - .6 && t < ST[2] + .4 ? 1 : 0, sm = cue(1, 'som');
+    put('door', x - 90, y + 60, 0, .95, 0, on);
+    const sw = Math.sin(u * 3.2) * 6 * Math.exp(-Math.max(0, u - cue(1, 'tag')) * .6);
+    put('ktag', x + 110, y + 400, -120, .85 * pop(u, cue(1, 'tag') - .1) * (u > sm && u < sm + .3 ? 1 + .15 * Math.sin((u - sm) / .3 * Math.PI) : 1), 4 + sw, on * vis(u, cue(1, 'tag') - .1));
+    $('ktagA').textContent = u > sm ? "6 000 000" : '$500'; $('ktagB').textContent = u > sm ? "so'm · oyiga" : 'oyiga · median'; }
+  // S2: four items + subtotal
+  { const u = L(2), [x, y] = A[2], on = t > ST[2] - .6 && t < ST[3] + .4 ? 1 : 0;
+    [['it1', -170, 'i1'], ['it2', 20, 'i2'], ['it3', 210, 'i3'], ['it4', 400, 'i4']].forEach(([id, dy, k], i) => { const p = E.out(seg(u, cue(2, k) - .1, .4));
+      put(id, x + (i % 2 ? 20 : -20) + 900 * (1 - p), y + dy, -20, .9 * (.6 + .4 * E.back(seg(u, cue(2, k) - .1, .4))), (i % 2 ? 2 : -2), on * vis(u, cue(2, k) - .1)); });
+    put('sum2', x, y + 610, -80, 2.2 - 1.3 * E.back(seg(u, cue(2, 'sum'), .3)), -4, on * cl(seg(u, cue(2, 'sum'), .08))); }
+  // S3: salary after tax vs costs, deficit
+  { const u = L(3), [x, y] = A[3], on = t > ST[3] - .6 && t < ST[4] + .4 ? 1 : 0, tx = cue(3, 'tax'), nt = cue(3, 'net');
+    put('colS', x - 220, y - 40, 0, .9 * pop(u, .05), -2, on * vis(u, .05));
+    put('colX', x + 220, y - 40, 0, .9 * pop(u, .3), 2, on * vis(u, .3));
+    $('salTax').style.opacity = cl(seg(u, tx, .15)); $('salTax').style.transform = `scale(${2 - E.back(seg(u, tx, .35))})`;
+    $('salOld').style.display = u > nt ? '' : 'none';
+    $('salV').textContent = fmtN(Math.round((12300000 - 1500000 * E.out(seg(u, nt, .7))) / 1000) * 1000);
+    put('gap', x, y + 430, -100, 2.2 - 1.3 * E.back(seg(u, cue(3, 'gap'), .3)), -3, on * cl(seg(u, cue(3, 'gap'), .08))); }
+}
+
+const far = $('far').getContext('2d');
+const bokeh = []; { const r = rng(11); for (let i = 0; i < 70; i++) bokeh.push({ x: -1600 + r() * 11000, y: -2400 + r() * 6600, z: 900 + r() * 2600, rad: 40 + r() * 120, hue: [48, 140, 200, 330, 270][Math.floor(r() * 5)] }); }
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function bgAt(t) {
+  const i = sceneAt(t); const a = SCENE_BG[i];
+  if (i + 1 < ST.length && t > ST[i + 1] - 0.3) { const p = seg(t, ST[i + 1] - 0.3, 0.6); const b = SCENE_BG[i + 1]; return [0, 1].map(k => { const x = hex(a[k]), y = hex(b[k]); return `rgb(${x.map((v, j) => Math.round(lerp(v, y[j], p))).join(',')})`; }); }
+  return a;
+}
+function drawBg(t) {
+  const [c1, c2] = bgAt(t);
+  $('bg').style.background = `radial-gradient(1200px 1400px at 50% 40%, ${c2} 0%, ${c1} 65%, #05060f 100%)`;
+  far.clearRect(0, 0, W, H);
+  for (const b of bokeh) {
+    const p = proj(b.x, b.y, b.z); if (p.sx < -300 || p.sx > W + 300 || p.sy < -300 || p.sy > H + 300) continue;
+    const r = b.rad * p.s * 2.2, g = far.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r);
+    g.addColorStop(0, `hsla(${b.hue},90%,65%,.28)`); g.addColorStop(1, `hsla(${b.hue},90%,65%,0)`);
+    far.fillStyle = g; far.beginPath(); far.arc(p.sx, p.sy, r, 0, 7); far.fill();
+  }
+}
+
+const hudItems = [...document.querySelectorAll('#hud [data-s]')].map(el => {
+  const fx = el.dataset.fx; const letters = [];
+  if (fx === 'slam') {
+    const walk = n => { [...n.childNodes].forEach(ch => {
+      if (ch.nodeType === 3) { const frag = document.createDocumentFragment(); for (const c of ch.textContent) { const s = document.createElement('span'); s.textContent = c; frag.appendChild(s); letters.push(s); } ch.replaceWith(frag); }
+      else if (ch.nodeName !== 'BR') walk(ch); }); };
+    walk(el);
+  }
+  el.style.opacity = 0;
+  return { el, s: +el.dataset.s, inK: el.dataset.in, fx, letters };
+});
+function hudAt(t, vel) {
+  for (const it of hudItems) {
+    const s0 = ST[it.s], end = (ST[it.s + 1] ?? TOTAL + 1);
+    const tin = s0 + cue(it.s, it.inK), tout = end - 0.12, a = t - tin;
+    if (a < 0 || t > tout + 0.2) { it.el.style.opacity = 0; continue; }
+    const o = 1 - seg(t, tout, 0.2), lag = `translate(${-vel.x * 2}px, ${-vel.y * 2}px)`;
+    if (it.fx === 'slam') {
+      it.el.style.opacity = o; it.el.style.transform = `${lag} scale(${1 + (1 - o) * .25})`; it.el.style.filter = o < 1 ? `blur(${(1 - o) * 10}px)` : '';
+      it.letters.forEach((sp, k) => { const p = seg(a - k * 0.03, 0, 0.34); sp.style.opacity = cl(p * 3);
+        sp.style.transform = `translateY(${(1 - E.out(p)) * -80}px) scale(${1 + (1 - E.back(p)) * 1.6}) rotate(${(1 - E.out(p)) * -14}deg)`; });
+    } else if (it.fx === 'stamp') {
+      const p = seg(a, 0, 0.3), sh = a < 0.5 ? Math.sin(a * 70) * 10 * (1 - a / 0.5) : 0;
+      it.el.style.opacity = cl(p * 4) * o; it.el.style.transform = `${lag} translateX(${sh}px) scale(${2.3 - 1.3 * E.back(p)}) rotate(${-6 + 6 * (1 - E.out(p))}deg)`;
+    } else if (it.fx === 'pop') {
+      const p = seg(a, 0, 0.35); it.el.style.opacity = cl(p * 3) * o; it.el.style.transform = `${lag} scale(${.4 + .6 * E.back(p)})`;
+    }
+  }
+}
+
+
+window.render = (t) => {
+  CAM = cam(t); const pc = cam(Math.max(0, t - 1 / 60));
+  const s = F / (0 - CAM.z), vel = { x: (CAM.x - pc.x) * s, y: (CAM.y - pc.y) * s };
+  $('world').style.transform = `rotate(${CAM.roll}deg) scale(1.07)`;
+  const bx = Math.min(36, Math.abs(vel.x) * 0.45), by = Math.min(36, Math.abs(vel.y) * 0.45);
+  $('mbk').setAttribute('stdDeviation', `${bx.toFixed(1)} ${by.toFixed(1)}`);
+  $('world').style.filter = (bx > 0.5 || by > 0.5) ? 'url(#mb)' : '';
+  drawBg(t); objects(t); drawNotes(t); hudAt(t, vel);
+  $('prog').style.width = (100 * cl(t / TOTAL)) + '%';
+};
+</script>
+</body></html>
