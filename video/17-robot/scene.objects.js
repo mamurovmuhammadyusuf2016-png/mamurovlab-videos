@@ -30,8 +30,8 @@ function objects(t) {
       put(id, x + 900 * (1 - p) * (i % 2 ? 1 : -1), y + dy, -20, .9 * (.6 + .4 * E.back(seg(u, k0, .45))), (i % 2 ? 2 : -2), on * vis(u, k0)); }); }
   // S2: jobs struck out + WEF
   { const u = L(2), [x, y] = A[2], on = t > ST[2] - .6 && t < ST[3] + .4 ? 1 : 0;
-    [['j1', 'k1', -420], ['j2', 'k2', -230], ['j3', 'k3', -40]].forEach(([id, k, dy], i) => { const k0 = cue(2, k) - .1, p = E.out(seg(u, k0, .4));
+    [['j1', 'k1', -340], ['j2', 'k2', -150], ['j3', 'k3', 40]].forEach(([id, k, dy], i) => { const k0 = cue(2, k) - .1, p = E.out(seg(u, k0, .4));
       put(id, x + (i % 2 ? 20 : -20) + 900 * (1 - p), y + dy, -20, .85 * (.6 + .4 * E.back(seg(u, k0, .4))), (i % 2 ? 2 : -2), on * vis(u, k0));
       $(id).querySelector('.x').style.transform = `scaleX(${E.out(seg(u, k0 + .45, .25))})`; });
-    put('wef', x, y + 330, -80, 1.7 - 0.85 * E.back(seg(u, cue(2, 'wef'), .3)), -3, on * cl(seg(u, cue(2, 'wef'), .08))); }
+    put('wef', x, y + 420, -80, 1.7 - 0.85 * E.back(seg(u, cue(2, 'wef'), .3)), -3, on * cl(seg(u, cue(2, 'wef'), .08))); }
 }

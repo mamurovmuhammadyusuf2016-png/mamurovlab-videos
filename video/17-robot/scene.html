@@ -24,16 +24,20 @@ body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; colo
 #vid { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; transform-origin: 50% 50%; }
 #vshade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.25) 24%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 62%, rgba(0,0,0,.78) 100%); pointer-events: none; }
 #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
-.stat { width: 860px; border-radius: 36px; padding: 30px 44px; background: rgba(255,255,255,.96); color: #0c1a2e; box-shadow: 0 28px 56px rgba(0,0,0,.5); display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
+.stat { position: relative; padding-left: 210px !important; width: 860px; border-radius: 36px; padding: 30px 44px; background: rgba(255,255,255,.96); color: #0c1a2e; box-shadow: 0 28px 56px rgba(0,0,0,.5); display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
 .stat .v { font: 900 120px/1 "Inter Display", Inter; letter-spacing: -5px; white-space: nowrap; color: #0a6cff; }
 .stat .k { font: 900 50px/1.1 "Inter Display", Inter; letter-spacing: 1px; white-space: nowrap; text-align: right; }
-.job { width: 820px; border-radius: 30px; padding: 26px 40px; background: rgba(255,255,255,.96); color: #1a0610; box-shadow: 0 24px 46px rgba(0,0,0,.45); position: relative; overflow: hidden; font: 900 84px/1 "Inter Display", Inter; letter-spacing: -1px; white-space: nowrap; }
-.job .x { position: absolute; left: 24px; right: 24px; top: 50%; height: 14px; margin-top: -7px; background: #ff3b4e; border-radius: 7px; transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 24px rgba(255,59,78,.8); }
+.job { width: 820px; border-radius: 30px; padding: 26px 40px; background: rgba(255,255,255,.96); color: #1a0610; box-shadow: 0 24px 46px rgba(0,0,0,.45); position: relative; overflow: visible; padding-left: 200px !important; font: 900 76px/1 "Inter Display", Inter; letter-spacing: -1px; white-space: nowrap; }
+.job .x { position: absolute; left: 190px; right: 24px; top: 50%; height: 14px; margin-top: -7px; background: #ff3b4e; border-radius: 7px; transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 24px rgba(255,59,78,.8); }
 .wef { width: 860px; border-radius: 30px; padding: 26px 40px; border: 10px solid #ffd23f; background: rgba(20,6,10,.85); color: #fff; text-align: center; box-shadow: 0 0 60px rgba(255,210,63,.35); }
 .wef .v { font: 900 120px/1 "Inter Display", Inter; letter-spacing: -4px; color: #ffd23f; white-space: nowrap; }
 .wef .k { font: 800 40px/1.25 Inter; margin-top: 8px; }
 .vsb { width: 400px; height: 200px; border-radius: 100px; text-align: center; font: 900 110px/200px "Inter Display", Inter; color: #fff; box-shadow: 0 26px 50px rgba(0,0,0,.5); white-space: nowrap; }
 .lower { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; }
+
+.ic { position: absolute; left: -40px; top: 50%; transform: translateY(-50%) rotate(-6deg); filter: drop-shadow(0 18px 26px rgba(0,0,0,.45)); }
+.wef { position: relative; }
+.icw { position: absolute; left: -70px; top: -130px; width: 230px; transform: rotate(-8deg); filter: drop-shadow(0 18px 30px rgba(0,0,0,.6)); }
 
 </style></head>
 <body>
@@ -44,26 +48,27 @@ body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; colo
 <div id="world">
   <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
   <!-- S1: why the robot wins -->
-  <div class="o stat" id="st1"><span class="v">0</span><span class="k">CHARCHOQ</span></div>
-  <div class="o stat" id="st2"><span class="v">0 SO'M</span><span class="k">OYLIK</span></div>
-  <div class="o stat" id="st3"><span class="v">24/7</span><span class="k">ISHLAYDI</span></div>
+  <div class="o stat" id="st1"><img class="ic" src="icons/r01.png" style="height:230px"><span class="v">0</span><span class="k">CHARCHOQ</span></div>
+  <div class="o stat" id="st2"><img class="ic" src="icons/r02.png" style="width:230px"><span class="v">0 SO'M</span><span class="k">OYLIK</span></div>
+  <div class="o stat" id="st3"><img class="ic" src="icons/r03.png" style="width:220px"><span class="v">24/7</span><span class="k">ISHLAYDI</span></div>
   <!-- S2: first to be replaced -->
-  <div class="o job" id="j1">KASSIRLAR<div class="x"></div></div>
-  <div class="o job" id="j2">OPERATORLAR<div class="x"></div></div>
-  <div class="o job" id="j3">BUXGALTERLAR<div class="x"></div></div>
-  <div class="o wef" id="wef"><div class="v">92 MLN</div><div class="k">ish o'rni 2030-yilgacha almashadi<br>Jahon iqtisodiy forumi, 2025</div></div>
+  <div class="o job" id="j1"><img class="ic" src="icons/r04.png" style="width:210px">KASSIRLAR<div class="x"></div></div>
+  <div class="o job" id="j2"><img class="ic" src="icons/r05.png" style="height:200px">OPERATORLAR<div class="x"></div></div>
+  <div class="o job" id="j3"><img class="ic" src="icons/r06.png" style="width:230px">BUXGALTERLAR<div class="x"></div></div>
+  <div class="o wef" id="wef"><img class="icw" src="icons/r07.png"><div class="v">92 MLN</div><div class="k">ish o'rni 2030-yilgacha almashadi<br>Jahon iqtisodiy forumi, 2025</div></div>
   <canvas id="notes" width="1080" height="1920"></canvas>
 </div>
 <div id="flash"></div>
 <div id="hud">
   <div class="prog"><i id="prog"></i></div>
   <div class="handle">@MAMUROVLAB</div>
-  <div class="t sh" data-s="0" data-in="-1" data-fx="pop" style="top:210px;font-size:112px;letter-spacing:-4px">O'RNINGIZDA<br><span class="y">ROBOT!</span></div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="pop" style="top:210px;font-size:112px;letter-spacing:-4px">O'RNINGIZDA<br><span class="y">ROBOT!</span><img src="icons/r08.png" style="height:150px;vertical-align:-30px;margin-left:14px"></div>
   <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:230px;font-size:100px;letter-spacing:-3px">U <span class="y">CHARCHAMAYDI</span></div>
   <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:230px;font-size:92px;letter-spacing:-2px">BIRINCHI <span class="r">NAVBATDA</span></div>
   <div class="t sh" data-s="3" data-in="ai" data-fx="slam" style="top:210px;font-size:92px;letter-spacing:-2px">AI'NI O'RGANGAN<br><span class="g">ISHSIZ QOLMAYDI</span></div>
   <div class="t sh" data-s="3" data-in="cmd" data-fx="stamp" style="top:1540px;font-size:66px;letter-spacing:-1px"><span class="pill" style="background:#3ddc84;color:#04230f">ROBOTGA BUYRUQ BERADI</span></div>
   <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:210px;font-size:96px;letter-spacing:-3px">SIZ AI<br><span class="y">ISHLATASIZMI?</span></div>
+  <div class="t" data-s="4" data-in="0.25" data-fx="pop" style="top:560px"><img src="icons/r09.png" style="height:400px;filter:drop-shadow(0 30px 50px rgba(0,0,0,.6))"></div>
   <div class="t" data-s="4" data-in="vs" data-fx="pop" style="top:1240px"><span class="vsb" style="display:inline-block;background:#3ddc84;color:#04230f;margin-right:30px">HA</span><span class="vsb" style="display:inline-block;background:#ff3b4e">YO'Q</span></div>
   <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1560px"><span class="pill" style="font-size:52px;background:#fff;color:#06101e">YOZING VA DO'STINGIZGA YUBORING</span></div>
 </div>
@@ -155,10 +160,10 @@ function objects(t) {
       put(id, x + 900 * (1 - p) * (i % 2 ? 1 : -1), y + dy, -20, .9 * (.6 + .4 * E.back(seg(u, k0, .45))), (i % 2 ? 2 : -2), on * vis(u, k0)); }); }
   // S2: jobs struck out + WEF
   { const u = L(2), [x, y] = A[2], on = t > ST[2] - .6 && t < ST[3] + .4 ? 1 : 0;
-    [['j1', 'k1', -420], ['j2', 'k2', -230], ['j3', 'k3', -40]].forEach(([id, k, dy], i) => { const k0 = cue(2, k) - .1, p = E.out(seg(u, k0, .4));
+    [['j1', 'k1', -340], ['j2', 'k2', -150], ['j3', 'k3', 40]].forEach(([id, k, dy], i) => { const k0 = cue(2, k) - .1, p = E.out(seg(u, k0, .4));
       put(id, x + (i % 2 ? 20 : -20) + 900 * (1 - p), y + dy, -20, .85 * (.6 + .4 * E.back(seg(u, k0, .4))), (i % 2 ? 2 : -2), on * vis(u, k0));
       $(id).querySelector('.x').style.transform = `scaleX(${E.out(seg(u, k0 + .45, .25))})`; });
-    put('wef', x, y + 330, -80, 1.7 - 0.85 * E.back(seg(u, cue(2, 'wef'), .3)), -3, on * cl(seg(u, cue(2, 'wef'), .08))); }
+    put('wef', x, y + 420, -80, 1.7 - 0.85 * E.back(seg(u, cue(2, 'wef'), .3)), -3, on * cl(seg(u, cue(2, 'wef'), .08))); }
 }
 
 const far = $('far').getContext('2d');

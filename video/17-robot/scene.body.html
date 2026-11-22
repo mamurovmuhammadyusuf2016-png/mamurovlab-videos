@@ -5,26 +5,27 @@
 <div id="world">
   <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
   <!-- S1: why the robot wins -->
-  <div class="o stat" id="st1"><span class="v">0</span><span class="k">CHARCHOQ</span></div>
-  <div class="o stat" id="st2"><span class="v">0 SO'M</span><span class="k">OYLIK</span></div>
-  <div class="o stat" id="st3"><span class="v">24/7</span><span class="k">ISHLAYDI</span></div>
+  <div class="o stat" id="st1"><img class="ic" src="icons/r01.png" style="height:230px"><span class="v">0</span><span class="k">CHARCHOQ</span></div>
+  <div class="o stat" id="st2"><img class="ic" src="icons/r02.png" style="width:230px"><span class="v">0 SO'M</span><span class="k">OYLIK</span></div>
+  <div class="o stat" id="st3"><img class="ic" src="icons/r03.png" style="width:220px"><span class="v">24/7</span><span class="k">ISHLAYDI</span></div>
   <!-- S2: first to be replaced -->
-  <div class="o job" id="j1">KASSIRLAR<div class="x"></div></div>
-  <div class="o job" id="j2">OPERATORLAR<div class="x"></div></div>
-  <div class="o job" id="j3">BUXGALTERLAR<div class="x"></div></div>
-  <div class="o wef" id="wef"><div class="v">92 MLN</div><div class="k">ish o'rni 2030-yilgacha almashadi<br>Jahon iqtisodiy forumi, 2025</div></div>
+  <div class="o job" id="j1"><img class="ic" src="icons/r04.png" style="width:210px">KASSIRLAR<div class="x"></div></div>
+  <div class="o job" id="j2"><img class="ic" src="icons/r05.png" style="height:200px">OPERATORLAR<div class="x"></div></div>
+  <div class="o job" id="j3"><img class="ic" src="icons/r06.png" style="width:230px">BUXGALTERLAR<div class="x"></div></div>
+  <div class="o wef" id="wef"><img class="icw" src="icons/r07.png"><div class="v">92 MLN</div><div class="k">ish o'rni 2030-yilgacha almashadi<br>Jahon iqtisodiy forumi, 2025</div></div>
   <canvas id="notes" width="1080" height="1920"></canvas>
 </div>
 <div id="flash"></div>
 <div id="hud">
   <div class="prog"><i id="prog"></i></div>
   <div class="handle">@MAMUROVLAB</div>
-  <div class="t sh" data-s="0" data-in="-1" data-fx="pop" style="top:210px;font-size:112px;letter-spacing:-4px">O'RNINGIZDA<br><span class="y">ROBOT!</span></div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="pop" style="top:210px;font-size:112px;letter-spacing:-4px">O'RNINGIZDA<br><span class="y">ROBOT!</span><img src="icons/r08.png" style="height:150px;vertical-align:-30px;margin-left:14px"></div>
   <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:230px;font-size:100px;letter-spacing:-3px">U <span class="y">CHARCHAMAYDI</span></div>
   <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:230px;font-size:92px;letter-spacing:-2px">BIRINCHI <span class="r">NAVBATDA</span></div>
   <div class="t sh" data-s="3" data-in="ai" data-fx="slam" style="top:210px;font-size:92px;letter-spacing:-2px">AI'NI O'RGANGAN<br><span class="g">ISHSIZ QOLMAYDI</span></div>
   <div class="t sh" data-s="3" data-in="cmd" data-fx="stamp" style="top:1540px;font-size:66px;letter-spacing:-1px"><span class="pill" style="background:#3ddc84;color:#04230f">ROBOTGA BUYRUQ BERADI</span></div>
   <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:210px;font-size:96px;letter-spacing:-3px">SIZ AI<br><span class="y">ISHLATASIZMI?</span></div>
+  <div class="t" data-s="4" data-in="0.25" data-fx="pop" style="top:560px"><img src="icons/r09.png" style="height:400px;filter:drop-shadow(0 30px 50px rgba(0,0,0,.6))"></div>
   <div class="t" data-s="4" data-in="vs" data-fx="pop" style="top:1240px"><span class="vsb" style="display:inline-block;background:#3ddc84;color:#04230f;margin-right:30px">HA</span><span class="vsb" style="display:inline-block;background:#ff3b4e">YO'Q</span></div>
   <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1560px"><span class="pill" style="font-size:52px;background:#fff;color:#06101e">YOZING VA DO'STINGIZGA YUBORING</span></div>
 </div>
