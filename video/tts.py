@@ -9,8 +9,8 @@ for i in range(4):
         req=urllib.request.Request(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",data=json.dumps(body).encode(),headers={"Content-Type":"application/json","x-goog-api-key":key})
         r=json.load(urllib.request.urlopen(req,timeout=90)); break
     except urllib.error.HTTPError as e:
-        body=e.read().decode(errors="ignore")
-        if e.code==429 and "PerDay" in body:  # daily quota: retrying only burns more quota
+        err=e.read().decode(errors="ignore")
+        if e.code==429 and "PerDay" in err:  # daily quota: retrying only burns more quota
             print("daily quota exhausted for",model,file=sys.stderr); sys.exit(2)
         print("retry",e,file=sys.stderr); time.sleep(20*(i+1))
     except Exception as e:

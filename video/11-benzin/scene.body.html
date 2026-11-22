@@ -1,0 +1,49 @@
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <!-- S0: the pump whose price only goes up -->
+  <div class="o glow" id="glow0"></div>
+  <div class="o pump" id="pump"><div class="top">AI-92</div><div class="scr"><span class="n" id="p0n">12 600</span><span class="u">so'm / litr</span></div>
+    <div class="btn" id="btn">↓<svg viewBox="0 0 250 250"><path id="crack" d="M60 40 L110 110 L95 140 L150 190 L140 230" fill="none" stroke="#1a1a1a" stroke-width="9" stroke-linecap="round" stroke-dasharray="320" stroke-dashoffset="320"/></svg></div>
+    <div class="hose"></div><div class="nozzle"></div></div>
+  <!-- S1: 2017 vs now -->
+  <div class="o board2 old17" id="b17"><div class="yr">2017</div><div class="n" id="b17n">4 300</div><div class="u">so'm / litr</div></div>
+  <div class="o board2 new26" id="b26"><div class="yr">HOZIR</div><div class="n" id="b26n">4 300</div><div class="u">so'm / litr</div></div>
+  <div class="o stampX" id="x3">×3</div>
+  <!-- S2: government -> exchange auction -->
+  <div class="o word" id="wGov">HUKUMAT</div>
+  <div class="o strike" id="strike"></div>
+  <div class="o word y" id="wBirja">BIRJA</div>
+  <div class="o price" id="auPrice">12 400</div>
+  <div class="o barrel" id="barrel"><div class="lb">AI-92</div></div>
+  <div class="o hand" id="h0">✋</div><div class="o hand" id="h1">🙋</div><div class="o hand" id="h2">✋</div><div class="o hand" id="h3">🙋‍♂️</div><div class="o hand" id="h4">✋</div><div class="o hand" id="h5">🤚</div><div class="o hand" id="h6">✋</div>
+  <div class="o" id="hammer" style="font-size:240px;line-height:1">🔨</div>
+  <div class="o tag" id="tKam" style="background:#ff4757;color:#fff">BENZIN KAM</div>
+  <div class="o tag" id="tKop" style="background:#3ddc84;color:#08210f">XARIDOR KO'P</div>
+  <!-- S3: import from Russia -->
+  <div class="o country" id="cRu">ROSSIYA</div>
+  <div class="o country y" id="cUz">O'ZBEKISTON</div>
+  <div class="o rail" id="rail"></div>
+  <div class="o train" id="train"><div class="loco"></div><div class="car"></div><div class="car"></div><div class="car"></div></div>
+  <div class="o tank" id="tank"><div class="fill" id="tankFill"></div><div class="half"></div><div class="lb">~50%</div></div>
+  <div class="o ptag2" id="impTag"><span id="impN">$576</span><small>1000 litr import narxi</small></div>
+  <div class="o stampX" id="p73" style="font-size:200px;color:#ff4757;text-shadow:0 0 50px rgba(255,71,87,.7),0 14px 0 rgba(0,0,0,.35)">+73%</div>
+  <!-- S4: 20 000? -->
+  <div class="o glow" id="glow4"></div>
+  <div class="o board4" id="b4"><span id="b4n">13 000</span></div>
+  <div class="o vote" id="vHa" style="background:#3ddc84;color:#08210f">HA</div>
+  <div class="o vote" id="vYoq" style="background:#ff4757;color:#fff">YO'Q</div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-0.25" data-fx="slam" style="top:220px;font-size:118px;letter-spacing:-4px">NEGA BENZIN<br><span class="y">FAQAT QIMMAT?</span></div>
+  <div class="t sh" data-s="0" data-in="kim" data-fx="stamp" style="top:1560px;font-size:110px;letter-spacing:-3px"><span class="pill" style="background:#ffd23f;color:#1a0c02">KIM HAL QILADI?</span></div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:240px;font-size:100px;letter-spacing:-3px">2017 <span class="y">vs</span> HOZIR</div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:230px;font-size:92px;letter-spacing:-2px">NARXNI KIM<br><span class="y">BELGILAYDI?</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:230px;font-size:92px;letter-spacing:-2px">QARIYB <span class="y">YARMI</span><br>CHETDAN</div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:230px;font-size:100px;letter-spacing:-3px">BENZIN <span class="r">20 000</span><br>BO'LADIMI?</div>
+  <div class="t" data-s="4" data-in="kom" data-fx="pop" style="top:1580px"><span class="pill" style="font-size:66px;background:#ffd23f;color:#1a0c02">KOMMENTGA YOZING 👇</span></div>
+</div>
