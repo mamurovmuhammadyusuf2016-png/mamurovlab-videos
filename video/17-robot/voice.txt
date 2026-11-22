@@ -1,5 +1,5 @@
 Ertaga ishga kelsangiz — stolingizda robot o'tiribdi!
 U charchamaydi, oylik so'ramaydi, kechasi ham ishlaydi.
-Kassirlar, operatorlar, buxgalterlar — birinchi navbatda shunday almashtiriladi.
+Kassirlar, operatorlar, buxgalterlar — ularning ishini birinchi bo'lib robotlar qiladi.
 Lekin sun'iy intellektni ishlatishni o'rgangan odam ishsiz qolmaydi — u robotga buyruq beradi!
 Siz sun'iy intellektdan foydalanasizmi? Ha yoki yo'q — yozing va do'stingizga yuboring!
