@@ -1,0 +1,287 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="cues.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070a1f; }
+body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; color: #fff; }
+#bg { position: absolute; inset: 0; }
+#world { position: absolute; inset: 0; transform-origin: 540px 960px; }
+#world .o { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#notes { position: absolute; left: 0; top: 0; }
+#hud { position: absolute; inset: 0; pointer-events: none; }
+.t { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; line-height: .95; }
+.t span { display: inline-block; white-space: pre; will-change: transform; }
+.y { color: #ffd23f; } .g { color: #3ddc84; } .r { color: #ff4757; } .b { color: #5fd3ff; }
+.sh { text-shadow: 0 8px 0 rgba(0,0,0,.35), 0 18px 40px rgba(0,0,0,.55); }
+.pill { display: inline-block; padding: 14px 36px; border-radius: 999px; font-weight: 900; }
+.handle { position: absolute; top: 74px; left: 0; right: 0; text-align: center; font: 800 30px "Inter Display", Inter; letter-spacing: 3px; color: rgba(255,255,255,.55); }
+.prog { position: absolute; top: 46px; left: 90px; right: 90px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.14); overflow: hidden; }
+.prog i { display: block; height: 100%; background: #ffd23f; width: 0; }
+.shadow { width: 900px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+.lbl { padding: 14px 32px; border-radius: 20px; font-weight: 900; font-size: 48px; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.emo { font-size: 150px; line-height: 1; }
+.lamp { width: 150px; height: 160px; text-align: center; }
+.lamp span { display: block; font-size: 120px; line-height: 160px; transition: none; }
+.big { font: 900 230px/0.95 "Inter Display", Inter; letter-spacing: -9px; color: #fff; text-align: center; white-space: nowrap; text-shadow: 0 14px 0 rgba(0,0,0,.4), 0 0 60px rgba(120,170,255,.55); font-variant-numeric: tabular-nums; }
+.big small { display: block; font: 900 76px/1.05 "Inter Display", Inter; letter-spacing: 3px; color: #ffd23f; margin-top: 12px; text-shadow: 0 6px 0 rgba(0,0,0,.4); }
+.card { width: 840px; display: flex; align-items: center; gap: 28px; padding: 22px 36px; border-radius: 30px; background: rgba(255,255,255,.96); color: #14143a; box-shadow: 0 24px 46px rgba(0,0,0,.45); position: relative; overflow: hidden; }
+.card .e { font-size: 92px; line-height: 1; }
+.card .t { font: 900 62px/1.05 "Inter Display", Inter; letter-spacing: -1px; white-space: nowrap; }
+.card .x { position: absolute; left: 0; right: 0; top: 50%; height: 14px; margin-top: -7px; background: #ff3b4e; border-radius: 7px; transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 24px rgba(255,59,78,.8); }
+.card .no { position: absolute; right: 30px; top: 50%; margin-top: -36px; font: 900 72px/72px "Inter Display", Inter; color: #ff3b4e; opacity: 0; }
+.stampG { font: 900 150px/1 "Inter Display", Inter; color: #3ddc84; letter-spacing: -5px; text-align: center; white-space: nowrap; text-shadow: 0 10px 0 rgba(0,0,0,.35), 0 0 50px rgba(61,220,132,.6); font-variant-numeric: tabular-nums; }
+.stampG small { display: block; font: 900 64px/1.1 "Inter Display", Inter; letter-spacing: 2px; color: #fff; margin-top: 8px; }
+.net { padding: 20px 40px; border-radius: 26px; background: #3ddc84; color: #04230f; font: 900 76px/1 "Inter Display", Inter; letter-spacing: -2px; white-space: nowrap; box-shadow: 0 0 60px rgba(61,220,132,.7), 0 26px 50px rgba(0,0,0,.45); }
+.panel { width: 440px; border-radius: 36px; padding: 34px 20px; text-align: center; box-shadow: 0 34px 64px rgba(0,0,0,.5); position: relative; }
+.panel .e { font-size: 150px; line-height: 1; }
+.panel .k { font: 900 54px/1.1 "Inter Display", Inter; letter-spacing: 0; margin-top: 14px; }
+.panel .s { font: 800 36px/1.2 Inter; margin-top: 8px; opacity: .8; }
+.lost { padding: 20px 36px; border: 12px solid #ff3b4e; border-radius: 26px; color: #ff3b4e; font: 900 84px/1 "Inter Display", Inter; letter-spacing: -1px; white-space: nowrap; background: rgba(40,0,8,.78); text-shadow: 0 0 30px rgba(255,59,78,.6); }
+.glow { width: 1400px; height: 1400px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,190,60,.38), rgba(255,190,60,0)); }
+
+</style></head>
+<body>
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <div class="o glow" id="glow0"></div>
+  <div class="o glow" id="glow2" style="background:radial-gradient(closest-side, rgba(61,220,132,.4), rgba(61,220,132,0))"></div>
+  <!-- S0 / S4 big number -->
+  <div class="o big" id="num0">92 MLN<small>ISH O'RNI YO'QOLADI</small></div>
+  <!-- S1 professions -->
+  <div class="o card" id="c1"><div class="e">💵</div><div class="t">Kassir</div><div class="x"></div><div class="no">✖</div></div>
+  <div class="o card" id="c2"><div class="e">🏦</div><div class="t">Bank kassiri</div><div class="x"></div><div class="no">✖</div></div>
+  <div class="o card" id="c3"><div class="e">⌨️</div><div class="t">Ma'lumot operatori</div><div class="x"></div><div class="no">✖</div></div>
+  <div class="o card" id="c4"><div class="e">🗂️</div><div class="t">Ma'muriy yordamchi</div><div class="x"></div><div class="no">✖</div></div>
+  <div class="o card" id="c5"><div class="e">🧮</div><div class="t">Buxgalter</div><div class="x"></div><div class="no">✖</div></div>
+  <!-- S2 new jobs -->
+  <div class="o stampG" id="num2">+170 MLN<small>YANGI ISH O'RNI</small></div>
+  <div class="o net" id="net2">SOF O'SISH: +78 MLN</div>
+  <!-- S3 AI vs no AI -->
+  <div class="o panel" id="pAI" style="background:linear-gradient(160deg,#3ddc84,#128a4a);color:#042a12"><div class="e">🧑‍💻</div><div class="k">AI bilan ishlaydi</div><div class="s">+ 170 mln yangi ish</div></div>
+  <div class="o panel" id="pNo" style="background:linear-gradient(160deg,#e9e6f6,#a8a4c0);color:#1d1a2e"><div class="e">🧍</div><div class="k">AI'siz</div><div class="s">kasb o'zgaradi</div></div>
+  <div class="o lost" id="lost3">YUTQAZADI</div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="pop" style="top:215px;font-size:84px;letter-spacing:-3px">JAHON IQTISODIY FORUMI</div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:230px;font-size:92px;letter-spacing:-2px">ENG TEZ <span class="r">QISQARADI</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:230px;font-size:96px;letter-spacing:-3px">LEKIN… <span class="g">YANGI!</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:230px;font-size:96px;letter-spacing:-3px">KIM <span class="r">YUTQAZADI?</span></div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:230px;font-size:96px;letter-spacing:-3px">KASBINGIZ<br><span class="y">QAYSI?</span></div>
+  <div class="t" data-s="4" data-in="num" data-fx="pop" style="top:1490px"><span class="pill" style="font-size:66px;background:#ffd23f;color:#1a0c02">BITTA SO'Z YOZING 👇</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1620px"><span class="pill" style="font-size:46px;background:#fff;color:#0a1030">DO'STINGIZGA YUBORING ↗</span></div>
+</div>
+
+<script>
+const C = window.CUES, ST = C.starts, TOTAL = C.total;
+const W = 1080, H = 1920, F = 1000;
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, d) => cl((t - a) / d);
+const E = {
+  io: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  out: x => 1 - Math.pow(1 - x, 3),
+  back: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+};
+const sDur = i => (ST[i + 1] ?? TOTAL) - ST[i];
+const cue = (s, k) => { const v = C['s' + s]?.[k]; return v === undefined ? parseFloat(k) : v; };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const A = [[0, 0], [0, 2600], [2700, 2600], [2700, 0], [0, 0]];
+const SCENE_BG = [['#0a1030', '#1c3a7a'], ['#200a14', '#6a1530'], ['#06241c', '#106a4a'], ['#14103a', '#3a2a7a'], ['#0a1030', '#1c3a7a']];
+
+function shake(k, amp) { if (k <= 0 || k > 1.1) return [0, 0, 0]; const e = Math.exp(-k * 4.5); return [Math.sin(k * 80) * amp * e, Math.cos(k * 70) * amp * e, Math.sin(k * 55) * 1.2 * e]; }
+function hold(i, u) {
+  const d = sDur(i), p = E.io(cl(u / d));
+  let [x, y] = A[i];
+  let z = -1000 + 150 * p;
+  x += Math.sin(u * 0.9 + i * 1.7) * 18; y += Math.cos(u * 0.7 + i * 2.3) * 12;
+  let roll = Math.sin(u * 0.8 + i) * 1.1;
+  let s = [0, 0, 0];
+  if (i === 0) { z = -1500 + 450 * p; y += 60 - 60 * p; roll += -1.5 + 1.5 * p; s = shake(u - cue(0, 'dark'), 14); }
+  if (i === 1) { y += -80 + 160 * p; x += 40 - 80 * p; }
+  if (i === 2) { z = -1300 + 250 * p; y += 40 - 40 * p; s = shake(u - cue(2, 'new'), 12); }
+  if (i === 3) { x += -50 + 100 * p; roll += 1 - 2 * p; s = shake(u - cue(3, 'lose'), 16); }
+  if (i === 4) { z = -1000 - 480 * p; y += 0; roll += 0.6 - 1.2 * p; }
+  return { x: x + s[0], y: y + s[1], z, roll: roll + s[2] };
+}
+const lerp = (a, b, p) => a + (b - a) * p;
+const lc = (a, b, p) => ({ x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), z: lerp(a.z, b.z, p), roll: lerp(a.roll, b.roll, p) });
+const TW = 0.26;
+function sceneAt(t) { let i = 0; ST.forEach((s, k) => { if (t >= s) i = k; }); return i; }
+function cam(t) {
+  const i = sceneAt(t); let c = hold(i, t - ST[i]);
+  if (i + 1 < ST.length && t > ST[i + 1] - TW) c = lc(c, hold(i + 1, t - ST[i + 1]), E.io(seg(t, ST[i + 1] - TW, 2 * TW)));
+  if (i > 0 && t < ST[i] + TW) c = lc(hold(i - 1, t - ST[i - 1]), c, E.io(seg(t, ST[i] - TW, 2 * TW)));
+  return c;
+}
+let CAM, FOCUS = 0;
+function proj(x, y, z) { const s = F / (z - CAM.z); return { sx: W / 2 + (x - CAM.x) * s, sy: H / 2 + (y - CAM.y) * s, s }; }
+const $ = id => document.getElementById(id);
+function put(el, x, y, z = 0, sc = 1, rot = 0, op = 1, sx2 = 1, sy2 = 1) {
+  if (typeof el === 'string') el = $(el);
+  const p = proj(x, y, z);
+  if (op <= 0.001 || p.s <= 0 || p.sx < -1600 || p.sx > 2700 || p.sy < -1800 || p.sy > 3700) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.style.transform = `translate(${p.sx}px,${p.sy}px) scale(${p.s * sc}) rotate(${rot}deg) scale(${sx2},${sy2}) translate(-50%,-50%)`;
+  el.style.opacity = op;
+  const b = Math.min(16, Math.abs(z - FOCUS) * 0.016);
+  el.style.filter = b > 0.4 ? `blur(${b}px)` : '';
+  el.style.zIndex = Math.round(6000 - z);
+}
+
+// ---------- sprites + particles ----------
+function sprite(kind) {
+  const c = document.createElement('canvas'); c.width = 300; c.height = 140; const g = c.getContext('2d');
+  if (kind === 'spark') {
+    const r = g.createRadialGradient(150, 70, 0, 150, 70, 70); r.addColorStop(0, 'rgba(255,255,220,1)'); r.addColorStop(.35, 'rgba(255,210,63,.9)'); r.addColorStop(1, 'rgba(255,160,0,0)');
+    g.fillStyle = r; g.beginPath(); g.arc(150, 70, 70, 0, 7); g.fill(); return c;
+  }
+  const grad = g.createLinearGradient(0, 0, 300, 140);
+  grad.addColorStop(0, '#f3e6ff'); grad.addColorStop(.55, '#d2b8f0'); grad.addColorStop(1, '#a88ad6');
+  g.fillStyle = grad; g.beginPath(); g.roundRect(0, 0, 300, 140, 14); g.fill();
+  g.strokeStyle = 'rgba(255,255,255,.7)'; g.lineWidth = 6; g.beginPath(); g.roundRect(10, 10, 280, 120, 10); g.stroke();
+  g.fillStyle = 'rgba(255,255,255,.4)'; g.beginPath(); g.arc(70, 70, 38, 0, 7); g.fill();
+  g.fillStyle = '#3a1d6a'; g.font = '900 44px "Inter Display", Inter'; g.textAlign = 'right';
+  g.fillText('100 000', 282, 66); g.font = '800 26px Inter'; g.fillText("SO'M", 280, 108);
+  return c;
+}
+const SPR = { som: sprite('som'), spark: sprite('spark') };
+const parts = [];
+function emit(seed, t0, t1, rate, fn) { const r = rng(seed); for (let t = t0; t < t1; t += 1 / rate) parts.push(fn(r, t + r() / rate)); }
+// S2: gold/green sparks when the new jobs light up; S0: sparks when lamps die
+emit(101, ST[2] + cue(2, 'new'), ST[2] + cue(2, 'new') + 2.2, 40, (r, t) => ({ t0: t, life: 1.4, x: A[2][0] - 500 + r() * 1000, y: A[2][1] - 700 + r() * 1400, z: -60, vx: (r() - .5) * 300, vy: -200 - r() * 400, vz: 0, g: 0, rot: 0, vr: 0, fl: 0, sc: .12 + r() * .14, k: 'spark', add: 1 }));
+emit(102, ST[2] + cue(2, 'net'), ST[2] + cue(2, 'net') + .3, 110, (r, t) => { const a = r() * Math.PI * 2, v = 500 + r() * 1100; return { t0: t, life: 1.1, x: A[2][0], y: A[2][1] + 560, z: -150, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vz: 0, g: 900, rot: 0, vr: 0, fl: 0, sc: .1 + r() * .12, k: 'spark', add: 1 }; });
+emit(103, ST[4] + .05, ST[4] + 1.4, 40, (r, t) => ({ t0: t, life: 1.4, x: A[4][0] - 500 + r() * 1000, y: A[4][1] - 700 + r() * 1400, z: -60, vx: (r() - .5) * 300, vy: -200 - r() * 400, vz: 0, g: 0, rot: 0, vr: 0, fl: 0, sc: .12 + r() * .14, k: 'spark', add: 1 }));
+function partAt(p, t) { const u = t - p.t0; if (u < 0 || u > p.life) return null; return { x: p.x + p.vx * u, y: p.y + p.vy * u + 0.5 * p.g * u * u, z: p.z + p.vz * u, rot: p.rot + p.vr * u, fl: p.fl ? Math.cos(p.fl * u) : 1, a: cl((p.life - u) / 0.35) * cl(u / 0.05) }; }
+const nctx = $('notes').getContext('2d');
+function drawNotes(t) {
+  nctx.setTransform(1, 0, 0, 1, 0, 0); nctx.clearRect(0, 0, W, H);
+  const live = []; for (const p of parts) { const s = partAt(p, t); if (s && s.z > CAM.z + 60) live.push([p, s]); }
+  live.sort((a, b) => b[1].z - a[1].z);
+  for (const [p, s0] of live) {
+    const pr = proj(s0.x, s0.y, s0.z); if (pr.sx < -400 || pr.sx > W + 400 || pr.sy < -400 || pr.sy > H + 400) continue;
+    if (p.add) { // soft glow sprite: no DOF filter and no trail copies (cheap to paint)
+      nctx.filter = 'none'; nctx.globalCompositeOperation = 'lighter'; nctx.globalAlpha = s0.a; const sc = pr.s * p.sc * 0.62;
+      nctx.setTransform(sc, 0, 0, sc, pr.sx, pr.sy); nctx.drawImage(SPR[p.k], -150, -70); continue; }
+    const b = Math.min(14, Math.abs(s0.z - FOCUS) * 0.012); nctx.filter = b > 0.6 ? `blur(${b.toFixed(1)}px)` : 'none';
+    nctx.globalCompositeOperation = 'source-over';
+    const fast = Math.hypot(p.vx, p.vy + p.g * (t - p.t0)) > 1000;
+    for (let k = fast ? 2 : 0; k >= 0; k--) { const s = k ? partAt(p, t - k / 200) : s0; if (!s) continue; const q = k ? proj(s.x, s.y, s.z) : pr;
+      nctx.globalAlpha = s0.a * (k ? 0.22 : 1); nctx.setTransform(1, 0, 0, 1, q.sx, q.sy); nctx.rotate(s.rot); const sc = q.s * p.sc * 0.62; nctx.scale(sc, sc * (0.25 + 0.75 * Math.abs(s.fl))); nctx.drawImage(SPR[p.k], -150, -70); }
+  }
+  nctx.globalAlpha = 1; nctx.filter = 'none'; nctx.globalCompositeOperation = 'source-over';
+}
+const pop = (u, t0, d = .35) => E.back(seg(u, t0, d)), vis = (u, t0) => cl(seg(u, t0, .1));
+// ---------- lamp grids (each lamp is one job) ----------
+function makeLamps(n) {
+  const world = $('world'), anchor = $('notes'), out = [], r = rng(33);
+  for (let k = 0; k < n; k++) {
+    const el = document.createElement('div'); el.className = 'o lamp'; const sp = document.createElement('span'); sp.textContent = '💡'; el.appendChild(sp);
+    world.insertBefore(el, anchor); out.push({ el, sp, k, rnd: r(), cx: k % 5, cy: Math.floor(k / 5), st: '' });
+  }
+  return out;
+}
+const L0 = makeLamps(35), L2 = makeLamps(35);
+function setLamp(l, on, tint) {
+  const st = on ? (tint || 'on') : 'off'; if (l.st === st) return; l.st = st;
+  l.sp.style.filter = on ? (tint === 'green' ? 'hue-rotate(85deg) saturate(1.2) drop-shadow(0 0 26px rgba(80,255,150,.95))' : 'drop-shadow(0 0 26px rgba(255,190,60,.95))') : 'grayscale(1) brightness(.28)';
+  l.sp.style.opacity = on ? 1 : .75;
+}
+function putLamps(L, x, y, on, sc, fn) {
+  L.forEach((l) => { const lx = x + (l.cx - 2) * 215 + (l.cy % 2 ? 30 : -30), ly = y + (l.cy - 3) * 250 + 40; put(l.el, lx, ly, 160 - l.cy * 6, sc, 0, on); fn(l); });
+}
+function objects(t) {
+  const L = i => t - ST[i];
+  // S0 + S4: lamp wall; lamps die after "yo'qoladi", come back for the CTA (loop)
+  { const inS0 = t < ST[1] + .4, inS4 = t > ST[4] - .6, on = inS0 || inS4 ? 1 : 0, [x, y] = A[0], u = inS4 ? L(4) : L(0), dk = cue(0, 'dark');
+    put('glow0', x, y + 60, 400, 1 + .06 * Math.sin(t * 3), 0, on * .75);
+    putLamps(L0, x, y, on, .95, (l) => { if (inS4) setLamp(l, u > 0.15 + l.rnd * 0.9); else setLamp(l, !(L(0) > dk + l.rnd * 3.0)); });
+    const nb = inS0 ? E.back(seg(L(0), -0.05, .35)) : 1, nbump = inS0 && L(0) > dk && L(0) < dk + .3 ? 1 + .08 * Math.sin((L(0) - dk) / .3 * Math.PI) : 1;
+    put('num0', x, y - 110, -100, (inS0 ? (.62 + .38 * nb) : .85 + .15 * Math.min(1, u)) * nbump, -3, on * (inS0 ? 1 : 1)); }
+  // S1: five professions struck out in turn
+  { const u = L(1), [x, y] = A[1], on = t > ST[1] - .6 && t < ST[2] + .4 ? 1 : 0;
+    ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, i) => { const k = cue(1, 'k' + (i + 1)), p = E.out(seg(u, k - .15, .4)), xx = cl(seg(u, k + .45, .25)), el = $(id);
+      put(id, x + (i % 2 ? 20 : -20) + 900 * (1 - p), y - 330 + i * 205, -20, .85 * (.6 + .4 * E.back(seg(u, k - .15, .4))), (i % 2 ? 2 : -2), on * vis(u, k - .15));
+      el.querySelector('.x').style.transform = `scaleX(${E.out(xx)})`; el.querySelector('.no').style.opacity = xx; el.style.filter = ''; el.querySelector('.t').style.opacity = 1 - .55 * xx; }); }
+  // S2: 170 mln new jobs light up
+  { const u = L(2), [x, y] = A[2], on = t > ST[2] - .6 && t < ST[3] + .4 ? 1 : 0, nw = cue(2, 'new');
+    put('glow2', x, y + 60, 400, 1 + .06 * Math.sin(t * 3), 0, on * .8);
+    putLamps(L2, x, y, on, .95, (l) => setLamp(l, u > nw + l.rnd * 2.0, 'green'));
+    put('num2', x, y - 120, -100, (.7 + .3 * pop(u, nw - .1)) * (u > nw && u < nw + .3 ? 1 + .08 * Math.sin((u - nw) / .3 * Math.PI) : 1), -3, on * vis(u, nw - .1));
+    put('net2', x, y + 600, -100, 2.0 - 1.1 * E.back(seg(u, cue(2, 'net'), .3)), -3, on * cl(seg(u, cue(2, 'net'), .08))); }
+  // S3: with AI wins, without AI loses
+  { const u = L(3), [x, y] = A[3], on = t > ST[3] - .6 && t < ST[4] + .4 ? 1 : 0, ls = cue(3, 'lose');
+    put('pAI', x - 235, y - 20, 0, .95 * pop(u, cue(3, 'ai') - .1), -2, on * vis(u, cue(3, 'ai') - .1));
+    put('pNo', x + 235, y - 20, 0, .95 * pop(u, .1) * (1 - .12 * cl(seg(u, ls, .3))), 2, on * vis(u, .1) * (1 - .35 * cl(seg(u, ls, .3))));
+    put('lost3', x, y + 360, -100, 1.7 - 0.8 * E.back(seg(u, ls, .3)), -5, on * cl(seg(u, ls, .08))); }
+}
+
+const far = $('far').getContext('2d');
+const bokeh = []; { const r = rng(11); for (let i = 0; i < 70; i++) bokeh.push({ x: -1600 + r() * 11000, y: -2400 + r() * 6600, z: 900 + r() * 2600, rad: 40 + r() * 120, hue: [48, 140, 200, 330, 270][Math.floor(r() * 5)] }); }
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function bgAt(t) {
+  const i = sceneAt(t); const a = SCENE_BG[i];
+  if (i + 1 < ST.length && t > ST[i + 1] - 0.3) { const p = seg(t, ST[i + 1] - 0.3, 0.6); const b = SCENE_BG[i + 1]; return [0, 1].map(k => { const x = hex(a[k]), y = hex(b[k]); return `rgb(${x.map((v, j) => Math.round(lerp(v, y[j], p))).join(',')})`; }); }
+  return a;
+}
+function drawBg(t) {
+  const [c1, c2] = bgAt(t);
+  $('bg').style.background = `radial-gradient(1200px 1400px at 50% 40%, ${c2} 0%, ${c1} 65%, #05060f 100%)`;
+  far.clearRect(0, 0, W, H);
+  for (const b of bokeh) {
+    const p = proj(b.x, b.y, b.z); if (p.sx < -300 || p.sx > W + 300 || p.sy < -300 || p.sy > H + 300) continue;
+    const r = b.rad * p.s * 2.2, g = far.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r);
+    g.addColorStop(0, `hsla(${b.hue},90%,65%,.28)`); g.addColorStop(1, `hsla(${b.hue},90%,65%,0)`);
+    far.fillStyle = g; far.beginPath(); far.arc(p.sx, p.sy, r, 0, 7); far.fill();
+  }
+}
+
+const hudItems = [...document.querySelectorAll('#hud [data-s]')].map(el => {
+  const fx = el.dataset.fx; const letters = [];
+  if (fx === 'slam') {
+    const walk = n => { [...n.childNodes].forEach(ch => {
+      if (ch.nodeType === 3) { const frag = document.createDocumentFragment(); for (const c of ch.textContent) { const s = document.createElement('span'); s.textContent = c; frag.appendChild(s); letters.push(s); } ch.replaceWith(frag); }
+      else if (ch.nodeName !== 'BR') walk(ch); }); };
+    walk(el);
+  }
+  el.style.opacity = 0;
+  return { el, s: +el.dataset.s, inK: el.dataset.in, fx, letters };
+});
+function hudAt(t, vel) {
+  for (const it of hudItems) {
+    const s0 = ST[it.s], end = (ST[it.s + 1] ?? TOTAL + 1);
+    const tin = s0 + cue(it.s, it.inK), tout = end - 0.12, a = t - tin;
+    if (a < 0 || t > tout + 0.2) { it.el.style.opacity = 0; continue; }
+    const o = 1 - seg(t, tout, 0.2), lag = `translate(${-vel.x * 2}px, ${-vel.y * 2}px)`;
+    if (it.fx === 'slam') {
+      it.el.style.opacity = o; it.el.style.transform = `${lag} scale(${1 + (1 - o) * .25})`; it.el.style.filter = o < 1 ? `blur(${(1 - o) * 10}px)` : '';
+      it.letters.forEach((sp, k) => { const p = seg(a - k * 0.03, 0, 0.34); sp.style.opacity = cl(p * 3);
+        sp.style.transform = `translateY(${(1 - E.out(p)) * -80}px) scale(${1 + (1 - E.back(p)) * 1.6}) rotate(${(1 - E.out(p)) * -14}deg)`; });
+    } else if (it.fx === 'stamp') {
+      const p = seg(a, 0, 0.3), sh = a < 0.5 ? Math.sin(a * 70) * 10 * (1 - a / 0.5) : 0;
+      it.el.style.opacity = cl(p * 4) * o; it.el.style.transform = `${lag} translateX(${sh}px) scale(${2.3 - 1.3 * E.back(p)}) rotate(${-6 + 6 * (1 - E.out(p))}deg)`;
+    } else if (it.fx === 'pop') {
+      const p = seg(a, 0, 0.35); it.el.style.opacity = cl(p * 3) * o; it.el.style.transform = `${lag} scale(${.4 + .6 * E.back(p)})`;
+    }
+  }
+}
+
+
+window.render = (t) => {
+  CAM = cam(t); const pc = cam(Math.max(0, t - 1 / 60));
+  const s = F / (0 - CAM.z), vel = { x: (CAM.x - pc.x) * s, y: (CAM.y - pc.y) * s };
+  $('world').style.transform = `rotate(${CAM.roll}deg) scale(1.07)`;
+  const bx = Math.min(36, Math.abs(vel.x) * 0.45), by = Math.min(36, Math.abs(vel.y) * 0.45);
+  $('mbk').setAttribute('stdDeviation', `${bx.toFixed(1)} ${by.toFixed(1)}`);
+  $('world').style.filter = (bx > 0.5 || by > 0.5) ? 'url(#mb)' : '';
+  drawBg(t); objects(t); drawNotes(t); hudAt(t, vel);
+  $('prog').style.width = (100 * cl(t / TOTAL)) + '%';
+};
+</script>
+</body></html>

@@ -53,7 +53,7 @@ function makeLamps(n) {
 const L0 = makeLamps(35), L2 = makeLamps(35);
 function setLamp(l, on, tint) {
   const st = on ? (tint || 'on') : 'off'; if (l.st === st) return; l.st = st;
-  l.sp.style.filter = on ? (tint === 'green' ? 'hue-rotate(250deg) saturate(1.3) drop-shadow(0 0 26px rgba(80,255,150,.95))' : 'drop-shadow(0 0 26px rgba(255,190,60,.95))') : 'grayscale(1) brightness(.28)';
+  l.sp.style.filter = on ? (tint === 'green' ? 'hue-rotate(85deg) saturate(1.2) drop-shadow(0 0 26px rgba(80,255,150,.95))' : 'drop-shadow(0 0 26px rgba(255,190,60,.95))') : 'grayscale(1) brightness(.28)';
   l.sp.style.opacity = on ? 1 : .75;
 }
 function putLamps(L, x, y, on, sc, fn) {
@@ -70,7 +70,7 @@ function objects(t) {
   // S1: five professions struck out in turn
   { const u = L(1), [x, y] = A[1], on = t > ST[1] - .6 && t < ST[2] + .4 ? 1 : 0;
     ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, i) => { const k = cue(1, 'k' + (i + 1)), p = E.out(seg(u, k - .15, .4)), xx = cl(seg(u, k + .45, .25)), el = $(id);
-      put(id, x + (i % 2 ? 20 : -20) + 900 * (1 - p), y - 440 + i * 215, -20, .9 * (.6 + .4 * E.back(seg(u, k - .15, .4))), (i % 2 ? 2 : -2), on * vis(u, k - .15));
+      put(id, x + (i % 2 ? 20 : -20) + 900 * (1 - p), y - 330 + i * 205, -20, .85 * (.6 + .4 * E.back(seg(u, k - .15, .4))), (i % 2 ? 2 : -2), on * vis(u, k - .15));
       el.querySelector('.x').style.transform = `scaleX(${E.out(xx)})`; el.querySelector('.no').style.opacity = xx; el.style.filter = ''; el.querySelector('.t').style.opacity = 1 - .55 * xx; }); }
   // S2: 170 mln new jobs light up
   { const u = L(2), [x, y] = A[2], on = t > ST[2] - .6 && t < ST[3] + .4 ? 1 : 0, nw = cue(2, 'new');
@@ -82,5 +82,5 @@ function objects(t) {
   { const u = L(3), [x, y] = A[3], on = t > ST[3] - .6 && t < ST[4] + .4 ? 1 : 0, ls = cue(3, 'lose');
     put('pAI', x - 235, y - 20, 0, .95 * pop(u, cue(3, 'ai') - .1), -2, on * vis(u, cue(3, 'ai') - .1));
     put('pNo', x + 235, y - 20, 0, .95 * pop(u, .1) * (1 - .12 * cl(seg(u, ls, .3))), 2, on * vis(u, .1) * (1 - .35 * cl(seg(u, ls, .3))));
-    put('lost3', x + 235, y + 360, -100, 2.0 - 1.1 * E.back(seg(u, ls, .3)), -5, on * cl(seg(u, ls, .08))); }
+    put('lost3', x, y + 360, -100, 1.7 - 0.8 * E.back(seg(u, ls, .3)), -5, on * cl(seg(u, ls, .08))); }
 }
