@@ -26,7 +26,7 @@ function objects(t) {
     put('yr', x, y - 300, -30, .72 * stamp(u, .1), -2, on * cl(seg(u, .1, .08)) * (1 - cl(seg(u, ty - .3, .3))));
     put('life', x, y + 200, 0, .95 * pop(u, .4), 0, on * vis(u, .4));
     LIFE.forEach((c, k) => { const lit = k >= 65 && u > ty - .6 + (k - 65) * .07; c.style.background = lit ? '#ff3b4e' : (u > .4 + k * .012 ? 'rgba(255,255,255,.32)' : 'rgba(255,255,255,.1)'); c.style.boxShadow = lit ? '0 0 18px rgba(255,59,78,.8)' : 'none'; });
-    put('ten', x, y - 300, -60, .8 * stamp(u, ty), 3, on * cl(seg(u, ty, .08))); }
+    put('ten', x, y - 250, -60, .8 * stamp(u, ty), 3, on * cl(seg(u, ty, .08))); }
   // S3: two languages a year or hundreds of books
   { const u = L(3), [x, y] = A[3], on = t > ST[3] - .6 && t < ST[4] + .4 ? 1 : 0, lg = cue(3, 'lang'), bo = cue(3, 'book');
     put('bubbles', x - 220, y - 150 + Math.sin(u * 2.4) * 8, 0, pop(u, lg - .2), -4, on * vis(u, lg - .2));

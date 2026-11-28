@@ -1,0 +1,231 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="cues.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070a1f; }
+body { font-family: "Inter Display", Inter, "Noto Color Emoji", sans-serif; color: #fff; }
+#bg { position: absolute; inset: 0; }
+#world { position: absolute; inset: 0; transform-origin: 540px 960px; }
+#world .o { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#notes { position: absolute; left: 0; top: 0; }
+#hud { position: absolute; inset: 0; pointer-events: none; }
+.t { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; line-height: .95; }
+.t span { display: inline-block; white-space: pre; will-change: transform; }
+.y { color: #ffd23f; } .g { color: #3ddc84; } .r { color: #ff4757; } .b { color: #5fd3ff; }
+.sh { text-shadow: 0 8px 0 rgba(0,0,0,.35), 0 18px 40px rgba(0,0,0,.55); }
+.pill { display: inline-block; padding: 14px 36px; border-radius: 999px; font-weight: 900; }
+.handle { position: absolute; top: 74px; left: 0; right: 0; text-align: center; font: 800 30px "Inter Display", Inter; letter-spacing: 3px; color: rgba(255,255,255,.55); }
+.prog { position: absolute; top: 46px; left: 90px; right: 90px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.14); overflow: hidden; }
+.prog i { display: block; height: 100%; background: #ffd23f; width: 0; }
+.shadow { width: 900px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+.lbl { padding: 14px 32px; border-radius: 20px; font-weight: 900; font-size: 48px; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.emo { font-size: 150px; line-height: 1; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.ico { filter: drop-shadow(0 26px 30px rgba(0,0,0,.5)); }
+.card { padding: 26px 50px; border-radius: 40px; background: rgba(255,255,255,.96); color: #0c1a2e; text-align: center; box-shadow: 0 28px 56px rgba(0,0,0,.5); white-space: nowrap; }
+.card .k { font: 900 44px/1 "Inter Display", Inter; letter-spacing: 3px; color: #7a86a0; }
+.card .v { font: 900 140px/1 "Inter Display", Inter; letter-spacing: -5px; color: #0a6cff; margin-top: 8px; }
+.card.y .v { color: #ff9f1a; } .card.r .v { color: #ff3b4e; } .card.g .v { color: #16b866; }
+.grid { display: grid; gap: 10px; padding: 26px; border-radius: 34px; background: rgba(8,10,30,.72); box-shadow: 0 24px 50px rgba(0,0,0,.45), inset 0 0 0 3px rgba(255,255,255,.12); }
+.grid i { display: block; width: 52px; height: 52px; border-radius: 12px; background: rgba(255,255,255,.18); }
+.grid.day { grid-template-columns: repeat(8, 1fr); } .grid.day i { width: 86px; height: 86px; border-radius: 18px; }
+.grid.life { grid-template-columns: repeat(13, 1fr); }
+.lbl { font: 900 52px/1 "Inter Display", Inter; color: #fff; letter-spacing: 1px; text-shadow: 0 6px 16px rgba(0,0,0,.6); white-space: nowrap; }
+
+</style></head>
+<body>
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <!-- S0 / S4: phone + ?? YIL -->
+  <img class="o ico" id="phone" src="icons/phone.png" style="width:660px">
+  <img class="o ico" id="hg0" src="icons/hourglass.png" style="width:300px">
+  <div class="o card r" id="q0"><div class="k">UMRINGIZDAN</div><div class="v" id="q0v">?? YIL</div></div>
+  <!-- S1: a day of 24 hours, 4 on the phone -->
+  <div class="o card" id="d4"><div class="k">KUNIGA</div><div class="v">~4 SOAT</div></div>
+  <div class="o grid day" id="day"></div>
+  <div class="o lbl" id="dayl">24 SOATDAN</div>
+  <!-- S2: a life of 75 years, 10 on the phone -->
+  <div class="o card y" id="yr"><div class="k">BIR YILDA</div><div class="v" id="yrv">1 300+ SOAT</div></div>
+  <div class="o grid life" id="life"></div>
+  <div class="o card r" id="ten"><div class="k">BUTUN UMRDA</div><div class="v">10 YIL</div></div>
+  <!-- S3: what you could do instead -->
+  <img class="o ico" id="bubbles" src="icons/bubbles.png" style="width:380px">
+  <div class="o card g" id="lang"><div class="k">HAR YILI</div><div class="v">2 TA TIL</div></div>
+  <img class="o ico" id="books" src="icons/books.png" style="width:380px">
+  <div class="o card y" id="bk"><div class="k">YOKI</div><div class="v">YUZLAB KITOB</div></div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="flash"></div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">TELEFONGA<br><span class="y">NECHA YIL?</span></div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">HAR <span class="y">KUNI</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">BUTUN <span class="r">UMRDA</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:200px;font-size:84px;letter-spacing:-3px">SHU VAQTDA<br><span class="g">NIMA QILSA BO'LARDI?</span></div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:200px;font-size:96px;letter-spacing:-3px">SIZ KUNIGA<br><span class="y">NECHA SOAT?</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1600px"><span class="pill" style="font-size:52px;background:#fff;color:#06101e">RAQAM YOZING VA YUBORING</span></div>
+</div>
+
+<script>
+const C = window.CUES, ST = C.starts, TOTAL = C.total;
+const W = 1080, H = 1920, F = 1000;
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, d) => cl((t - a) / d);
+const E = {
+  io: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  out: x => 1 - Math.pow(1 - x, 3),
+  back: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+};
+const sDur = i => (ST[i + 1] ?? TOTAL) - ST[i];
+const cue = (s, k) => { const v = C['s' + s]?.[k]; return v === undefined ? parseFloat(k) : v; };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const A = [[0, 0], [0, 2600], [2700, 2600], [2700, 0], [0, 0]];
+const SCENE_BG = [['#0a0a2a', '#2a1f6a'], ['#06183a', '#0f4a6a'], ['#1a0610', '#5a1228'], ['#0d2a1a', '#1a5a3a'], ['#0a0a2a', '#2a1f6a']];
+
+function shake(k, amp) { if (k <= 0 || k > 1.1) return [0, 0, 0]; const e = Math.exp(-k * 4.5); return [Math.sin(k * 80) * amp * e, Math.cos(k * 70) * amp * e, Math.sin(k * 55) * 1.2 * e]; }
+function hold(i, u) {
+  const d = sDur(i), p = E.io(cl(u / d));
+  let [x, y] = A[i];
+  let z = -1000 + 150 * p;
+  x += Math.sin(u * 0.9 + i * 1.7) * 18; y += Math.cos(u * 0.7 + i * 2.3) * 12;
+  let roll = Math.sin(u * 0.8 + i) * 1.1;
+  let s = [0, 0, 0];
+  if (i === 0) { z = -1080 + 120 * p; }
+  if (i === 1) { z = -1150 + 200 * p; s = shake(u - cue(1, 'h4'), 10); }
+  if (i === 2) { y += -50 + 100 * p; s = shake(u - cue(2, 'ten'), 14); }
+  if (i === 3) { z = -1100 + 160 * p; s = shake(u - cue(3, 'lang'), 8); }
+  if (i === 4) { z = -1080 + 120 * p; }
+  return { x: x + s[0], y: y + s[1], z, roll: roll + s[2] };
+}
+const lerp = (a, b, p) => a + (b - a) * p;
+const lc = (a, b, p) => ({ x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), z: lerp(a.z, b.z, p), roll: lerp(a.roll, b.roll, p) });
+const TW = 0.26;
+function sceneAt(t) { let i = 0; ST.forEach((s, k) => { if (t >= s) i = k; }); return i; }
+function cam(t) {
+  const i = sceneAt(t); let c = hold(i, t - ST[i]);
+  if (i + 1 < ST.length && t > ST[i + 1] - TW) c = lc(c, hold(i + 1, t - ST[i + 1]), E.io(seg(t, ST[i + 1] - TW, 2 * TW)));
+  if (i > 0 && t < ST[i] + TW) c = lc(hold(i - 1, t - ST[i - 1]), c, E.io(seg(t, ST[i] - TW, 2 * TW)));
+  return c;
+}
+let CAM, FOCUS = 0;
+function proj(x, y, z) { const s = F / (z - CAM.z); return { sx: W / 2 + (x - CAM.x) * s, sy: H / 2 + (y - CAM.y) * s, s }; }
+const $ = id => document.getElementById(id);
+function put(el, x, y, z = 0, sc = 1, rot = 0, op = 1, sx2 = 1, sy2 = 1) {
+  if (typeof el === 'string') el = $(el);
+  const p = proj(x, y, z);
+  if (op <= 0.001 || p.s <= 0 || p.sx < -1600 || p.sx > 2700 || p.sy < -1800 || p.sy > 3700) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.style.transform = `translate(${p.sx}px,${p.sy}px) scale(${p.s * sc}) rotate(${rot}deg) scale(${sx2},${sy2}) translate(-50%,-50%)`;
+  el.style.opacity = op;
+  const b = Math.min(16, Math.abs(z - FOCUS) * 0.016);
+  el.style.filter = b > 0.4 ? `blur(${b}px)` : '';
+  el.style.zIndex = Math.round(6000 - z);
+}
+
+// ---------- no particles in this reel ----------
+function drawNotes(t) {}
+const pop = (u, t0, d = .35) => E.back(seg(u, t0, d)), vis = (u, t0) => cl(seg(u, t0, .1));
+const FL = $('flash');
+window.vidSet = async (t) => { let f = 0; ST.forEach((s) => { if (s > 0) f = Math.max(f, 1 - Math.abs(t - s) / 0.1); }); FL.style.opacity = Math.max(0, f) * .35; };
+const stamp = (u, t0) => 2.1 - 1.1 * E.back(seg(u, t0, .3));
+const DAY = [], LIFE = [];
+for (let k = 0; k < 24; k++) { const i = document.createElement('i'); $('day').appendChild(i); DAY.push(i); }
+for (let k = 0; k < 75; k++) { const i = document.createElement('i'); $('life').appendChild(i); LIFE.push(i); }
+function objects(t) {
+  const L = i => t - ST[i];
+  // S0 + S4: phone with "?? YIL" (answer shown in S4 -> loops back to the question)
+  { const [x, y] = A[0], on = t < ST[1] + .4 || t > ST[4] - .6 ? 1 : 0, s4 = t > ST[3];
+    $('q0v').textContent = s4 ? '10 YIL' : '?? YIL';
+    put('phone', x - 40, y - 20 + Math.sin(t * 2) * 8, 0, 1, Math.sin(t * 1.4) * 3, on);
+    put('hg0', x + 270, y + 120, -60, .95, 10 + Math.sin(t * 2.4) * 4, on);
+    put('q0', x, y + 560, -40, .8 * (1 + .04 * Math.sin(t * 6)), -3, on * (s4 ? 1 - cl(seg(L(4), cue(4, 'send') - .3, .3)) : 1)); }
+  // S1: 4 of 24 hours light up red
+  { const u = L(1), [x, y] = A[1], on = t > ST[1] - .6 && t < ST[2] + .4 ? 1 : 0, h = cue(1, 'h4');
+    put('d4', x, y - 280, -30, .8 * stamp(u, h), -2, on * cl(seg(u, h, .08)));
+    put('day', x, y + 220, 0, .95 * pop(u, .05), 0, on * vis(u, .05));
+    put('dayl', x, y + 530, -10, pop(u, .3), 0, on * vis(u, .3));
+    DAY.forEach((c, k) => { const lit = k >= 20 && u > h + (k - 20) * .12; c.style.background = lit ? '#ff3b4e' : 'rgba(255,255,255,.18)'; c.style.boxShadow = lit ? '0 0 24px rgba(255,59,78,.8)' : 'none'; }); }
+  // S2: per year card, then 75-year grid with 10 years in red
+  { const u = L(2), [x, y] = A[2], on = t > ST[2] - .6 && t < ST[3] + .4 ? 1 : 0, ty = cue(2, 'ten');
+    put('yr', x, y - 300, -30, .72 * stamp(u, .1), -2, on * cl(seg(u, .1, .08)) * (1 - cl(seg(u, ty - .3, .3))));
+    put('life', x, y + 200, 0, .95 * pop(u, .4), 0, on * vis(u, .4));
+    LIFE.forEach((c, k) => { const lit = k >= 65 && u > ty - .6 + (k - 65) * .07; c.style.background = lit ? '#ff3b4e' : (u > .4 + k * .012 ? 'rgba(255,255,255,.32)' : 'rgba(255,255,255,.1)'); c.style.boxShadow = lit ? '0 0 18px rgba(255,59,78,.8)' : 'none'; });
+    put('ten', x, y - 250, -60, .8 * stamp(u, ty), 3, on * cl(seg(u, ty, .08))); }
+  // S3: two languages a year or hundreds of books
+  { const u = L(3), [x, y] = A[3], on = t > ST[3] - .6 && t < ST[4] + .4 ? 1 : 0, lg = cue(3, 'lang'), bo = cue(3, 'book');
+    put('bubbles', x - 220, y - 150 + Math.sin(u * 2.4) * 8, 0, pop(u, lg - .2), -4, on * vis(u, lg - .2));
+    put('lang', x + 170, y - 300, -40, .66 * stamp(u, lg), 3, on * cl(seg(u, lg, .08)));
+    put('books', x - 220, y + 360, 0, pop(u, bo - .2), 3, on * vis(u, bo - .2));
+    put('bk', x + 150, y + 330, -40, .6 * stamp(u, bo), -3, on * cl(seg(u, bo, .08))); }
+}
+
+const far = $('far').getContext('2d');
+const bokeh = []; { const r = rng(11); for (let i = 0; i < 70; i++) bokeh.push({ x: -1600 + r() * 11000, y: -2400 + r() * 6600, z: 900 + r() * 2600, rad: 40 + r() * 120, hue: [48, 140, 200, 330, 270][Math.floor(r() * 5)] }); }
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function bgAt(t) {
+  const i = sceneAt(t); const a = SCENE_BG[i];
+  if (i + 1 < ST.length && t > ST[i + 1] - 0.3) { const p = seg(t, ST[i + 1] - 0.3, 0.6); const b = SCENE_BG[i + 1]; return [0, 1].map(k => { const x = hex(a[k]), y = hex(b[k]); return `rgb(${x.map((v, j) => Math.round(lerp(v, y[j], p))).join(',')})`; }); }
+  return a;
+}
+function drawBg(t) {
+  const [c1, c2] = bgAt(t);
+  $('bg').style.background = `radial-gradient(1200px 1400px at 50% 40%, ${c2} 0%, ${c1} 65%, #05060f 100%)`;
+  far.clearRect(0, 0, W, H);
+  for (const b of bokeh) {
+    const p = proj(b.x, b.y, b.z); if (p.sx < -300 || p.sx > W + 300 || p.sy < -300 || p.sy > H + 300) continue;
+    const r = b.rad * p.s * 2.2, g = far.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r);
+    g.addColorStop(0, `hsla(${b.hue},90%,65%,.28)`); g.addColorStop(1, `hsla(${b.hue},90%,65%,0)`);
+    far.fillStyle = g; far.beginPath(); far.arc(p.sx, p.sy, r, 0, 7); far.fill();
+  }
+}
+
+const hudItems = [...document.querySelectorAll('#hud [data-s]')].map(el => {
+  const fx = el.dataset.fx; const letters = [];
+  if (fx === 'slam') {
+    const walk = n => { [...n.childNodes].forEach(ch => {
+      if (ch.nodeType === 3) { const frag = document.createDocumentFragment(); for (const c of ch.textContent) { const s = document.createElement('span'); s.textContent = c; frag.appendChild(s); letters.push(s); } ch.replaceWith(frag); }
+      else if (ch.nodeName !== 'BR') walk(ch); }); };
+    walk(el);
+  }
+  el.style.opacity = 0;
+  return { el, s: +el.dataset.s, inK: el.dataset.in, fx, letters };
+});
+function hudAt(t, vel) {
+  for (const it of hudItems) {
+    const s0 = ST[it.s], end = (ST[it.s + 1] ?? TOTAL + 1);
+    const tin = s0 + cue(it.s, it.inK), tout = end - 0.12, a = t - tin;
+    if (a < 0 || t > tout + 0.2) { it.el.style.opacity = 0; continue; }
+    const o = 1 - seg(t, tout, 0.2), lag = `translate(${-vel.x * 2}px, ${-vel.y * 2}px)`;
+    if (it.fx === 'slam') {
+      it.el.style.opacity = o; it.el.style.transform = `${lag} scale(${1 + (1 - o) * .25})`; it.el.style.filter = o < 1 ? `blur(${(1 - o) * 10}px)` : '';
+      it.letters.forEach((sp, k) => { const p = seg(a - k * 0.03, 0, 0.34); sp.style.opacity = cl(p * 3);
+        sp.style.transform = `translateY(${(1 - E.out(p)) * -80}px) scale(${1 + (1 - E.back(p)) * 1.6}) rotate(${(1 - E.out(p)) * -14}deg)`; });
+    } else if (it.fx === 'stamp') {
+      const p = seg(a, 0, 0.3), sh = a < 0.5 ? Math.sin(a * 70) * 10 * (1 - a / 0.5) : 0;
+      it.el.style.opacity = cl(p * 4) * o; it.el.style.transform = `${lag} translateX(${sh}px) scale(${2.3 - 1.3 * E.back(p)}) rotate(${-6 + 6 * (1 - E.out(p))}deg)`;
+    } else if (it.fx === 'pop') {
+      const p = seg(a, 0, 0.35); it.el.style.opacity = cl(p * 3) * o; it.el.style.transform = `${lag} scale(${.4 + .6 * E.back(p)})`;
+    }
+  }
+}
+
+
+window.render = (t) => {
+  CAM = cam(t); const pc = cam(Math.max(0, t - 1 / 60));
+  const s = F / (0 - CAM.z), vel = { x: (CAM.x - pc.x) * s, y: (CAM.y - pc.y) * s };
+  $('world').style.transform = `rotate(${CAM.roll}deg) scale(1.07)`;
+  const bx = Math.min(36, Math.abs(vel.x) * 0.45), by = Math.min(36, Math.abs(vel.y) * 0.45);
+  $('mbk').setAttribute('stdDeviation', `${bx.toFixed(1)} ${by.toFixed(1)}`);
+  $('world').style.filter = (bx > 0.5 || by > 0.5) ? 'url(#mb)' : '';
+  drawBg(t); objects(t); drawNotes(t); hudAt(t, vel);
+  $('prog').style.width = (100 * cl(t / TOTAL)) + '%';
+};
+</script>
+<script>const __r = window.render; window.render = async (t, s, tot) => { __r(t, s, tot); await window.vidSet(t); };</script>
+</body></html>
