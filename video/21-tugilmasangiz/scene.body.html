@@ -1,0 +1,39 @@
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <!-- S0 / S4: empty cradle -->
+  <img class="o ico" id="beshik" src="icons/beshik.png" style="width:560px">
+  <div class="o card r" id="q0"><div class="k">AGAR SIZ BO'LMASANGIZ</div><div class="v">?</div></div>
+  <!-- S1: trash = 4 elephants -->
+  <div class="o card" id="tr"><div class="k">CHIQINDI · UMR BO'YI</div><div class="v">20+ TONNA</div></div>
+  <img class="o ico" id="trash" src="icons/trash.png" style="width:420px">
+  <div class="o eq" id="eq">=</div>
+  <img class="o ico" id="el0" src="icons/elephant.png" style="width:230px">
+  <img class="o ico" id="el1" src="icons/elephant.png" style="width:230px">
+  <img class="o ico" id="el2" src="icons/elephant.png" style="width:230px">
+  <img class="o ico" id="el3" src="icons/elephant.png" style="width:230px">
+  <!-- S2: food + water -->
+  <img class="o ico" id="plov" src="icons/plov.png" style="width:440px">
+  <div class="o card y" id="fd"><div class="k">OVQAT</div><div class="v">30 TONNA</div></div>
+  <img class="o ico" id="bottle" src="icons/bottle.png" style="width:190px">
+  <div class="o card" id="wt"><div class="k">SUV</div><div class="v">55 000 L</div></div>
+  <!-- S3: money + heartbeats -->
+  <img class="o ico" id="money" src="icons/money.png" style="width:400px">
+  <div class="o card g" id="mn"><div class="k">40 YIL ISH</div><div class="v">3,5 MLRD</div></div>
+  <img class="o ico" id="heart" src="icons/heart.png" style="width:340px">
+  <div class="o card r" id="hb"><div class="k">YURAK URISHI</div><div class="v">3 MLRD</div></div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="flash"></div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="slam" style="top:200px;font-size:104px;letter-spacing:-4px">AGAR SIZ<br><span class="y">TUG'ILMAGANINGIZDA?</span></div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">SIZ TASHLAYDIGAN<br><span class="r">CHIQINDI</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">SIZ YEYDIGAN<br><span class="y">VA ICHADIGAN</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">SIZ TOPADIGAN<br><span class="g">PUL</span></div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">SIZ DUNYOGA<br><span class="y">FOYDAMI, ZARARMI?</span></div>
+  <div class="t" data-s="4" data-in="vs" data-fx="pop" style="top:1250px"><span class="vsb" style="display:inline-block;background:#3ddc84;color:#04230f;margin-right:24px">FOYDA</span><span class="vsb" style="display:inline-block;background:#ff3b4e">ZARAR</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1560px"><span class="pill" style="font-size:52px;background:#fff;color:#06101e">BITTA SO'Z YOZING VA YUBORING</span></div>
+</div>
