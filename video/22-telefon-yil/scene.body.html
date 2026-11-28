@@ -1,0 +1,34 @@
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <!-- S0 / S4: phone + ?? YIL -->
+  <img class="o ico" id="phone" src="icons/phone.png" style="width:520px">
+  <img class="o ico" id="hg0" src="icons/hourglass.png" style="width:300px">
+  <div class="o card r" id="q0"><div class="k">UMRINGIZDAN</div><div class="v" id="q0v">?? YIL</div></div>
+  <!-- S1: a day of 24 hours, 4 on the phone -->
+  <div class="o card" id="d4"><div class="k">KUNIGA</div><div class="v">~4 SOAT</div></div>
+  <div class="o grid day" id="day"></div>
+  <div class="o lbl" id="dayl">24 SOATDAN</div>
+  <!-- S2: a life of 75 years, 10 on the phone -->
+  <div class="o card y" id="yr"><div class="k">BIR YILDA</div><div class="v" id="yrv">1 300+ SOAT</div></div>
+  <div class="o grid life" id="life"></div>
+  <div class="o card r" id="ten"><div class="k">BUTUN UMRDA</div><div class="v">10 YIL</div></div>
+  <!-- S3: what you could do instead -->
+  <img class="o ico" id="bubbles" src="icons/bubbles.png" style="width:380px">
+  <div class="o card g" id="lang"><div class="k">HAR YILI</div><div class="v">2 TA TIL</div></div>
+  <img class="o ico" id="books" src="icons/books.png" style="width:380px">
+  <div class="o card y" id="bk"><div class="k">YOKI</div><div class="v">YUZLAB KITOB</div></div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="flash"></div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">TELEFONGA<br><span class="y">NECHA YIL?</span></div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">HAR <span class="y">KUNI</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">BUTUN <span class="r">UMRDA</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:200px;font-size:96px;letter-spacing:-3px">SHU VAQTDA<br><span class="g">NIMA QILSA BO'LARDI?</span></div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:200px;font-size:96px;letter-spacing:-3px">SIZ KUNIGA<br><span class="y">NECHA SOAT?</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1600px"><span class="pill" style="font-size:52px;background:#fff;color:#06101e">RAQAM YOZING VA YUBORING</span></div>
+</div>
