@@ -1,0 +1,36 @@
+<div id="bg"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <!-- S0 / S4: one day (loop spot) -->
+  <img class="o ico" id="clock" src="icons/r03.png" style="width:440px">
+  <img class="o ico" id="pause" src="icons/g04.png" style="width:190px">
+  <div class="o card r" id="day"><div class="k">1 KUN =</div><div class="v" id="dayv">??? SO'M</div></div>
+  <!-- S1: GDP per day -->
+  <div class="o card big" id="gdp"><div class="k">1 KUNDA</div><div class="v" id="gdpv">0 SO'M</div></div>
+  <img class="o ico" id="factory" src="icons/g03.png" style="width:420px">
+  <img class="o ico" id="money" src="icons/g02.png" style="width:400px">
+  <!-- S2: what it buys -->
+  <img class="o ico" id="school" src="icons/g01.png" style="width:380px">
+  <div class="o card g" id="sch"><div class="k">MAKTAB</div><div class="v">320 TA</div></div>
+  <div class="o yoki" id="yoki">YOKI</div>
+  <img class="o ico" id="metro" src="icons/t02.png" style="width:380px">
+  <div class="o card" id="met"><div class="k">METRO</div><div class="v">38 KM</div></div>
+  <!-- S3: per person -->
+  <div class="o card y" id="per"><div class="k">HAR BIR ODAMGA · KUNIGA</div><div class="v">165 000 SO'M</div></div>
+  <img class="o ico" id="crowd" src="icons/t01.png" style="width:600px">
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="flash"></div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">AGAR O'ZBEKISTON<br><span class="y">1 KUN</span> ISHLAMASA?</div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">MAMLAKAT<br><span class="y">1 KUNDA</span> YARATADI</div>
+  <div class="t sh" data-s="1" data-in="sec" data-fx="stamp" style="top:1610px;font-size:66px;letter-spacing:-1px"><span class="pill" style="background:#ffd23f;color:#1a1000">HAR SONIYADA 74 MLN!</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">BU PULGA<br><span class="g">NIMA OLSA BO'LADI?</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">HAR BIR<br><span class="y">ODAMGA</span></div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:200px;font-size:100px;letter-spacing:-3px">DAM OLISH KUNI<br><span class="y">KO'PAYSINMI?</span></div>
+  <div class="t" data-s="4" data-in="vs" data-fx="pop" style="top:1240px"><span class="vsb" style="display:inline-block;background:#3ddc84;color:#04230f;margin-right:30px">HA</span><span class="vsb" style="display:inline-block;background:#ff3b4e">YO'Q</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1560px"><span class="pill" style="font-size:52px;background:#fff;color:#06101e">YOZING VA DO'STINGIZGA YUBORING</span></div>
+</div>
