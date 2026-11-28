@@ -4,16 +4,16 @@ const pop = (u, t0, d = .35) => E.back(seg(u, t0, d)), vis = (u, t0) => cl(seg(u
 const FL = $('flash');
 window.vidSet = async (t) => { let f = 0; ST.forEach((s) => { if (s > 0) f = Math.max(f, 1 - Math.abs(t - s) / 0.1); }); FL.style.opacity = Math.max(0, f) * .35; };
 const bump = (u, t0) => { const k = u - t0; return k > 0 && k < 1.2 ? Math.exp(-k * 5) * Math.sin(Math.min(1, k / .08) * Math.PI / 2) : 0; };
-const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
 function objects(t) {
   const L = i => t - ST[i];
   // S0 + S4: alarm clock, pause button, "1 KUN = ???" card (answer revealed in S4)
   { const [x, y] = A[0], on = t < ST[1] + .4 || t > ST[4] - .6 ? 1 : 0, s4 = t > ST[3];
     const dig = '0123456789'; let q = ''; for (let k = 0; k < 3; k++) q += dig[Math.floor((t * 23 + k * 7) % 10)];
-    $('dayv').textContent = s4 ? "6,4 TRLN SO'M" : `${q} TRLN SO'M`;
+    $('dayv').textContent = s4 ? "6,4 TRLN SO'M" : "??? SO'M";
     put('clock', x, y - 60 + Math.sin(t * 6) * 4, 0, 1, Math.sin(t * 30) * 2.2 * (s4 ? .3 : 1), on);
     put('pause', x + 220, y + 110, -80, 1 + .08 * Math.sin(t * 5), 8, on);
-    put('day', x, y + 520, -60, s4 ? .85 : .9, -3, on * (s4 ? 1 - cl(seg(L(4), cue(4, 'vs') - .3, .3)) : 1)); }
+    put('day', x, y + 520, 0, (s4 ? .78 : .85) * (1 + .05 * Math.sin(t * 7)), -3 + Math.sin(t * 9) * 1.5, on * (s4 ? 1 - cl(seg(L(4), cue(4, 'vs') - .3, .3)) : 1)); }
   // S1: GDP counter
   { const u = L(1), [x, y] = A[1], on = t > ST[1] - .6 && t < ST[2] + .4 ? 1 : 0, c = E.out(seg(u, .1, 1.6));
     $('gdpv').textContent = c < 1 ? fmt(6.43e6 * c) + " MLN" : "6,4 TRLN SO'M"; $('gdpv').style.color = c < 1 ? '#0a6cff' : '#16b866';

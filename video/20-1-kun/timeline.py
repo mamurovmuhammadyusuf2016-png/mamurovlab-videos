@@ -3,7 +3,7 @@ import json, math, subprocess, glob, os
 here = os.path.dirname(os.path.abspath(__file__))
 def dur(f): return float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',f]))
 voices = sorted(glob.glob(os.path.join(here,'voice','v*.wav')), key=lambda p:int(os.path.basename(p)[1:-4]))
-GRID, GAP, VO, TAIL = 0.125, 0.45, 0.05, 2.6
+GRID, GAP, VO, TAIL = 0.125, 0.5, 0.05, 2.4
 lens = [dur(v) for v in voices]; starts = [0.0]
 for i in range(1, len(lens)):
     starts.append(math.ceil((starts[-1] + VO + lens[i-1] + GAP) / GRID) * GRID)
