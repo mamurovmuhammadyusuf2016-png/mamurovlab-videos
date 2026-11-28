@@ -1,0 +1,37 @@
+<div id="bg"></div>
+<img id="vid" src="build/fa/0001.jpg" alt="">
+<div id="vshade"></div>
+<svg width="0" height="0" style="position:absolute"><filter id="mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur id="mbk" stdDeviation="0 0"/></filter></svg>
+<div id="world">
+  <canvas id="far" width="1080" height="1920" style="position:absolute;left:0;top:0"></canvas>
+  <!-- S1: population (over today's Tashkent footage) -->
+  <img class="o ico" id="crowd" src="icons/t01.png" style="width:560px">
+  <div class="o card" id="pop"><div class="k" id="popk">HOZIR</div><div class="v" id="popv">3 MLN</div></div>
+  <img class="o ico" id="crane" src="icons/t06.png" style="width:330px">
+  <!-- S2: metro + New Tashkent -->
+  <img class="o ico" id="metro" src="icons/t02.png" style="width:520px">
+  <div class="o card" id="km"><div class="k">METRO · 2030</div><div class="v" id="kmv">71 KM</div></div>
+  <img class="o ico" id="tower" src="icons/t03.png" style="width:420px">
+  <div class="o card y" id="yt"><div class="k">YANGI TOSHKENT</div><div class="v">2 MLN</div></div>
+  <img class="o ico" id="drone" src="icons/t04.png" style="width:380px">
+  <img class="o ico" id="ev" src="icons/t05.png" style="width:360px">
+  <!-- S3: water + heat -->
+  <img class="o ico" id="drop" src="icons/t09.png" style="width:380px">
+  <div class="o card r" id="wat"><div class="k">SUV TANQISLIGI</div><div class="v">×5</div></div>
+  <img class="o ico" id="thermo" src="icons/t08.png" style="width:330px">
+  <div class="o card r" id="hot"><div class="k">HAVO ALLAQACHON</div><div class="v">+1,5°C</div></div>
+  <canvas id="notes" width="1080" height="1920"></canvas>
+</div>
+<div id="flash"></div>
+<div id="hud">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="handle">@MAMUROVLAB</div>
+  <div class="t sh" data-s="0" data-in="-1" data-fx="slam" style="top:210px;font-size:140px;letter-spacing:-5px">TOSHKENT<br><span class="y">2050</span></div>
+  <div class="t sh" data-s="0" data-in="q" data-fx="stamp" style="top:1560px;font-size:84px;letter-spacing:-2px"><span class="pill" style="background:#ffd23f;color:#1a1000">QANDAY BO'LADI?</span></div>
+  <div class="t sh" data-s="1" data-in="0.05" data-fx="slam" style="top:210px;font-size:96px;letter-spacing:-3px">AHOLI<br><span class="y">KO'PAYADI</span></div>
+  <div class="t sh" data-s="2" data-in="0.05" data-fx="slam" style="top:210px;font-size:96px;letter-spacing:-3px">YANGI<br><span class="b">METRO VA SHAHAR</span></div>
+  <div class="t sh" data-s="3" data-in="0.05" data-fx="slam" style="top:210px;font-size:96px;letter-spacing:-3px">LEKIN<br><span class="r">MUAMMO HAM BOR</span></div>
+  <div class="t sh" data-s="4" data-in="0.05" data-fx="slam" style="top:190px;font-size:88px;letter-spacing:-3px">2050-YILDA<br>TOSHKENTDA<br><span class="y">YASHAYSIZMI?</span></div>
+  <div class="t" data-s="4" data-in="vs" data-fx="pop" style="top:1240px"><span class="vsb" style="display:inline-block;background:#3ddc84;color:#04230f;margin-right:30px">HA</span><span class="vsb" style="display:inline-block;background:#ff3b4e">YO'Q</span></div>
+  <div class="t" data-s="4" data-in="send" data-fx="pop" style="top:1560px"><span class="pill" style="font-size:52px;background:#fff;color:#06101e">YOZING VA DO'STINGIZGA YUBORING</span></div>
+</div>
